@@ -8,10 +8,10 @@ namespace GoodsReseller.Domain.Orders.Entities
     {
         public Product Product { get; }
         public Money UnitPrice { get; }
-        public Factor TotalDiscount { get; }
         public Quantity Quantity { get; private set; }
+        public Factor DiscountPerUnit { get; }
 
-        public OrderItem(Guid id, int version, Product product, Money unitPrice, Factor totalDiscount, Quantity quantity)
+        public OrderItem(Guid id, int version, Product product, Money unitPrice, Quantity quantity, Factor discountPerUnit)
             : base(id, version)
         {
             if (product == null)
@@ -24,9 +24,9 @@ namespace GoodsReseller.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(unitPrice));
             }
             
-            if (totalDiscount == null)
+            if (discountPerUnit == null)
             {
-                throw new ArgumentNullException(nameof(totalDiscount));
+                throw new ArgumentNullException(nameof(discountPerUnit));
             }
             
             if (quantity == null)
@@ -36,8 +36,8 @@ namespace GoodsReseller.Domain.Orders.Entities
             
             Product = product;
             UnitPrice = unitPrice;
-            TotalDiscount = totalDiscount;
             Quantity = quantity;
+            DiscountPerUnit = discountPerUnit;
         }
 
         public void IncrementQuantity()
