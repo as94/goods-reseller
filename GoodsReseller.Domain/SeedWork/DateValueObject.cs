@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace GoodsReseller.Domain.SeedWork
 {
-    public sealed class DateAndDateUtcPair : ValueObject
+    public sealed class DateValueObject : ValueObject
     {
-        public DateAndDateUtcPair(DateTime date, DateTime dateUtc)
+        public DateValueObject(DateTime date)
         {
             Date = date;
-            DateUtc = dateUtc;
+            DateUtc = date.ToUniversalTime();
         }
 
         public DateTime Date { get; }

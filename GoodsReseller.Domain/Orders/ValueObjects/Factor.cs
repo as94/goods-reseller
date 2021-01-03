@@ -6,23 +6,19 @@ namespace GoodsReseller.Domain.Orders.ValueObjects
 {
     public sealed class Factor : ValueObject
     {
-        public Factor(double value)
+        public Factor(decimal value)
         {
             if (value < 0)
             {
                 throw new ArgumentException("Value shouldn't be negative");
             }
-
-            if (value > 1)
-            {
-                
-                throw new ArgumentException("Value shouldn't be more than 1");
-            }
             
             Value = value;
         }
 
-        public double Value { get; }
+        public decimal Value { get; }
+        
+        public static Factor Empty => new Factor(0);
         
         protected override IEnumerable<object> GetEqualityComponents()
         {

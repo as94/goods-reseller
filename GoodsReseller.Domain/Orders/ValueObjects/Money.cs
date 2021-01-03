@@ -25,5 +25,22 @@ namespace GoodsReseller.Domain.Orders.ValueObjects
             yield return Value;
             yield return Currency;
         }
+        
+        public static Money Zero = new Money(0);
+
+        public Money Add(Money money)
+        {
+            return new Money(Value + money.Value);
+        }
+        
+        public Money Subtract(Money money)
+        {
+            return new Money(Value - money.Value);
+        }
+
+        public Money Multiply(Factor factor)
+        {
+            return new Money(Value * factor.Value);
+        }
     }
 }

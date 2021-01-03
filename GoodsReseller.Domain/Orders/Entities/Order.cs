@@ -17,10 +17,13 @@ namespace GoodsReseller.Domain.Orders.Entities
         // card info
         
         public Address Address { get; }
-        public DateAndDateUtcPair CreationDate { get; }
-        public DateAndDateUtcPair? LastUpdateDate { get; }
         
-        public Order(Guid id, int version, Address address, DateAndDateUtcPair creationDate)
+        public DateValueObject CreationDate { get; }
+        public DateValueObject? LastUpdateDate { get; private set; }
+        
+        public Money TotalCost { get; private set; }
+        
+        public Order(Guid id, int version, Address address, DateValueObject creationDate)
             : base(id, version)
         {
             if (address == null)
@@ -37,10 +40,10 @@ namespace GoodsReseller.Domain.Orders.Entities
             CreationDate = creationDate;
             LastUpdateDate = null;
             _orderItems = new List<OrderItem>();
+            TotalCost = Money.Zero;
         }
 
-        // TODO: add unit test
-        public void AddOrderItem(Guid productId, Product product, Money unitPrice, Factor totalDiscount)
+        public void AddOrderItem(Product product, Money unitPrice, Factor discountPerUnit, DateValueObject lastUpdateDate)
         {
             if (product == null)
             {
@@ -52,28 +55,33 @@ namespace GoodsReseller.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(unitPrice));
             }
             
-            if (totalDiscount == null)
+            if (discountPerUnit == null)
             {
-                throw new ArgumentNullException(nameof(totalDiscount));
+                throw new ArgumentNullException(nameof(discountPerUnit));
             }
 
-            var existingOrderItem = _orderItems.FirstOrDefault(x => x.Product.Id == productId);
+            var existingOrderItem = _orderItems.FirstOrDefault(x => x.Product.Id == product.Id);
             if (existingOrderItem != null)
             {
                 existingOrderItem.IncrementQuantity();
             }
-            
-            var newOrderItem = new OrderItem(Guid.NewGuid(), 1, product, unitPrice, totalDiscount, new Quantity(1));
-            _orderItems.Add(newOrderItem);
+            else
+            {
+                var newOrderItem = new OrderItem(Guid.NewGuid(), 1, product, unitPrice, new Quantity(1), discountPerUnit);
+                _orderItems.Add(newOrderItem);
+            }
+
+            RecalculateTotalCost();
+            IncrementVersion();
+            LastUpdateDate = lastUpdateDate;
         }
         
-        // TODO: add unit test
-        public void RemoveOrderItem(Guid productId)
+        public void RemoveOrderItem(Guid productId, DateValueObject lastUpdateDate)
         {
             var existingOrderItem = _orderItems.FirstOrDefault(x => x.Product.Id == productId);
             if (existingOrderItem != null)
             {
-                if (existingOrderItem.Quantity.Value > 0)
+                if (existingOrderItem.Quantity.Value > 1)
                 {
                     existingOrderItem.DecrementQuantity();
                 }
@@ -81,7 +89,28 @@ namespace GoodsReseller.Domain.Orders.Entities
                 {
                     _orderItems.Remove(existingOrderItem);
                 }
+
+                RecalculateTotalCost();
+                IncrementVersion();
+                LastUpdateDate = lastUpdateDate;
             }
+        }
+
+        private void RecalculateTotalCost()
+        {
+            var totalCost = Money.Zero;
+
+            foreach (var orderItem in _orderItems)
+            {
+                var unitPriceFactor = new Factor(1 - orderItem.DiscountPerUnit.Value);
+                var quantityFactor = new Factor(orderItem.Quantity.Value);
+
+                var orderItemValue = orderItem.UnitPrice.Multiply(unitPriceFactor).Multiply(quantityFactor);
+                
+                totalCost = totalCost.Add(orderItemValue);
+            }
+
+            TotalCost = totalCost;
         }
     }
 }
