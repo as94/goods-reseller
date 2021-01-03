@@ -5,10 +5,17 @@ namespace GoodsReseller.Domain.SeedWork
     public abstract class Entity
     {
         public Guid Id { get; }
+        public int Version { get; private set; }
 
-        protected Entity(Guid id)
+        protected Entity(Guid id, int version)
         {
+            if (version <= 0)
+            {
+                throw new ArgumentException("Version should be more than 0");
+            }
+            
             Id = id;
+            Version = version;
         }
 
         public bool IsTransient()
@@ -65,6 +72,11 @@ namespace GoodsReseller.Domain.SeedWork
         public static bool operator !=(Entity left, Entity right)
         {
             return !(left == right);
+        }
+
+        protected void IncrementVersion()
+        {
+            Version++;
         }
     }
 }

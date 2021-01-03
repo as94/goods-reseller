@@ -10,33 +10,6 @@ namespace GoodsReseller.Domain.Orders.ValueObjects
 
         public Quantity(int value)
         {
-            Validate(value);
-            
-            Value = value;
-        }
-
-
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Value;
-        }
-
-        public void Increment()
-        {
-            var newValue = Value + 1;
-            Validate(newValue);
-            Value = newValue;
-        }
-
-        public void Decrement()
-        {
-            var newValue = Value - 1;
-            Validate(newValue);
-            Value = newValue;
-        }
-
-        private void Validate(double value)
-        {
             if (value < 0)
             {
                 throw new ArgumentException("Value shouldn't be negative");
@@ -47,6 +20,14 @@ namespace GoodsReseller.Domain.Orders.ValueObjects
             {
                 throw new ArgumentException("Value shouldn't be more than 100");
             }
+            
+            Value = value;
+        }
+
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
         }
     }
 }

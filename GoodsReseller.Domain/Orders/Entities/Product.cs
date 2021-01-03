@@ -7,7 +7,7 @@ namespace GoodsReseller.Domain.Orders.Entities
     {
         public string Name { get; }
         
-        public Product(Guid id, string name) : base(id)
+        public Product(Guid id, int version, string name) : base(id, version)
         {
             Name = name;
         }

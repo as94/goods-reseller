@@ -11,7 +11,8 @@ namespace GoodsReseller.Domain.Orders.Entities
         private readonly List<OrderItem> _orderItems;
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems;
         
-        // order status
+        // TODO: order status
+        
         // payment method
         // card info
         
@@ -19,7 +20,8 @@ namespace GoodsReseller.Domain.Orders.Entities
         public DateAndDateUtcPair CreationDate { get; }
         public DateAndDateUtcPair? LastUpdateDate { get; }
         
-        public Order(Guid id, Address address, DateAndDateUtcPair creationDate) : base(id)
+        public Order(Guid id, int version, Address address, DateAndDateUtcPair creationDate)
+            : base(id, version)
         {
             if (address == null)
             {
@@ -58,10 +60,10 @@ namespace GoodsReseller.Domain.Orders.Entities
             var existingOrderItem = _orderItems.FirstOrDefault(x => x.Product.Id == productId);
             if (existingOrderItem != null)
             {
-                existingOrderItem.Quantity.Increment();
+                existingOrderItem.IncrementQuantity();
             }
             
-            var newOrderItem = new OrderItem(Guid.NewGuid(), product, unitPrice, totalDiscount, new Quantity(1));
+            var newOrderItem = new OrderItem(Guid.NewGuid(), 1, product, unitPrice, totalDiscount, new Quantity(1));
             _orderItems.Add(newOrderItem);
         }
         
@@ -73,7 +75,7 @@ namespace GoodsReseller.Domain.Orders.Entities
             {
                 if (existingOrderItem.Quantity.Value > 0)
                 {
-                    existingOrderItem.Quantity.Decrement();
+                    existingOrderItem.DecrementQuantity();
                 }
                 else
                 {

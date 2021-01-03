@@ -9,9 +9,10 @@ namespace GoodsReseller.Domain.Orders.Entities
         public Product Product { get; }
         public Money UnitPrice { get; }
         public Factor TotalDiscount { get; }
-        public Quantity Quantity { get; }
+        public Quantity Quantity { get; private set; }
 
-        public OrderItem(Guid id, Product product, Money unitPrice, Factor totalDiscount, Quantity quantity) : base(id)
+        public OrderItem(Guid id, int version, Product product, Money unitPrice, Factor totalDiscount, Quantity quantity)
+            : base(id, version)
         {
             if (product == null)
             {
@@ -37,6 +38,18 @@ namespace GoodsReseller.Domain.Orders.Entities
             UnitPrice = unitPrice;
             TotalDiscount = totalDiscount;
             Quantity = quantity;
+        }
+
+        public void IncrementQuantity()
+        {
+            Quantity = new Quantity(Quantity.Value + 1);
+            IncrementVersion();
+        }
+
+        public void DecrementQuantity()
+        {
+            Quantity = new Quantity(Quantity.Value - 1);
+            IncrementVersion();
         }
     }
 }
