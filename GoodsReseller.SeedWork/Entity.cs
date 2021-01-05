@@ -1,6 +1,6 @@
 using System;
 
-namespace GoodsReseller.Orders.Domain.SeedWork
+namespace GoodsReseller.SeedWork
 {
     public abstract class Entity
     {

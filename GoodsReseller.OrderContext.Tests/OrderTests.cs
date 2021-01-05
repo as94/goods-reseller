@@ -2,7 +2,7 @@ using System;
 using FluentAssertions;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
-using GoodsReseller.Orders.Domain.SeedWork;
+using GoodsReseller.SeedWork;
 using Xunit;
 
 namespace GoodsReseller.OrderContext.Tests

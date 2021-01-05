@@ -5,7 +5,7 @@ using GoodsReseller.OrderContext.Domain.Orders.Entities;
 
 namespace GoodsReseller.OrderContext.Domain.Orders
 {
-    public interface IOrderRepository
+    public interface IOrdersRepository
     {
         Task<Order> GetAsync(Guid orderId, CancellationToken cancellationToken);
         Task SaveAsync(Order order, CancellationToken cancellationToken);
