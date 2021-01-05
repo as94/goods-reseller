@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace GoodsReseller.Domain.SeedWork
+namespace GoodsReseller.Orders.Domain.SeedWork
 {
     public abstract class Enumeration
     {

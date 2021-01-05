@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GoodsReseller.Domain.Orders.Entities;
+using GoodsReseller.OrderContext.Domain.Orders.Entities;
 
-namespace GoodsReseller.Domain.Orders
+namespace GoodsReseller.OrderContext.Domain.Orders
 {
     public interface IOrderRepository
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GoodsReseller.Domain.SeedWork
+namespace GoodsReseller.Orders.Domain.SeedWork
 {
     public sealed class DateValueObject : ValueObject
     {

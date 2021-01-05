@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using GoodsReseller.Domain.SeedWork;
+using GoodsReseller.Orders.Domain.SeedWork;
 
-namespace GoodsReseller.Domain.Orders.ValueObjects
+namespace GoodsReseller.OrderContext.Domain.Orders.ValueObjects
 {
     public sealed class Quantity : ValueObject
     {

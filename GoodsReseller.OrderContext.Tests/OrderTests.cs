@@ -1,11 +1,11 @@
 using System;
 using FluentAssertions;
-using GoodsReseller.Domain.Orders.Entities;
-using GoodsReseller.Domain.Orders.ValueObjects;
-using GoodsReseller.Domain.SeedWork;
+using GoodsReseller.OrderContext.Domain.Orders.Entities;
+using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
+using GoodsReseller.Orders.Domain.SeedWork;
 using Xunit;
 
-namespace GoodsReseller.Domain.Tests
+namespace GoodsReseller.OrderContext.Tests
 {
     public class OrderTests
     {

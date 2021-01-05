@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GoodsReseller.Domain.Orders.ValueObjects;
-using GoodsReseller.Domain.SeedWork;
+using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
+using GoodsReseller.Orders.Domain.SeedWork;
 
-namespace GoodsReseller.Domain.Orders.Entities
+namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {
     public sealed class Order : Entity, IAggregateRoot
     {
