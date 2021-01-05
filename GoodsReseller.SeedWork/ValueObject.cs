@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GoodsReseller.Domain.SeedWork
+namespace GoodsReseller.Orders.Domain.SeedWork
 {
     public abstract class ValueObject
     {

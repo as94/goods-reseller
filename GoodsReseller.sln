@@ -2,9 +2,17 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.Api", "GoodsReseller.Api\GoodsReseller.Api.csproj", "{9311245C-BB62-4D3C-B1CD-D994773F4310}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.Domain", "GoodsReseller.Domain\GoodsReseller.Domain.csproj", "{E79ACC61-3EEB-4F4D-8DA7-FA6BD3370545}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.OrderContext.Domain", "GoodsReseller.OrderContext.Domain\GoodsReseller.OrderContext.Domain.csproj", "{E79ACC61-3EEB-4F4D-8DA7-FA6BD3370545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.Domain.Tests", "GoodsReseller.Domain.Tests\GoodsReseller.Domain.Tests.csproj", "{7E9DF53D-5601-4217-8131-C878DF74767E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.OrderContext.Tests", "GoodsReseller.OrderContext.Tests\GoodsReseller.OrderContext.Tests.csproj", "{7E9DF53D-5601-4217-8131-C878DF74767E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.SeedWork", "GoodsReseller.SeedWork\GoodsReseller.SeedWork.csproj", "{883EB053-E8DF-49CB-BFE1-1A8B403A0383}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.DataCatalogContext.Contracts", "GoodsReseller.DataCatalogContext.Contracts\GoodsReseller.DataCatalogContext.Contracts.csproj", "{049858FA-80A4-44F7-9FB3-D62493DD9779}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.OrderContext.Handlers", "GoodsReseller.OrderContext.Handlers\GoodsReseller.OrderContext.Handlers.csproj", "{B930EA44-42F3-41F6-9088-5432B507506B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.OrderContext.Contracts", "GoodsReseller.OrderContext.Contracts\GoodsReseller.OrderContext.Contracts.csproj", "{7825950E-E8F7-4463-A28F-E3AF381148F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +32,21 @@ Global
 		{7E9DF53D-5601-4217-8131-C878DF74767E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E9DF53D-5601-4217-8131-C878DF74767E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E9DF53D-5601-4217-8131-C878DF74767E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{883EB053-E8DF-49CB-BFE1-1A8B403A0383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{883EB053-E8DF-49CB-BFE1-1A8B403A0383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{883EB053-E8DF-49CB-BFE1-1A8B403A0383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{883EB053-E8DF-49CB-BFE1-1A8B403A0383}.Release|Any CPU.Build.0 = Release|Any CPU
+		{049858FA-80A4-44F7-9FB3-D62493DD9779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{049858FA-80A4-44F7-9FB3-D62493DD9779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{049858FA-80A4-44F7-9FB3-D62493DD9779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{049858FA-80A4-44F7-9FB3-D62493DD9779}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B930EA44-42F3-41F6-9088-5432B507506B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B930EA44-42F3-41F6-9088-5432B507506B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B930EA44-42F3-41F6-9088-5432B507506B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B930EA44-42F3-41F6-9088-5432B507506B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7825950E-E8F7-4463-A28F-E3AF381148F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7825950E-E8F7-4463-A28F-E3AF381148F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7825950E-E8F7-4463-A28F-E3AF381148F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7825950E-E8F7-4463-A28F-E3AF381148F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
