@@ -1,4 +1,4 @@
-namespace GoodsReseller.Orders.Domain.SeedWork
+namespace GoodsReseller.SeedWork
 {
     public interface IAggregateRoot
     {

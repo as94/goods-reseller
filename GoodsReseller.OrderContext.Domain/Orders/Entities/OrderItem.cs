@@ -1,6 +1,6 @@
 using System;
 using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
-using GoodsReseller.Orders.Domain.SeedWork;
+using GoodsReseller.SeedWork;
 
 namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {

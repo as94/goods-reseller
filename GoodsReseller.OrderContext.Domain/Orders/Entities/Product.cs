@@ -1,5 +1,5 @@
 using System;
-using GoodsReseller.Orders.Domain.SeedWork;
+using GoodsReseller.SeedWork;
 
 namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {
