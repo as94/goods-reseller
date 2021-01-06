@@ -2,9 +2,9 @@ using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace GoodsReseller.Infrastructure.Orders.DataModels
+namespace GoodsReseller.Infrastructure.Orders.Models
 {
-    internal sealed class OrderData
+    internal sealed class OrderDocument
     {
         [BsonId]
         [BsonElement("id")]

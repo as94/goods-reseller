@@ -16,7 +16,6 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
             return new OrderItemContract
             {
                 Id = orderItem.Id,
-                Version = orderItem.Version,
                 Product = orderItem.Product.ToContract(),
                 UnitPrice = orderItem.UnitPrice.ToContract(),
                 Quantity = orderItem.Quantity.Value,

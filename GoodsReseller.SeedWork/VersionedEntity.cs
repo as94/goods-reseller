@@ -2,13 +2,20 @@ using System;
 
 namespace GoodsReseller.SeedWork
 {
-    public abstract class Entity
+    public abstract class VersionedEntity
     {
         public Guid Id { get; }
+        public int Version { get; private set; }
 
-        protected Entity(Guid id)
+        protected VersionedEntity(Guid id, int version)
         {
+            if (version <= 0)
+            {
+                throw new ArgumentException("Version should be more than 0");
+            }
+            
             Id = id;
+            Version = version;
         }
 
         public bool IsTransient()
@@ -18,7 +25,7 @@ namespace GoodsReseller.SeedWork
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Entity))
+            if (!(obj is VersionedEntity))
             {
                 return false;
             }
@@ -33,26 +40,26 @@ namespace GoodsReseller.SeedWork
                 return false;
             }
 
-            var item = (Entity) obj;
+            var item = (VersionedEntity) obj;
             if (item.IsTransient() || IsTransient())
             {
                 return false;
             }
 
-            return item.Id == Id;
+            return item.Id == Id && item.Version == Version;
         }
 
         public override int GetHashCode()
         {
             if (!IsTransient())
             {
-                return Id.GetHashCode();
+                return Id.GetHashCode() ^ Version.GetHashCode();
             }
 
             return base.GetHashCode();
         }
 
-        public static bool operator ==(Entity left, Entity right)
+        public static bool operator ==(VersionedEntity left, VersionedEntity right)
         {
             if (Equals(left, null))
             {
@@ -62,9 +69,14 @@ namespace GoodsReseller.SeedWork
             return left.Equals(right);
         }
 
-        public static bool operator !=(Entity left, Entity right)
+        public static bool operator !=(VersionedEntity left, VersionedEntity right)
         {
             return !(left == right);
+        }
+
+        protected void IncrementVersion()
+        {
+            Version++;
         }
     }
 }

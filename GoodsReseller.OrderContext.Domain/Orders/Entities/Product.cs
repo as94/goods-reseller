@@ -3,7 +3,7 @@ using GoodsReseller.SeedWork;
 
 namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {
-    public sealed class Product : Entity
+    public sealed class Product : VersionedEntity
     {
         public string Name { get; }
         
