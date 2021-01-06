@@ -5,7 +5,7 @@ using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Handlers.Converters;
 using MediatR;
 
-namespace GoodsReseller.OrderContext.Handlers
+namespace GoodsReseller.OrderContext.Handlers.Orders
 {
     public sealed class GetOrderByIdHandler : IRequestHandler<GetOrderByIdRequest, GetOrderByIdResponse>
     {

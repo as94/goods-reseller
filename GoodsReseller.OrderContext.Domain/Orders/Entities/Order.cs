@@ -6,9 +6,9 @@ using GoodsReseller.SeedWork;
 
 namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {
-    public sealed class Order : Entity, IAggregateRoot
+    public sealed class Order : VersionedEntity, IAggregateRoot
     {
-        private readonly List<OrderItem> _orderItems;
+        private List<OrderItem> _orderItems;
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems;
         
         // TODO: order status
@@ -22,6 +22,25 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public DateValueObject? LastUpdateDate { get; private set; }
         
         public Money TotalCost { get; private set; }
+
+        public static Order Restore(
+            Guid id,
+            int version,
+            Address address,
+            DateValueObject creationDate,
+            DateValueObject? lastUpdateDate,
+            List<OrderItem> orderItems,
+            Money totalCost)
+        {
+            var order = new Order(id, version, address, creationDate)
+            {
+                LastUpdateDate = lastUpdateDate,
+                _orderItems = orderItems,
+                TotalCost = totalCost
+            };
+
+            return order;
+        }
         
         public Order(Guid id, int version, Address address, DateValueObject creationDate)
             : base(id, version)
@@ -67,7 +86,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             }
             else
             {
-                var newOrderItem = new OrderItem(Guid.NewGuid(), 1, product, unitPrice, new Quantity(1), discountPerUnit);
+                var newOrderItem = new OrderItem(Guid.NewGuid(), product, unitPrice, new Quantity(1), discountPerUnit);
                 _orderItems.Add(newOrderItem);
             }
 

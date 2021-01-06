@@ -8,8 +8,4 @@
       <ProjectReference Include="..\GoodsReseller.SeedWork\GoodsReseller.SeedWork.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="DataCatalog" />
-    </ItemGroup>
-
 </Project>

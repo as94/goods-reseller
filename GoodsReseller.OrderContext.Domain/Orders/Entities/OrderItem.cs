@@ -11,8 +11,8 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Quantity Quantity { get; private set; }
         public Factor DiscountPerUnit { get; }
 
-        public OrderItem(Guid id, int version, Product product, Money unitPrice, Quantity quantity, Factor discountPerUnit)
-            : base(id, version)
+        public OrderItem(Guid id, Product product, Money unitPrice, Quantity quantity, Factor discountPerUnit)
+            : base(id)
         {
             if (product == null)
             {
@@ -43,13 +43,11 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public void IncrementQuantity()
         {
             Quantity = new Quantity(Quantity.Value + 1);
-            IncrementVersion();
         }
 
         public void DecrementQuantity()
         {
             Quantity = new Quantity(Quantity.Value - 1);
-            IncrementVersion();
         }
     }
 }

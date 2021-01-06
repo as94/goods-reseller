@@ -1,21 +1,23 @@
 using System;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.Infrastructure.Configurations;
-using GoodsReseller.Infrastructure.Orders.DataModels;
+using GoodsReseller.Infrastructure.Orders.Models;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
 using MongoDB.Driver;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using JsonConvert = Newtonsoft.Json.JsonConvert;
 
 namespace GoodsReseller.Infrastructure.Orders
 {
-    // TODO: check
     internal sealed class OrdersRepository : IOrdersRepository
     {
-        private readonly IMongoCollection<OrderData> _orders;
+        private readonly IMongoCollection<OrderDocument> _orders;
         
         public OrdersRepository(IOptions<GoodsResellerDatabaseOptions> options)
         {
@@ -24,7 +26,7 @@ namespace GoodsReseller.Infrastructure.Orders
             var client = new MongoClient(goodsResellerDatabaseOptions.ConnectionString);
             var database = client.GetDatabase(goodsResellerDatabaseOptions.DatabaseName);
 
-            _orders = database.GetCollection<OrderData>("orders");
+            _orders = database.GetCollection<OrderDocument>("orders");
         }
         
         public async Task<Order> GetAsync(Guid orderId, CancellationToken cancellationToken)
@@ -36,12 +38,18 @@ namespace GoodsReseller.Infrastructure.Orders
                 return null;
             }
 
-            var order = JsonSerializer.Deserialize<Order>(existingOrder.Document.AsString, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            });
+            var orderState = JsonConvert.DeserializeObject<OrderState>(
+                existingOrder.Document.ToJson(new JsonWriterSettings { OutputMode = JsonOutputMode.Shell }),
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    },
+                    Formatting = Formatting.Indented
+                });
 
-            return order;
+            return orderState?.ToDomain();
         }
 
         public async Task SaveAsync(Order order, CancellationToken cancellationToken)
@@ -51,12 +59,18 @@ namespace GoodsReseller.Infrastructure.Orders
                 throw new ArgumentNullException(nameof(order));
             }
 
-            var json = JsonSerializer.Serialize(order, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            });
+            var json = JsonConvert.SerializeObject(
+                order,
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    },
+                    Formatting = Formatting.Indented
+                });
             
-            var orderData = new OrderData
+            var orderDocument = new OrderDocument
             {
                 Id = order.Id,
                 Version = order.Version,
@@ -67,19 +81,19 @@ namespace GoodsReseller.Infrastructure.Orders
 
            if (existingOrder == null)
            {
-               await _orders.InsertOneAsync(orderData, new InsertOneOptions(), cancellationToken);
+               await _orders.InsertOneAsync(orderDocument, new InsertOneOptions(), cancellationToken);
            }
-           else if (existingOrder.Version < orderData.Version)
+           else if (existingOrder.Version < orderDocument.Version)
            {
-               await _orders.ReplaceOneAsync(x => x.Id == order.Id, orderData, new ReplaceOptions(), cancellationToken: cancellationToken);
+               await _orders.ReplaceOneAsync(x => x.Id == order.Id, orderDocument, new ReplaceOptions(), cancellationToken);
            }
         }
 
-        private async Task<OrderData> GetExistingOrder(Guid orderId, CancellationToken cancellationToken)
+        private async Task<OrderDocument> GetExistingOrder(Guid orderId, CancellationToken cancellationToken)
         {
             return await (await _orders.FindAsync(
                 x => x.Id == orderId,
-                new FindOptions<OrderData>(),
+                new FindOptions<OrderDocument>(),
                 cancellationToken)).FirstOrDefaultAsync(cancellationToken);
         }
     }
