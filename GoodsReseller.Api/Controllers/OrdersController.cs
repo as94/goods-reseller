@@ -19,12 +19,6 @@ namespace GoodsReseller.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("hello")]
-        public string HelloOrders()
-        {
-            return "Hello, orders!";
-        }
-
         [HttpGet("{orderId}")]
         public async Task<IActionResult> GetOrderAsync(Guid orderId, CancellationToken cancellationToken)
         {
