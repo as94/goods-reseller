@@ -2,9 +2,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using GoodsReseller.OrderContext.Contracts.Models.OrderItems;
-using GoodsReseller.OrderContext.Contracts.OrderItems.AddOrderItem;
-using GoodsReseller.OrderContext.Contracts.OrderItems.RemoveOrderItem;
+using GoodsReseller.OrderContext.Contracts.Models;
+using GoodsReseller.OrderContext.Contracts.OrderItems.PatchOrderItem;
 using GoodsReseller.OrderContext.Contracts.Orders.CreateOrder;
 using GoodsReseller.OrderContext.Contracts.Orders.GetById;
 using MediatR;
@@ -42,29 +41,25 @@ namespace GoodsReseller.Api.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(
-            CancellationToken cancellationToken) =>
-            Ok(await _mediator.Send(new CreateOrderRequest(), cancellationToken));
-        
-        [HttpPost("{orderId}/orderItems")]
-        public async Task<IActionResult> AddOrderItemAsync(
+            CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(new CreateOrderRequest(), cancellationToken));
+        }
+
+        [HttpPatch("{orderId}/orderItems")]
+        public async Task<IActionResult> PatchOrderItemAsync(
             [FromRoute] Guid orderId,
-            [FromBody][Required] AddOrderItemContract addOrderItem,
-            CancellationToken cancellationToken) =>
-            Ok(await _mediator.Send(new AddOrderItemRequest
+            [FromBody][Required] PatchOrderItemContract patchOrderItem,
+            CancellationToken cancellationToken)
+        {
+            await _mediator.Send(new PatchOrderItemRequest
             {
                 OrderId = orderId,
-                ProductId = addOrderItem.ProductId
-            }, cancellationToken));
-        
-        [HttpDelete("{orderId}/orderItems")]
-        public async Task<IActionResult> RemoveOrderItemAsync(
-            [FromRoute] Guid orderId,
-            [FromBody][Required] RemoveOrderItemContract addOrderItem,
-            CancellationToken cancellationToken) =>
-            Ok(await _mediator.Send(new RemoveOrderItemRequest
-            {
-                OrderId = orderId,
-                ProductId = addOrderItem.ProductId
-            }, cancellationToken));
+                Op = patchOrderItem.Op,
+                ProductId = patchOrderItem.ProductId
+            }, cancellationToken);
+            
+            return Ok();
+        }
     }
 }

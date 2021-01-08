@@ -23,25 +23,6 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         
         public Money TotalCost { get; private set; }
 
-        public static Order Restore(
-            Guid id,
-            int version,
-            Address address,
-            DateValueObject creationDate,
-            DateValueObject? lastUpdateDate,
-            List<OrderItem> orderItems,
-            Money totalCost)
-        {
-            var order = new Order(id, version, address, creationDate)
-            {
-                LastUpdateDate = lastUpdateDate,
-                _orderItems = orderItems,
-                TotalCost = totalCost
-            };
-
-            return order;
-        }
-        
         public Order(Guid id, int version, Address address, DateValueObject creationDate)
             : base(id, version)
         {
@@ -60,6 +41,25 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             LastUpdateDate = null;
             _orderItems = new List<OrderItem>();
             TotalCost = Money.Zero;
+        }
+
+        public static Order Restore(
+            Guid id,
+            int version,
+            Address address,
+            DateValueObject creationDate,
+            DateValueObject? lastUpdateDate,
+            List<OrderItem> orderItems,
+            Money totalCost)
+        {
+            var order = new Order(id, version, address, creationDate)
+            {
+                LastUpdateDate = lastUpdateDate,
+                _orderItems = orderItems,
+                TotalCost = totalCost
+            };
+
+            return order;
         }
 
         public void AddOrderItem(Product product, Money unitPrice, Factor discountPerUnit, DateValueObject lastUpdateDate)
