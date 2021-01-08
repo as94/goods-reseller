@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace GoodsReseller.OrderContext.Contracts.Orders.CreateOrder
+namespace GoodsReseller.OrderContext.Contracts.Orders.Create
 {
     public class CreateOrderRequest : IRequest<CreateOrderResponse>
     {

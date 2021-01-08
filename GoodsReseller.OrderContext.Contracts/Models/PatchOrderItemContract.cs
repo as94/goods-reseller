@@ -9,8 +9,7 @@ namespace GoodsReseller.OrderContext.Contracts.Models
     {
         public string Op { get; set; }
         public Guid ProductId { get; set; }
-        
-        
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (!OrderItemOperations.AllOperations.Contains(Op))

@@ -1,6 +1,7 @@
 using System;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
+using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.Infrastructure.Orders.Models
 {

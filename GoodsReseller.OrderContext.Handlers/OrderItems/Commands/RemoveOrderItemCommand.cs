@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.SeedWork;
+using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 
 namespace GoodsReseller.OrderContext.Handlers.OrderItems.Commands

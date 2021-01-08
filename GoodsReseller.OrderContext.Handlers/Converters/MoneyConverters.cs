@@ -1,6 +1,7 @@
 using System;
 using GoodsReseller.OrderContext.Contracts.Models;
 using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
+using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.OrderContext.Handlers.Converters
 {

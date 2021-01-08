@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using GoodsReseller.SeedWork;
 
-namespace GoodsReseller.OrderContext.Domain.Orders.ValueObjects
+namespace GoodsReseller.SeedWork.ValueObjects
 {
     public sealed class Factor : ValueObject
     {
