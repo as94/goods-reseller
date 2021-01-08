@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.Infrastructure.Configurations;
-using GoodsReseller.Infrastructure.Orders.Models;
+using GoodsReseller.Infrastructure.OrderContext.Models;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using Microsoft.Extensions.Options;
@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using JsonConvert = Newtonsoft.Json.JsonConvert;
 
-namespace GoodsReseller.Infrastructure.Orders
+namespace GoodsReseller.Infrastructure.OrderContext
 {
     internal sealed class OrdersRepository : IOrdersRepository
     {
@@ -31,15 +31,15 @@ namespace GoodsReseller.Infrastructure.Orders
         
         public async Task<Order> GetAsync(Guid orderId, CancellationToken cancellationToken)
         {
-            var existingOrder = await GetExistingOrder(orderId, cancellationToken);
+            var existing = await GetExisting(orderId, cancellationToken);
 
-            if (existingOrder == null)
+            if (existing == null)
             {
                 return null;
             }
 
-            var orderState = JsonConvert.DeserializeObject<OrderState>(
-                existingOrder.Document.ToJson(new JsonWriterSettings { OutputMode = JsonOutputMode.Shell }),
+            var state = JsonConvert.DeserializeObject<OrderState>(
+                existing.Document.ToJson(new JsonWriterSettings { OutputMode = JsonOutputMode.Shell }),
                 new JsonSerializerSettings
                 {
                     ContractResolver = new DefaultContractResolver
@@ -49,7 +49,7 @@ namespace GoodsReseller.Infrastructure.Orders
                     Formatting = Formatting.Indented
                 });
 
-            return orderState?.ToDomain();
+            return state?.ToDomain();
         }
 
         public async Task SaveAsync(Order order, CancellationToken cancellationToken)
@@ -70,26 +70,28 @@ namespace GoodsReseller.Infrastructure.Orders
                     Formatting = Formatting.Indented
                 });
             
-            var orderDocument = new OrderDocument
+            var document = new OrderDocument
             {
                 Id = order.Id,
                 Version = order.Version,
+                CreationDateUtc = order.CreationDate.DateUtc,
+                LastUpdateDateUtc = order.LastUpdateDate?.DateUtc,
                 Document = BsonDocument.Parse(json)
             };
 
-           var existingOrder = await GetExistingOrder(order.Id, cancellationToken);
+           var existing = await GetExisting(order.Id, cancellationToken);
 
-           if (existingOrder == null)
+           if (existing == null)
            {
-               await _orders.InsertOneAsync(orderDocument, new InsertOneOptions(), cancellationToken);
+               await _orders.InsertOneAsync(document, new InsertOneOptions(), cancellationToken);
            }
-           else if (existingOrder.Version < orderDocument.Version)
+           else if (existing.Version < document.Version)
            {
-               await _orders.ReplaceOneAsync(x => x.Id == order.Id, orderDocument, new ReplaceOptions(), cancellationToken);
+               await _orders.ReplaceOneAsync(x => x.Id == order.Id, document, new ReplaceOptions(), cancellationToken);
            }
         }
 
-        private async Task<OrderDocument> GetExistingOrder(Guid orderId, CancellationToken cancellationToken)
+        private async Task<OrderDocument> GetExisting(Guid orderId, CancellationToken cancellationToken)
         {
             return await (await _orders.FindAsync(
                 x => x.Id == orderId,

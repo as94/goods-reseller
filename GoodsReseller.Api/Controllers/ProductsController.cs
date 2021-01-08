@@ -47,7 +47,7 @@ namespace GoodsReseller.Api.Controllers
             [FromBody] [Required] ProductInfoContract product,
             CancellationToken cancellationToken)
         {
-            await _mediator.Send(new CreateProductRequest
+            var response = await _mediator.Send(new CreateProductRequest
             {
                 Name = product.Name,
                 Description = product.Description,
@@ -55,10 +55,10 @@ namespace GoodsReseller.Api.Controllers
                 DiscountPerUnit = product.DiscountPerUnit
             }, cancellationToken);
 
-            return Ok();
+            return Ok(response);
         }
 
-        [HttpPut]
+        [HttpPut("{productId}")]
         public async Task<IActionResult> UpdateProductAsync(
             [FromRoute] [Required] Guid productId,
             [FromBody] [Required] ProductInfoContract product,
@@ -77,7 +77,7 @@ namespace GoodsReseller.Api.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{productId}")]
         public async Task<IActionResult> DeleteProductAsync(
             [FromRoute] [Required] Guid productId,
             CancellationToken cancellationToken)

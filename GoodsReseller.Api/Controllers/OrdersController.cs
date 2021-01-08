@@ -48,8 +48,8 @@ namespace GoodsReseller.Api.Controllers
 
         [HttpPatch("{orderId}/orderItems")]
         public async Task<IActionResult> PatchOrderItemAsync(
-            [FromRoute] Guid orderId,
-            [FromBody][Required] PatchOrderItemContract patchOrderItem,
+            [FromRoute] [Required] Guid orderId,
+            [FromBody] [Required] PatchOrderItemContract patchOrderItem,
             CancellationToken cancellationToken)
         {
             await _mediator.Send(new PatchOrderItemRequest
