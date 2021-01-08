@@ -10,9 +10,9 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Product Product { get; }
         public Money UnitPrice { get; }
         public Quantity Quantity { get; private set; }
-        public Factor DiscountPerUnit { get; }
+        public Discount DiscountPerUnit { get; }
 
-        public OrderItem(Guid id, Product product, Money unitPrice, Quantity quantity, Factor discountPerUnit)
+        public OrderItem(Guid id, Product product, Money unitPrice, Quantity quantity, Discount discountPerUnit)
             : base(id)
         {
             if (product == null)

@@ -29,7 +29,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 request.Name,
                 request.Description,
                 new Money(request.UnitPrice),
-                new Factor(request.DiscountPerUnit),
+                new Discount(request.DiscountPerUnit),
                 new DateValueObject(DateTime.Now));
 
             await _productRepository.SaveAsync(product, cancellationToken);

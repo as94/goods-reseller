@@ -26,17 +26,17 @@ namespace GoodsReseller.Api.Controllers
         [HttpGet("{orderId}")]
         public async Task<IActionResult> GetOrderAsync(Guid orderId, CancellationToken cancellationToken)
         {
-            var request = await _mediator.Send(new GetOrderByIdRequest
+            var response = await _mediator.Send(new GetOrderByIdRequest
             {
                 OrderId = orderId
             }, cancellationToken);
 
-            if (request.Order == null)
+            if (response.Order == null)
             {
                 return NotFound();
             }
 
-            return Ok(request.Order);
+            return Ok(response.Order);
         }
 
         [HttpPost]

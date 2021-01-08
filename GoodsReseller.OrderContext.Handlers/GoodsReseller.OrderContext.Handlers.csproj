@@ -10,6 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GoodsReseller.DataCatalogContext.Contracts\GoodsReseller.DataCatalogContext.Contracts.csproj" />
       <ProjectReference Include="..\GoodsReseller.OrderContext.Contracts\GoodsReseller.OrderContext.Contracts.csproj" />
       <ProjectReference Include="..\GoodsReseller.OrderContext.Domain\GoodsReseller.OrderContext.Domain.csproj" />
     </ItemGroup>

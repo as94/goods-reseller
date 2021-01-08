@@ -12,7 +12,7 @@ namespace GoodsReseller.SeedWork.ValueObjects
         {
             if (value < 0)
             {
-                throw new ArgumentException("Value shouldn't be negative");
+                throw new ArgumentException("Money shouldn't be negative");
             }
             
             Value = value;

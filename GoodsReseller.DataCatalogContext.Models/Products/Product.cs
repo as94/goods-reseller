@@ -9,7 +9,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public string Name { get; private set; }
         public string Description { get; private set; }
         public Money UnitPrice { get; private set; }
-        public Factor DiscountPerUnit { get; private set; }
+        public Discount DiscountPerUnit { get; private set; }
         
         public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
@@ -21,7 +21,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string name,
             string description,
             Money unitPrice,
-            Factor discountPerUnit,
+            Discount discountPerUnit,
             DateValueObject creationDate)
             : base(id, version)
         {
@@ -49,7 +49,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string name,
             string description,
             Money unitPrice,
-            Factor discountPerUnit,
+            Discount discountPerUnit,
             DateValueObject creationDate,
             DateValueObject? lastUpdateDate,
             bool isRemoved)
@@ -68,7 +68,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             };
         }
 
-        public void Update(string name, string description, Money unitPrice, Factor discountPerUnit, DateValueObject lastUpdateDate)
+        public void Update(string name, string description, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
         {
             if (IsRemoved)
             {

@@ -12,7 +12,7 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public Money UnitPrice { get; set; }
-        public Factor DiscountPerUnit { get; set; }
+        public Discount DiscountPerUnit { get; set; }
         
         public DateValueObject CreationDate { get; set; }
         public DateValueObject? LastUpdateDate { get; set; }
