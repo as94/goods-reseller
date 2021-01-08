@@ -11,6 +11,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public Money UnitPrice { get; private set; }
         public Factor DiscountPerUnit { get; private set; }
         
+        public DateValueObject CreationDate { get; }
+        public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
         
         public Product(
@@ -19,7 +21,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string name,
             string description,
             Money unitPrice,
-            Factor discountPerUnit)
+            Factor discountPerUnit,
+            DateValueObject creationDate)
             : base(id, version)
         {
             if (name == null)
@@ -36,6 +39,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Description = description;
             UnitPrice = unitPrice;
             DiscountPerUnit = discountPerUnit;
+            CreationDate = creationDate;
             IsRemoved = false;
         }
 
@@ -46,6 +50,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string description,
             Money unitPrice,
             Factor discountPerUnit,
+            DateValueObject creationDate,
+            DateValueObject? lastUpdateDate,
             bool isRemoved)
         {
             return new Product(
@@ -54,13 +60,15 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
                 name,
                 description,
                 unitPrice,
-                discountPerUnit)
+                discountPerUnit,
+                creationDate)
             {
+                LastUpdateDate = lastUpdateDate,
                 IsRemoved = isRemoved
             };
         }
 
-        public void Update(string name, string description, Money unitPrice, Factor discountPerUnit)
+        public void Update(string name, string description, Money unitPrice, Factor discountPerUnit, DateValueObject lastUpdateDate)
         {
             if (IsRemoved)
             {
@@ -76,24 +84,37 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             {
                 throw new ArgumentNullException(nameof(description));
             }
-            
+
+            if (lastUpdateDate == null)
+            {
+                throw new ArgumentNullException(nameof(lastUpdateDate));
+            }
+
             Name = name;
             Description = description;
             UnitPrice = unitPrice;
             DiscountPerUnit = discountPerUnit;
             
             IncrementVersion();
+            LastUpdateDate = lastUpdateDate;
         }
 
-        public void Remove()
+        public void Remove(DateValueObject lastUpdateDate)
         {
             if (IsRemoved)
             {
                 return;
             }
             
+            if (lastUpdateDate == null)
+            {
+                throw new ArgumentNullException(nameof(lastUpdateDate));
+            }
+            
             IsRemoved = true;
+            
             IncrementVersion();
+            LastUpdateDate = lastUpdateDate;
         }
     }
 }

@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GoodsReseller.DataCatalogContext.Contracts\GoodsReseller.DataCatalogContext.Contracts.csproj" />
+      <ProjectReference Include="..\GoodsReseller.DataCatalogContext.Models\GoodsReseller.DataCatalogContext.Models.csproj" />
     </ItemGroup>
 
 </Project>

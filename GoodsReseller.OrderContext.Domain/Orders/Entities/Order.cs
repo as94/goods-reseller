@@ -80,6 +80,11 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(discountPerUnit));
             }
 
+            if (lastUpdateDate == null)
+            {
+                throw new ArgumentNullException(nameof(lastUpdateDate));
+            }
+
             var existingOrderItem = _orderItems.FirstOrDefault(x => x.Product.Id == product.Id);
             if (existingOrderItem != null)
             {
@@ -98,6 +103,11 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         
         public void RemoveOrderItem(Guid productId, DateValueObject lastUpdateDate)
         {
+            if (lastUpdateDate == null)
+            {
+                throw new ArgumentNullException(nameof(lastUpdateDate));
+            }
+            
             var existingOrderItem = _orderItems.FirstOrDefault(x => x.Product.Id == productId);
             if (existingOrderItem != null)
             {
