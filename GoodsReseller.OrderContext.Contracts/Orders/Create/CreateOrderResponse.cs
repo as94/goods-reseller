@@ -1,6 +1,6 @@
 using System;
 
-namespace GoodsReseller.OrderContext.Contracts.Orders.CreateOrder
+namespace GoodsReseller.OrderContext.Contracts.Orders.Create
 {
     public class CreateOrderResponse
     {

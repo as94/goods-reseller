@@ -1,6 +1,4 @@
-using GoodsReseller.SeedWork;
-
-namespace GoodsReseller.OrderContext.Domain.Orders.ValueObjects
+namespace GoodsReseller.SeedWork.ValueObjects
 {
     public sealed class Currency : Enumeration
     {

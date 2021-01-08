@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Contracts.Models;
 using GoodsReseller.OrderContext.Contracts.OrderItems.PatchOrderItem;
-using GoodsReseller.OrderContext.Contracts.Orders.CreateOrder;
+using GoodsReseller.OrderContext.Contracts.Orders.Create;
 using GoodsReseller.OrderContext.Contracts.Orders.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

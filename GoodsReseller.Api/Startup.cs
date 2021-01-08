@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GoodsReseller.DataCatalogContext.Handlers;
 using GoodsReseller.Infrastructure;
 using GoodsReseller.Infrastructure.Configurations;
 using GoodsReseller.OrderContext.Handlers;
@@ -34,6 +35,7 @@ namespace GoodsReseller.Api
                 nameof(GoodsResellerDatabaseOptions)));
             
             services.RegisterInfrastructure();
+            services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
             services.AddControllers();
             services.AddSwaggerGen();

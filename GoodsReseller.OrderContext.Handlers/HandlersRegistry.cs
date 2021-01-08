@@ -1,4 +1,4 @@
-using GoodsReseller.OrderContext.Contracts.Orders.GetById;
+using GoodsReseller.OrderContext.Handlers.Orders;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +8,7 @@ namespace GoodsReseller.OrderContext.Handlers
     {
         public static void RegisterOrderContextHandlers(this IServiceCollection services)
         {
-            services.AddMediatR(typeof(HandlersRegistry).Assembly, typeof(GetOrderByIdRequest).Assembly);
+            services.AddMediatR(typeof(HandlersRegistry).Assembly, typeof(CreateOrderHandler).Assembly);
         }
     }
 }
