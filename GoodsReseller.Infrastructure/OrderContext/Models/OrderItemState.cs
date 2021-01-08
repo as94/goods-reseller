@@ -12,7 +12,7 @@ namespace GoodsReseller.Infrastructure.OrderContext.Models
         public Product Product { get; set; }
         public Money UnitPrice { get; set; }
         public Quantity Quantity { get; set; }
-        public Factor DiscountPerUnit { get; set; }
+        public Discount DiscountPerUnit { get; set; }
 
         public OrderItem ToDomain()
         {

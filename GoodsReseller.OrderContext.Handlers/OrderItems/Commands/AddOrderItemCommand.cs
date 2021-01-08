@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
@@ -31,17 +32,21 @@ namespace GoodsReseller.OrderContext.Handlers.OrderItems.Commands
                 throw new InvalidOperationException($"Order with Id = {parameters.OrderId} doesn't exist");
             }
             
-            // TODO: add
-            // var product = await _mediator.Send(new GetProductByIdRequest { ProductId = request.ProductId }, cancellationToken);
-            // if (product == null) ...
+            var response = await _mediator.Send(new GetProductByIdRequest
+            {
+                ProductId = parameters.ProductId
+            }, cancellationToken);
             
-            // product.UnitPrice
-            // product.DiscountPerUnit
+            if (response.Product == null)
+            {
+                throw new InvalidOperationException($"Product with Id = {parameters.ProductId} doesn't exist");
+            }
             
-            var product = new Product(parameters.ProductId, 1, "Table");
-            var money = new Money(10000M);
+            var product = new Product(response.Product.Id, response.Product.Version, response.Product.Name);
+            var unitPrice = new Money(response.Product.UnitPrice);
+            var discountPerUnit = new Discount(response.Product.DiscountPerUnit);
             
-            order.AddOrderItem(product, money, Factor.Empty, new DateValueObject(DateTime.Now));
+            order.AddOrderItem(product, unitPrice, discountPerUnit, new DateValueObject(DateTime.Now));
             await _ordersRepository.SaveAsync(order, cancellationToken);
         }
     }

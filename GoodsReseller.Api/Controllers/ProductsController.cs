@@ -29,17 +29,17 @@ namespace GoodsReseller.Api.Controllers
 
         public async Task<IActionResult> GetProductAsync(Guid productId, CancellationToken cancellationToken)
         {
-            var request = await _mediator.Send(new GetProductByIdRequest
+            var response = await _mediator.Send(new GetProductByIdRequest
             {
                 ProductId = productId
             }, cancellationToken);
 
-            if (request.Product == null)
+            if (response.Product == null)
             {
                 return NotFound();
             }
 
-            return Ok(request.Product);
+            return Ok(response.Product);
         }
 
         [HttpPost]

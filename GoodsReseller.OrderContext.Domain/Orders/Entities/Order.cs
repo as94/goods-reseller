@@ -63,7 +63,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             return order;
         }
 
-        public void AddOrderItem(Product product, Money unitPrice, Factor discountPerUnit, DateValueObject lastUpdateDate)
+        public void AddOrderItem(Product product, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
         {
             if (product == null)
             {

@@ -6,7 +6,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.ValueObjects
 {
     public sealed class Quantity : ValueObject
     {
-        public int Value { get; private set; }
+        public int Value { get; }
 
         public Quantity(int value)
         {

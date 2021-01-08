@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.SeedWork;
 using GoodsReseller.SeedWork.ValueObjects;
@@ -29,9 +30,15 @@ namespace GoodsReseller.OrderContext.Handlers.OrderItems.Commands
                 throw new InvalidOperationException($"Order with Id = {parameters.OrderId} doesn't exist");
             }
             
-            // TODO: add
-            // var product = await _mediator.Send(new GetProductByIdRequest { ProductId = request.ProductId }, cancellationToken);
-            // if (product == null) ...
+            var response = await _mediator.Send(new GetProductByIdRequest
+            {
+                ProductId = parameters.ProductId
+            }, cancellationToken);
+            
+            if (response.Product == null)
+            {
+                throw new InvalidOperationException($"Product with Id = {parameters.ProductId} doesn't exist");
+            }
             
             order.RemoveOrderItem(parameters.ProductId, new DateValueObject(DateTime.Now));
             await _ordersRepository.SaveAsync(order, cancellationToken);

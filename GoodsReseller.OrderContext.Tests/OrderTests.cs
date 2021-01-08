@@ -20,7 +20,7 @@ namespace GoodsReseller.OrderContext.Tests
             newOrder.AddOrderItem(
                 new Product(Guid.NewGuid(), 1, "Table"),
                 new Money(10000),
-                Factor.Empty,
+                Discount.Empty,
                 new DateValueObject(orderCreationDate.AddMinutes(2)));
 
             newOrder.TotalCost.Should().Be(new Money(10000));
@@ -36,7 +36,7 @@ namespace GoodsReseller.OrderContext.Tests
             newOrder.AddOrderItem(
                 new Product(Guid.NewGuid(), 1, "Table"),
                 new Money(10000),
-                new Factor(0.3M), 
+                new Discount(0.3M), 
                 new DateValueObject(orderCreationDate.AddMinutes(2)));
 
             newOrder.TotalCost.Should().Be(new Money(7000));
@@ -53,12 +53,12 @@ namespace GoodsReseller.OrderContext.Tests
             newOrder.AddOrderItem(
                 product,
                 new Money(10000),
-                new Factor(0.3M), 
+                new Discount(0.3M), 
                 new DateValueObject(orderCreationDate.AddMinutes(2)));
             newOrder.AddOrderItem(
                 product,
                 new Money(10000),
-                new Factor(0.3M), 
+                new Discount(0.3M), 
                 new DateValueObject(orderCreationDate.AddMinutes(3)));
 
             newOrder.TotalCost.Should().Be(new Money(14000));
@@ -88,7 +88,7 @@ namespace GoodsReseller.OrderContext.Tests
             newOrder.AddOrderItem(
                 product,
                 new Money(10000),
-                Factor.Empty,
+                Discount.Empty,
                 new DateValueObject(orderCreationDate.AddMinutes(2)));
             newOrder.RemoveOrderItem(product.Id, new DateValueObject(orderCreationDate.AddMinutes(3)));
 
@@ -106,12 +106,12 @@ namespace GoodsReseller.OrderContext.Tests
             newOrder.AddOrderItem(
                 product,
                 new Money(10000),
-                Factor.Empty,
+                Discount.Empty,
                 new DateValueObject(orderCreationDate.AddMinutes(2)));
             newOrder.AddOrderItem(
                 product,
                 new Money(10000),
-                Factor.Empty,
+                Discount.Empty,
                 new DateValueObject(orderCreationDate.AddMinutes(3)));
             newOrder.RemoveOrderItem(product.Id, new DateValueObject(orderCreationDate.AddMinutes(4)));
 
