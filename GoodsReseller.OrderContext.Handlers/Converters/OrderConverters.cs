@@ -18,6 +18,8 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
             {
                 Id = order.Id,
                 Version = order.Version,
+                Address = order.Address.ToContract(),
+                CustomerInfo = order.CustomerInfo.ToContract(),
                 OrderItems = order.OrderItems.Select(x => x.ToContract()).ToArray(),
                 TotalCost = order.TotalCost.ToContract()
             };

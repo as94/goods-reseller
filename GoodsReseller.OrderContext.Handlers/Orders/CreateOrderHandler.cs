@@ -5,7 +5,7 @@ using GoodsReseller.OrderContext.Contracts.Orders.Create;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
-using GoodsReseller.SeedWork;
+using GoodsReseller.OrderContext.Handlers.Converters;
 using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 
@@ -24,8 +24,11 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
         {
             var orderId = Guid.NewGuid();
             var version = 1;
+
+            var address = request.Address.ToDomain();
+            var customerInfo = request.CustomerInfo.ToDomain();
             
-            var order = new Order(orderId, version, new Address(), new DateValueObject(DateTime.Now));
+            var order = new Order(orderId, version, address, customerInfo, new DateValueObject(DateTime.Now));
             await _ordersRepository.SaveAsync(order, cancellationToken);
             
             return new CreateOrderResponse
