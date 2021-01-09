@@ -7,6 +7,6 @@ Customer -> Landing Page (payment included) -> Order -> Supply (transfer +) -> D
 ## Bounded contexts
 
 1. order
-1. goods transfer
-1. data catalog (customers, goods, suppliers, deliverymans)
+1. products transfer
+1. data catalog (products)
 1. auth
