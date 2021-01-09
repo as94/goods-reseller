@@ -18,26 +18,32 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         // card info
         
         public Address Address { get; }
-        
+        public CustomerInfo CustomerInfo { get; }
         public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
         
         public Money TotalCost { get; private set; }
 
-        public Order(Guid id, int version, Address address, DateValueObject creationDate)
+        public Order(Guid id, int version, Address address, CustomerInfo customerInfo, DateValueObject creationDate)
             : base(id, version)
         {
             if (address == null)
             {
                 throw new ArgumentNullException(nameof(address));
             }
-            
+
+            if (customerInfo == null)
+            {
+                throw new ArgumentNullException(nameof(customerInfo));
+            }
+
             if (creationDate == null)
             {
                 throw new ArgumentNullException(nameof(creationDate));
             }
             
             Address = address;
+            CustomerInfo = customerInfo;
             CreationDate = creationDate;
             LastUpdateDate = null;
             _orderItems = new List<OrderItem>();
@@ -48,12 +54,13 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Guid id,
             int version,
             Address address,
+            CustomerInfo customerInfo,
             DateValueObject creationDate,
             DateValueObject? lastUpdateDate,
             List<OrderItem> orderItems,
             Money totalCost)
         {
-            var order = new Order(id, version, address, creationDate)
+            var order = new Order(id, version, address, customerInfo, creationDate)
             {
                 LastUpdateDate = lastUpdateDate,
                 _orderItems = orderItems,

@@ -41,9 +41,10 @@ namespace GoodsReseller.Api.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(
+            [FromBody] [Required] CreateOrderRequest createOrder,
             CancellationToken cancellationToken)
         {
-            return Ok(await _mediator.Send(new CreateOrderRequest(), cancellationToken));
+            return Ok(await _mediator.Send(createOrder, cancellationToken));
         }
 
         [HttpPatch("{orderId}/orderItems")]

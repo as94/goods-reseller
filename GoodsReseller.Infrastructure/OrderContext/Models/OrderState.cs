@@ -12,7 +12,7 @@ namespace GoodsReseller.Infrastructure.OrderContext.Models
         public int Version { get; set; }
         
         public Address Address { get; set; }
-        
+        public CustomerInfo CustomerInfo { get; set; }
         public DateValueObject CreationDate { get; set; }
         public DateValueObject? LastUpdateDate { get; set; }
         
@@ -26,6 +26,7 @@ namespace GoodsReseller.Infrastructure.OrderContext.Models
                 Id,
                 Version,
                 Address,
+                CustomerInfo,
                 CreationDate,
                 LastUpdateDate,
                 OrderItems.Select(x => x.ToDomain())
