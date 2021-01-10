@@ -20,6 +20,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.DataCatalogCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.DataCatalogContext.Models", "GoodsReseller.DataCatalogContext.Models\GoodsReseller.DataCatalogContext.Models.csproj", "{68D7F17A-10D3-4CA7-AF3A-E228F92A3FAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.AuthContext.Contracts", "GoodsReseller.AuthContext.Contracts\GoodsReseller.AuthContext.Contracts.csproj", "{2861E15E-5433-4AAC-BAEC-E8C89524918B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.AuthContext.Handlers", "GoodsReseller.AuthContext.Handlers\GoodsReseller.AuthContext.Handlers.csproj", "{18410CD4-6542-4932-91BE-F70C167EEFCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.AuthContext.Domain", "GoodsReseller.AuthContext.Domain\GoodsReseller.AuthContext.Domain.csproj", "{CDE4C25D-5651-4FFD-AE9C-0CE0457E03BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +72,17 @@ Global
 		{68D7F17A-10D3-4CA7-AF3A-E228F92A3FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68D7F17A-10D3-4CA7-AF3A-E228F92A3FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68D7F17A-10D3-4CA7-AF3A-E228F92A3FAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2861E15E-5433-4AAC-BAEC-E8C89524918B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2861E15E-5433-4AAC-BAEC-E8C89524918B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2861E15E-5433-4AAC-BAEC-E8C89524918B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2861E15E-5433-4AAC-BAEC-E8C89524918B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18410CD4-6542-4932-91BE-F70C167EEFCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18410CD4-6542-4932-91BE-F70C167EEFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18410CD4-6542-4932-91BE-F70C167EEFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18410CD4-6542-4932-91BE-F70C167EEFCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDE4C25D-5651-4FFD-AE9C-0CE0457E03BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDE4C25D-5651-4FFD-AE9C-0CE0457E03BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDE4C25D-5651-4FFD-AE9C-0CE0457E03BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDE4C25D-5651-4FFD-AE9C-0CE0457E03BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using GoodsReseller.OrderContext.Domain.Orders.ValidationRules;
+using GoodsReseller.OrderContext.Domain.ValidationRules;
 
 namespace GoodsReseller.OrderContext.Contracts.Models
 {

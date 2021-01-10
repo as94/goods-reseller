@@ -4,7 +4,7 @@ using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.DataCatalogContext.Models.Products
 {
-    public sealed class Product : VersionedEntity
+    public sealed class Product : VersionedEntity, IAggregateRoot
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
