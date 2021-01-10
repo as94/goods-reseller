@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using GoodsReseller.OrderContext.Domain.Orders.ValidationRules;
+using GoodsReseller.OrderContext.Domain.ValidationRules;
 using GoodsReseller.SeedWork;
 
 namespace GoodsReseller.OrderContext.Domain.Orders.ValueObjects

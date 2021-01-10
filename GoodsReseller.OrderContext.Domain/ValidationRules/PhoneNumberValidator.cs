@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace GoodsReseller.OrderContext.Domain.Orders.ValidationRules
+namespace GoodsReseller.OrderContext.Domain.ValidationRules
 {
     public static class PhoneNumberValidator
     {
