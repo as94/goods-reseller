@@ -9,4 +9,8 @@
       <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\GoodsReseller.AuthContext.Contracts\GoodsReseller.AuthContext.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

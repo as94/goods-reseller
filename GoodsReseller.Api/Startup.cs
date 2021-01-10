@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GoodsReseller.Api.Middlewares;
+using GoodsReseller.AuthContext.Handlers;
 using GoodsReseller.DataCatalogContext.Handlers;
 using GoodsReseller.Infrastructure;
 using GoodsReseller.Infrastructure.Configurations;
@@ -42,6 +44,7 @@ namespace GoodsReseller.Api
                 });
             
             services.RegisterInfrastructure();
+            services.RegisterAuthContextHandlers();
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
             services.AddControllers();
@@ -51,16 +54,23 @@ namespace GoodsReseller.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Goods Reseller API V1");
             });
-            
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+
 
             // app.UseHttpsRedirection();
 

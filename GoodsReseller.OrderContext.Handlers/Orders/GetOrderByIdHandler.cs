@@ -7,7 +7,7 @@ using MediatR;
 
 namespace GoodsReseller.OrderContext.Handlers.Orders
 {
-    public sealed class GetOrderByIdHandler : IRequestHandler<GetOrderByIdRequest, GetOrderByIdResponse>
+    public class GetOrderByIdHandler : IRequestHandler<GetOrderByIdRequest, GetOrderByIdResponse>
     {
         private readonly IOrdersRepository _ordersRepository;
 

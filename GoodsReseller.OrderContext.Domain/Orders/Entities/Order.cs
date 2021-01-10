@@ -45,7 +45,6 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Address = address;
             CustomerInfo = customerInfo;
             CreationDate = creationDate;
-            LastUpdateDate = null;
             _orderItems = new List<OrderItem>();
             TotalCost = Money.Zero;
         }

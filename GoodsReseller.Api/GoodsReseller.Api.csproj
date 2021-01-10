@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GoodsReseller.AuthContext.Handlers\GoodsReseller.AuthContext.Handlers.csproj" />
       <ProjectReference Include="..\GoodsReseller.DataCatalogContext.Handlers\GoodsReseller.DataCatalogContext.Handlers.csproj" />
       <ProjectReference Include="..\GoodsReseller.Infrastructure\GoodsReseller.Infrastructure.csproj" />
       <ProjectReference Include="..\GoodsReseller.OrderContext.Handlers\GoodsReseller.OrderContext.Handlers.csproj" />

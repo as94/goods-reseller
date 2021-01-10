@@ -7,11 +7,12 @@ using GoodsReseller.OrderContext.Contracts.OrderItems.PatchOrderItem;
 using GoodsReseller.OrderContext.Contracts.Orders.Create;
 using GoodsReseller.OrderContext.Contracts.Orders.GetById;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodsReseller.Api.Controllers
 {
-    // [Authorize]
+    [Authorize(Roles = "Admin, Customer")]
     [ApiController]
     [Route("[controller]")]
     public class OrdersController : ControllerBase

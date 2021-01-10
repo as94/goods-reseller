@@ -4,14 +4,13 @@ using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Contracts.Orders.Create;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
-using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
 using GoodsReseller.OrderContext.Handlers.Converters;
 using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 
 namespace GoodsReseller.OrderContext.Handlers.Orders
 {
-    public sealed class CreateOrderHandler : IRequestHandler<CreateOrderRequest, CreateOrderResponse>
+    public class CreateOrderHandler : IRequestHandler<CreateOrderRequest, CreateOrderResponse>
     {
         private readonly IOrdersRepository _ordersRepository;
 
