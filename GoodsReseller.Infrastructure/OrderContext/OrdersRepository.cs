@@ -91,10 +91,10 @@ namespace GoodsReseller.Infrastructure.OrderContext
            }
         }
 
-        private async Task<OrderDocument> GetExisting(Guid orderId, CancellationToken cancellationToken)
+        private async Task<OrderDocument> GetExisting(Guid id, CancellationToken cancellationToken)
         {
             return await (await _orders.FindAsync(
-                x => x.Id == orderId,
+                x => x.Id == id,
                 new FindOptions<OrderDocument>(),
                 cancellationToken)).FirstOrDefaultAsync(cancellationToken);
         }

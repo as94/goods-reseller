@@ -1,24 +1,13 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using GoodsReseller.AuthContext.Domain.ValidationRules;
+using GoodsReseller.AuthContext.Domain.Users.ValueObjects;
 using MediatR;
 
 namespace GoodsReseller.AuthContext.Contracts.Users.Register
 {
-    public class RegisterUserRequest : IRequest<Unit>, IValidatableObject
+    public class RegisterUserRequest : IRequest<Unit>
     {
-        [Required]
         public string Email { get; set; }
 
-        [Required]
         public string Password { get; set; }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (!EmailValidator.IsValid(Email, out _))
-            {
-                yield return new ValidationResult($"Email '{Email}' is invalid ");
-            }
-        }
+        public Role Role { get; set; }
     }
 }

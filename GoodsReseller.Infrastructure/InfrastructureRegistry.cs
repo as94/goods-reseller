@@ -1,4 +1,6 @@
+using GoodsReseller.AuthContext.Domain.Users;
 using GoodsReseller.DataCatalogContext.Models.Products;
+using GoodsReseller.Infrastructure.AuthContext;
 using GoodsReseller.Infrastructure.DataCatalogContext;
 using GoodsReseller.Infrastructure.OrderContext;
 using GoodsReseller.OrderContext.Domain.Orders;
@@ -10,6 +12,7 @@ namespace GoodsReseller.Infrastructure
     {
         public static void RegisterInfrastructure(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddSingleton<IUsersRepository, UsersRepository>();
             serviceCollection.AddSingleton<IProductRepository, ProductRepository>();
             serviceCollection.AddSingleton<IOrdersRepository, OrdersRepository>();
         }

@@ -1,18 +1,14 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Contracts.OrderItems.PatchOrderItem;
 using GoodsReseller.OrderContext.Domain.Orders;
-using GoodsReseller.OrderContext.Domain.Orders.Entities;
-using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
 using GoodsReseller.OrderContext.Handlers.OrderItems.Commands;
-using GoodsReseller.SeedWork;
 using MediatR;
 
 namespace GoodsReseller.OrderContext.Handlers.OrderItems
 {
-    public sealed class PatchOrderItemHandler : IRequestHandler<PatchOrderItemRequest, Unit>
+    public class PatchOrderItemHandler : IRequestHandler<PatchOrderItemRequest, Unit>
     {
         private readonly OrderItemCommand[] _commands;
 

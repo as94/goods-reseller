@@ -8,11 +8,12 @@ using GoodsReseller.DataCatalogContext.Contracts.Products.Delete;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Update;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodsReseller.Api.Controllers
 {
-    // [Authorize]
+    [Authorize(Roles = "Admin,Customer")]
     [ApiController]
     [Route("[controller]")]
     public class ProductsController : ControllerBase
@@ -24,9 +25,7 @@ namespace GoodsReseller.Api.Controllers
             _mediator = mediator;
         }
 
-
         [HttpGet("{productId}")]
-
         public async Task<IActionResult> GetProductAsync(Guid productId, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(new GetProductByIdRequest
