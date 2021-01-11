@@ -29,8 +29,13 @@ namespace GoodsReseller.Infrastructure.AuthContext
             _users = database.GetCollection<UserDocument>("users");
             
             var indexKeysDefinition = Builders<UserDocument>.IndexKeys.Ascending(x => x.Email);
+            var indexOptions = new CreateIndexOptions
+            {
+                Unique = true,
+                Sparse = true
+            };
             
-            _users.Indexes.CreateOne(new CreateIndexModel<UserDocument>(indexKeysDefinition));
+            _users.Indexes.CreateOne(new CreateIndexModel<UserDocument>(indexKeysDefinition, indexOptions));
         }
         
         public async Task<User> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
