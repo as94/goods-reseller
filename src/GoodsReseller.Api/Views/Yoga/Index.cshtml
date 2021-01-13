@@ -27,6 +27,24 @@
 <body>
 <div>
     <h1>Набор для йоги</h1>
+    <div id="product">
+        <div id="product-name"></div>
+    </div>
 </div>
 </body>
+<script>
+    async function getProduct() {
+        const response = await fetch("/api/products/603f7f9f-3b94-4a8d-aba3-e8fcbec062d1", {
+            method: "GET",
+            headers: { "Accept": "application/json" }
+        });
+        
+        if (response.ok === true) {
+            const product = await response.json();
+            document.getElementById("product-name").innerHTML = product.name
+        }
+    }
+    
+    getProduct()
+</script>
 </html>

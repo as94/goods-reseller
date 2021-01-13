@@ -65,7 +65,9 @@ namespace GoodsReseller.Api
 
 
             // app.UseHttpsRedirection();
-
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            
             app.UseRouting();
 
             app.UseAuthentication();

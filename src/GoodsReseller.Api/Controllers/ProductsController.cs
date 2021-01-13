@@ -15,7 +15,7 @@ namespace GoodsReseller.Api.Controllers
 {
     [Authorize(Roles = "Admin,Customer")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/products")]
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
