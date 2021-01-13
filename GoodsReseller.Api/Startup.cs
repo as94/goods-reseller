@@ -39,6 +39,7 @@ namespace GoodsReseller.Api
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
             services.AddControllers();
+            services.AddMvc();
             services.AddSwaggerGen();
         }
 
@@ -73,6 +74,7 @@ namespace GoodsReseller.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
             });
         }
     }
