@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using GoodsReseller.Api.Middlewares;
 using GoodsReseller.AuthContext.Handlers;
 using GoodsReseller.DataCatalogContext.Handlers;
@@ -10,32 +6,27 @@ using GoodsReseller.Infrastructure.Configurations;
 using GoodsReseller.OrderContext.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace GoodsReseller.Api
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<GoodsResellerDatabaseOptions>(Configuration.GetSection(
-                nameof(GoodsResellerDatabaseOptions)));
+            var goodsResellerDatabaseSection = _configuration.GetSection(nameof(GoodsResellerDatabaseOptions));
+            services.Configure<GoodsResellerDatabaseOptions>(goodsResellerDatabaseSection);
             
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -43,7 +34,7 @@ namespace GoodsReseller.Api
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Auth/Login");
                 });
             
-            services.RegisterInfrastructure();
+            services.RegisterInfrastructure(goodsResellerDatabaseSection.Get<GoodsResellerDatabaseOptions>());
             services.RegisterAuthContextHandlers();
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
