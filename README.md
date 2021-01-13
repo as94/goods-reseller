@@ -10,3 +10,8 @@ Customer -> Landing Page (payment included) -> Order -> Supply (transfer +) -> D
 1. data catalog (products)
 1. order
 1. products transfer
+
+# Tech Documentation
+
+## MongoDB Migrations
+https://thegreatco.com/posts/20180821/
