@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GoodsReseller.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IMediator _mediator;
