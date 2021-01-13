@@ -18,14 +18,9 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
     {
         private readonly IMongoCollection<ProductDocument> _products;
 
-        public ProductRepository(IOptions<GoodsResellerDatabaseOptions> options)
+        public ProductRepository(IMongoDatabase mongoDatabase)
         {
-            var goodsResellerDatabaseOptions = options.Value;
-            
-            var client = new MongoClient(goodsResellerDatabaseOptions.ConnectionString);
-            var database = client.GetDatabase(goodsResellerDatabaseOptions.DatabaseName);
-
-            _products = database.GetCollection<ProductDocument>("products");
+            _products = mongoDatabase.GetCollection<ProductDocument>("products");
         }
         
         public async Task<Product> GetAsync(Guid productId, CancellationToken cancellationToken)

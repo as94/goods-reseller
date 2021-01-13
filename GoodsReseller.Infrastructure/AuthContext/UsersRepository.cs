@@ -19,14 +19,9 @@ namespace GoodsReseller.Infrastructure.AuthContext
     {
         private readonly IMongoCollection<UserDocument> _users;
         
-        public UsersRepository(IOptions<GoodsResellerDatabaseOptions> options)
+        public UsersRepository(IMongoDatabase mongoDatabase)
         {
-            var goodsResellerDatabaseOptions = options.Value;
-            
-            var client = new MongoClient(goodsResellerDatabaseOptions.ConnectionString);
-            var database = client.GetDatabase(goodsResellerDatabaseOptions.DatabaseName);
-
-            _users = database.GetCollection<UserDocument>("users");
+            _users = mongoDatabase.GetCollection<UserDocument>("users");
             
             var indexKeysDefinition = Builders<UserDocument>.IndexKeys.Ascending(x => x.Email);
             var indexOptions = new CreateIndexOptions

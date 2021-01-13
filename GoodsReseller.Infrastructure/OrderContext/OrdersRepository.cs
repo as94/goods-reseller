@@ -19,14 +19,9 @@ namespace GoodsReseller.Infrastructure.OrderContext
     {
         private readonly IMongoCollection<OrderDocument> _orders;
         
-        public OrdersRepository(IOptions<GoodsResellerDatabaseOptions> options)
+        public OrdersRepository(IMongoDatabase mongoDatabase)
         {
-            var goodsResellerDatabaseOptions = options.Value;
-            
-            var client = new MongoClient(goodsResellerDatabaseOptions.ConnectionString);
-            var database = client.GetDatabase(goodsResellerDatabaseOptions.DatabaseName);
-
-            _orders = database.GetCollection<OrderDocument>("orders");
+            _orders = mongoDatabase.GetCollection<OrderDocument>("orders");
         }
         
         public async Task<Order> GetAsync(Guid orderId, CancellationToken cancellationToken)
