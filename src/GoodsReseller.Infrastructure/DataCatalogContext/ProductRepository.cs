@@ -21,6 +21,15 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
         public ProductRepository(IMongoDatabase mongoDatabase)
         {
             _products = mongoDatabase.GetCollection<ProductDocument>("products");
+            
+            var indexKeysDefinition = Builders<ProductDocument>.IndexKeys.Ascending(x => x.Label);
+            var indexOptions = new CreateIndexOptions
+            {
+                Unique = true,
+                Sparse = true
+            };
+            
+            _products.Indexes.CreateOne(new CreateIndexModel<ProductDocument>(indexKeysDefinition, indexOptions));
         }
         
         public async Task<Product> GetAsync(Guid productId, CancellationToken cancellationToken)
@@ -68,6 +77,7 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
             {
                 Id = product.Id,
                 Version = product.Version,
+                Label = product.Label,
                 CreationDateUtc = product.CreationDate.DateUtc,
                 LastUpdateDateUtc = product.LastUpdateDate?.DateUtc,
                 IsRemoved = product.IsRemoved,

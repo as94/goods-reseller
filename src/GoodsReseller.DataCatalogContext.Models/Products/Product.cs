@@ -6,6 +6,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
 {
     public sealed class Product : VersionedEntity, IAggregateRoot
     {
+        public string Label { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public Money UnitPrice { get; private set; }
@@ -18,6 +19,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public Product(
             Guid id,
             int version,
+            string label,
             string name,
             string description,
             Money unitPrice,
@@ -25,6 +27,11 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             DateValueObject creationDate)
             : base(id, version)
         {
+            if (label == null)
+            {
+                throw new ArgumentNullException(nameof(label));
+            }
+            
             if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
@@ -34,7 +41,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             {
                 throw new ArgumentNullException(nameof(description));
             }
-            
+
+            Label = label;
             Name = name;
             Description = description;
             UnitPrice = unitPrice;
@@ -46,6 +54,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public static Product Restore(
             Guid id,
             int version,
+            string label,
             string name,
             string description,
             Money unitPrice,
@@ -57,6 +66,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             return new Product(
                 id,
                 version,
+                label,
                 name,
                 description,
                 unitPrice,
@@ -68,11 +78,16 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             };
         }
 
-        public void Update(string name, string description, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
+        public void Update(string label, string name, string description, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
         {
             if (IsRemoved)
             {
                 throw new InvalidOperationException($"Product with id = {Id} has already been removed");
+            }
+            
+            if (label == null)
+            {
+                throw new ArgumentNullException(nameof(label));
             }
             
             if (name == null)
@@ -90,6 +105,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
                 throw new ArgumentNullException(nameof(lastUpdateDate));
             }
 
+            Label = label;
             Name = name;
             Description = description;
             UnitPrice = unitPrice;

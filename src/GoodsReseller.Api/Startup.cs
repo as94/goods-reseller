@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using GoodsReseller.Api.Middlewares;
 using GoodsReseller.AuthContext.Handlers;
 using GoodsReseller.DataCatalogContext.Handlers;
@@ -31,7 +32,14 @@ namespace GoodsReseller.Api
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Auth/Login");
+                    options.Events = new CookieAuthenticationEvents
+                    {                          
+                        OnRedirectToLogin = redirectContext =>
+                        {
+                            redirectContext.HttpContext.Response.StatusCode = 401;
+                            return Task.CompletedTask;
+                        }
+                    };  
                 });
             
             services.RegisterInfrastructure(goodsResellerDatabaseSection.Get<GoodsResellerDatabaseOptions>());

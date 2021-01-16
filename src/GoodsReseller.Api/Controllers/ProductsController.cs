@@ -48,10 +48,7 @@ namespace GoodsReseller.Api.Controllers
         {
             var response = await _mediator.Send(new CreateProductRequest
             {
-                Name = product.Name,
-                Description = product.Description,
-                UnitPrice = product.UnitPrice,
-                DiscountPerUnit = product.DiscountPerUnit
+                ProductInfo = product
             }, cancellationToken);
 
             return Ok(response);
@@ -66,11 +63,7 @@ namespace GoodsReseller.Api.Controllers
             await _mediator.Send(new UpdateProductRequest
             {
                 ProductId = productId,
-                
-                Name = product.Name,
-                Description = product.Description,
-                UnitPrice = product.UnitPrice,
-                DiscountPerUnit = product.DiscountPerUnit
+                ProductInfo = product
             }, cancellationToken);
             
             return Ok();

@@ -25,10 +25,11 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
             var product = new Product(
                 productId,
                 version,
-                request.Name,
-                request.Description,
-                new Money(request.UnitPrice),
-                new Discount(request.DiscountPerUnit),
+                request.ProductInfo.Label,
+                request.ProductInfo.Name,
+                request.ProductInfo.Description,
+                new Money(request.ProductInfo.UnitPrice),
+                new Discount(request.ProductInfo.DiscountPerUnit),
                 new DateValueObject(DateTime.Now));
 
             await _productRepository.SaveAsync(product, cancellationToken);
