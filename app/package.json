@@ -27,11 +27,10 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "build-prod": "yarn eslint && webpack --config webpack.production.ts --mode=production",
+    "build-prod": "webpack --config webpack.production.ts --mode=production",
     "build": "tsc --noEmit && webpack --config webpack.development.ts --mode=development",
     "watch": "webpack --watch --config webpack.development.ts --mode=development",
-    "start": "webpack-dev-server --config webpack.development.ts --mode=development",
-    "eslint": "eslint -c eslint.json --project ."
+    "start": "webpack-dev-server --config webpack.development.ts --mode=development"
   },
   "eslintConfig": {
     "extends": [
