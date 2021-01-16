@@ -46,6 +46,40 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
             return state?.ToDomain();
         }
 
+        public async Task<IEnumerable<Product>> BatchAsync(int offset, int count, CancellationToken cancellationToken)
+        {
+            if (offset < 0)
+            {
+                throw new ArgumentException(nameof(offset));
+            }
+            
+            if (count < 0)
+            {
+                throw new ArgumentException(nameof(count));
+            }
+
+            if (count > 100)
+            {
+                throw new ArgumentException($"{nameof(count)} more than 100");
+            }
+            
+            var cursor = await _products.FindAsync(
+                new FilterDefinitionBuilder<ProductDocument>().Empty,
+                new FindOptions<ProductDocument>
+                {
+                    Skip = offset,
+                    Limit = count,
+                    MaxTime = TimeSpan.FromSeconds(5),
+                    MaxAwaitTime = TimeSpan.FromSeconds(5),
+                },
+                cancellationToken);
+            
+            return (await cursor.ToListAsync(cancellationToken))
+                .Select(x => GetState(x).ToDomain())
+                .ToList()
+                .AsReadOnly();
+        }
+
         public async Task<IEnumerable<Product>> GetListByIdsAsync(IEnumerable<Guid> productIds, CancellationToken cancellationToken)
         {
             if (productIds == null)
@@ -67,12 +101,15 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
             
             var cursor = await _products.FindAsync(
                 new FilterDefinitionBuilder<ProductDocument>().In(x=> x.Id , ids),
-                new FindOptions<ProductDocument>(),
+                new FindOptions<ProductDocument>
+                {
+                    MaxTime = TimeSpan.FromSeconds(5),
+                    MaxAwaitTime = TimeSpan.FromSeconds(5),
+                },
                 cancellationToken);
             
-            var documents = await cursor.ToListAsync(cancellationToken);
-            
-            return documents.Select(x => GetState(x).ToDomain())
+            return (await cursor.ToListAsync(cancellationToken))
+                .Select(x => GetState(x).ToDomain())
                 .ToList()
                 .AsReadOnly();
         }

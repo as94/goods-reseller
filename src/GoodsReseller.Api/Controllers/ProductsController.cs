@@ -3,10 +3,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.DataCatalogContext.Contracts.Models;
+using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
+using GoodsReseller.DataCatalogContext.Contracts.Products.BatchByIds;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Create;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Delete;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Update;
+using GoodsReseller.DataCatalogContext.Contracts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +42,17 @@ namespace GoodsReseller.Api.Controllers
             }
 
             return Ok(response.Product);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductListAsync([FromQuery] BatchProductsQuery query, CancellationToken cancellationToken)
+        {
+            var response = await _mediator.Send(new BatchProductsByIdsRequest
+            {
+                Query = query
+            }, cancellationToken);
+            
+            return Ok(response.ProductList);
         }
 
         [HttpPost]
