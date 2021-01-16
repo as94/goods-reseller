@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using GoodsReseller.DataCatalogContext.Contracts.Models;
 using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
 using GoodsReseller.DataCatalogContext.Contracts.Products.BatchByIds;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Create;

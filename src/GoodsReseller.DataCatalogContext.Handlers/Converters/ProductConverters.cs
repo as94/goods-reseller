@@ -20,6 +20,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
             {
                 Id = product.Id,
                 Version = product.Version,
+                Label = product.Label,
                 Name = product.Name,
                 Description = product.Description,
                 UnitPrice = product.UnitPrice.Value,

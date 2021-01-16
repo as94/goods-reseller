@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -9,6 +9,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
+import authApi from '../Api/Auth/authApi'
+import { LoginUserContract } from '../Api/Auth/contracts'
 
 const Copyright = () => {
 	return (
@@ -43,6 +45,18 @@ const useStyles = makeStyles(theme => ({
 const Login = () => {
 	const classes = useStyles()
 
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+
+	const signIn = useCallback(async () => {
+		await authApi.Login({
+			email,
+			password,
+		} as LoginUserContract)
+
+		// TODO: add redirect to Main Page
+	}, [email, password, authApi])
+
 	return (
 		<Container component="main" maxWidth="xs">
 			<CssBaseline />
@@ -64,6 +78,8 @@ const Login = () => {
 						name="email"
 						autoComplete="email"
 						autoFocus
+						value={email}
+						onChange={e => setEmail(e.target.value)}
 					/>
 					<TextField
 						variant="outlined"
@@ -75,8 +91,10 @@ const Login = () => {
 						type="password"
 						id="password"
 						autoComplete="current-password"
+						value={password}
+						onChange={e => setPassword(e.target.value)}
 					/>
-					<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+					<Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={signIn}>
 						Sign In
 					</Button>
 					<Link href="#" variant="body2">

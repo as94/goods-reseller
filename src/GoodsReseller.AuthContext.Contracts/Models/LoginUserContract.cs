@@ -4,7 +4,7 @@ using GoodsReseller.AuthContext.Domain.ValidationRules;
 
 namespace GoodsReseller.AuthContext.Contracts.Models
 {
-    public class RegisterUser : IValidatableObject
+    public class LoginUserContract : IValidatableObject
     {
         [Required]
         public string Email { get; set; }

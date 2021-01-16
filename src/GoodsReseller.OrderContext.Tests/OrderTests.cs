@@ -18,7 +18,7 @@ namespace GoodsReseller.OrderContext.Tests
             var newOrder = GetOrder(orderId, orderCreationDate);
 
             newOrder.AddOrderItem(
-                new Product(Guid.NewGuid(), 1, "Table"),
+                new Product(Guid.NewGuid(), 1, "Table", "table"),
                 new Money(10000),
                 Discount.Empty,
                 new DateValueObject(orderCreationDate.AddMinutes(2)));
@@ -34,7 +34,7 @@ namespace GoodsReseller.OrderContext.Tests
             var newOrder = GetOrder(orderId, orderCreationDate);
 
             newOrder.AddOrderItem(
-                new Product(Guid.NewGuid(), 1, "Table"),
+                new Product(Guid.NewGuid(), 1, "Table", "table"),
                 new Money(10000),
                 new Discount(0.3M), 
                 new DateValueObject(orderCreationDate.AddMinutes(2)));
@@ -48,7 +48,7 @@ namespace GoodsReseller.OrderContext.Tests
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId, orderCreationDate);
-            var product = new Product(Guid.NewGuid(), 1, "Table");
+            var product = new Product(Guid.NewGuid(), 1, "Table", "table");
             
             newOrder.AddOrderItem(
                 product,
@@ -70,7 +70,7 @@ namespace GoodsReseller.OrderContext.Tests
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId, orderCreationDate);
-            var product = new Product(Guid.NewGuid(), 1, "Table");
+            var product = new Product(Guid.NewGuid(), 1, "Table", "table");
             
             newOrder.RemoveOrderItem(product.Id, new DateValueObject(orderCreationDate.AddMinutes(2)));
             
@@ -83,7 +83,7 @@ namespace GoodsReseller.OrderContext.Tests
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId, orderCreationDate);
-            var product = new Product(Guid.NewGuid(), 1, "Table");
+            var product = new Product(Guid.NewGuid(), 1, "Table", "table");
             
             newOrder.AddOrderItem(
                 product,
@@ -101,7 +101,7 @@ namespace GoodsReseller.OrderContext.Tests
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId, orderCreationDate);
-            var product = new Product(Guid.NewGuid(), 1, "Table");
+            var product = new Product(Guid.NewGuid(), 1, "Table", "table");
             
             newOrder.AddOrderItem(
                 product,

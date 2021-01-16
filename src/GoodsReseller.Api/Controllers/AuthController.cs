@@ -31,7 +31,7 @@ namespace GoodsReseller.Api.Controllers
         // [Authorize(Roles = "Admin")]
         [HttpPost("registerAdmin")]
         public async Task RegisterAdminAsync(
-            [FromBody] [Required] RegisterUser registerUser,
+            [FromBody] [Required] RegisterUserContract registerUser,
             CancellationToken cancellationToken)
         {
             await _mediator.Send(new RegisterUserRequest
@@ -46,7 +46,7 @@ namespace GoodsReseller.Api.Controllers
         
         [HttpPost("register")]
         public async Task RegisterUserAsync(
-            [FromBody] [Required] RegisterUser registerUser,
+            [FromBody] [Required] RegisterUserContract registerUser,
             CancellationToken cancellationToken)
         {
             await _mediator.Send(new RegisterUserRequest
@@ -61,11 +61,16 @@ namespace GoodsReseller.Api.Controllers
 
         [HttpPost("login")]
         public async Task LoginAsync(
-            [FromBody] [Required] LoginUserRequest loginUserRequest,
+            [FromBody] [Required] LoginUserContract loginUser,
             CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(loginUserRequest, cancellationToken);
-            await AuthenticateAsync(loginUserRequest.Email, response.Role.Name);
+            var response = await _mediator.Send(new LoginUserRequest
+            {
+                Email = loginUser.Email,
+                Password = loginUser.Password
+            }, cancellationToken);
+            
+            await AuthenticateAsync(loginUser.Email, response.Role.Name);
         }
         
         [Authorize]

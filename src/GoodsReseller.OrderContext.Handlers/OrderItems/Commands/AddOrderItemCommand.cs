@@ -42,7 +42,12 @@ namespace GoodsReseller.OrderContext.Handlers.OrderItems.Commands
                 throw new InvalidOperationException($"Product with Id = {parameters.ProductId} doesn't exist");
             }
             
-            var product = new Product(response.Product.Id, response.Product.Version, response.Product.Name);
+            var product = new Product(
+                response.Product.Id,
+                response.Product.Version,
+                response.Product.Name,
+                response.Product.Label);
+            
             var unitPrice = new Money(response.Product.UnitPrice);
             var discountPerUnit = new Discount(response.Product.DiscountPerUnit);
             
