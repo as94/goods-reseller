@@ -1,0 +1,4 @@
+**/*.ejs
+**/*.spec.js
+**/*.spec.ts
+**/*.json
