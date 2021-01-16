@@ -13,6 +13,9 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext.Models
         [BsonElement("version")]
         public int Version { get; set; }
 
+        [BsonElement("label")]
+        public string Label { get; set; }
+
         [BsonElement("creationDateUtc")]
         public DateTime CreationDateUtc { get; set; }
 

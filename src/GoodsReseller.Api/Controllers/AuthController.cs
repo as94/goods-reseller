@@ -58,7 +58,7 @@ namespace GoodsReseller.Api.Controllers
             await AuthenticateAsync(registerUser.Email, Role.Customer.Name);
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public async Task LoginAsync(
             [FromBody] [Required] LoginUserRequest loginUserRequest,
             CancellationToken cancellationToken)
@@ -68,7 +68,7 @@ namespace GoodsReseller.Api.Controllers
         }
         
         [Authorize]
-        [HttpPost("Logout")]
+        [HttpPost("logout")]
         public async Task LogoutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

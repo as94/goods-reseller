@@ -1,4 +1,5 @@
 using System;
+using GoodsReseller.DataCatalogContext.Contracts.Models;
 using MediatR;
 
 namespace GoodsReseller.DataCatalogContext.Contracts.Products.Update
@@ -7,9 +8,6 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Products.Update
     {
         public Guid ProductId { get; set; }
         
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public decimal UnitPrice { get; set; }
-        public decimal DiscountPerUnit { get; set; }
+        public ProductInfoContract ProductInfo { get; set; }
     }
 }
