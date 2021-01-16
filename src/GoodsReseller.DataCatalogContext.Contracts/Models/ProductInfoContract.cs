@@ -1,3 +1,5 @@
+using System;
+
 namespace GoodsReseller.DataCatalogContext.Contracts.Models
 {
     public class ProductInfoContract
@@ -7,5 +9,6 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Models
         public string Description { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal DiscountPerUnit { get; set; }
+        public Guid[] ProductIds { get; set; }
     }
 }

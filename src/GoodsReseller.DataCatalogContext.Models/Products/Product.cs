@@ -4,7 +4,7 @@ using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.DataCatalogContext.Models.Products
 {
-    public sealed class Product : VersionedEntity, IAggregateRoot
+    public class Product : VersionedEntity, IAggregateRoot
     {
         public string Label { get; private set; }
         public string Name { get; private set; }
@@ -15,6 +15,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
+
+        public Guid[] ProductIds { get; private set; }
         
         public Product(
             Guid id,
@@ -24,7 +26,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string description,
             Money unitPrice,
             Discount discountPerUnit,
-            DateValueObject creationDate)
+            DateValueObject creationDate,
+            Guid[] productIds = null)
             : base(id, version)
         {
             if (label == null)
@@ -49,6 +52,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             DiscountPerUnit = discountPerUnit;
             CreationDate = creationDate;
             IsRemoved = false;
+            ProductIds = productIds;
         }
 
         public static Product Restore(
@@ -61,7 +65,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Discount discountPerUnit,
             DateValueObject creationDate,
             DateValueObject? lastUpdateDate,
-            bool isRemoved)
+            bool isRemoved,
+            Guid[]? productIds = null)
         {
             return new Product(
                 id,
@@ -71,14 +76,22 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
                 description,
                 unitPrice,
                 discountPerUnit,
-                creationDate)
+                creationDate,
+                productIds)
             {
                 LastUpdateDate = lastUpdateDate,
                 IsRemoved = isRemoved
             };
         }
 
-        public void Update(string label, string name, string description, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
+        public void Update(
+            string label,
+            string name,
+            string description,
+            Money unitPrice,
+            Discount discountPerUnit,
+            DateValueObject lastUpdateDate,
+            Guid[]? productIds = null)
         {
             if (IsRemoved)
             {
@@ -110,6 +123,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Description = description;
             UnitPrice = unitPrice;
             DiscountPerUnit = discountPerUnit;
+            ProductIds = productIds;
             
             IncrementVersion();
             LastUpdateDate = lastUpdateDate;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
@@ -24,9 +25,15 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 return new GetProductByIdResponse();
             }
 
+            IEnumerable<Product> innerProducts = null;
+            if (product.ProductIds?.Length > 0)
+            {
+                innerProducts = await _productRepository.GetListByIdsAsync(product.ProductIds, cancellationToken);
+            }
+
             return new GetProductByIdResponse
             {
-                Product = product.ToContract()
+                Product = product.ToContract(innerProducts)
             };
         }
     }

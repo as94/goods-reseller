@@ -19,6 +19,8 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext.Models
         public DateValueObject? LastUpdateDate { get; set; }
         public bool IsRemoved { get; set; }
 
+        public Guid[] ProductIds { get; set; }
+
         public Product ToDomain()
         {
             return Product.Restore(
@@ -31,7 +33,8 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext.Models
                 DiscountPerUnit,
                 CreationDate,
                 LastUpdateDate,
-                IsRemoved);
+                IsRemoved,
+                ProductIds);
         }
     }
 }
