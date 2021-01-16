@@ -1,20 +1,29 @@
 {
 	"compilerOptions": {
-		"lib": ["dom", "dom.iterable", "esnext"],
+		"lib": [
+			"dom",
+			"dom.iterable",
+			"esnext"
+		],
 		"jsx": "react",
-	​
 		"strict": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"strictNullChecks": true,
 		"module": "commonjs",
-	​
 		"esModuleInterop": true,
-	​
 		"skipLibCheck": true,
-
 		"baseUrl": "./src",
 		"resolveJsonModule": true,
-		"typeRoots": [ "./types", "./node_modules/@types"]
+		"typeRoots": [
+			"./types",
+			"./node_modules/@types"
+		]
 	},
-	"include": ["src", "dev-server"]
+	"include": [
+		"src",
+		"dev-server"
+	]
 }
