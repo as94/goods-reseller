@@ -1,10 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.DataCatalogContext.Models.Products;
-using GoodsReseller.Infrastructure.Configurations;
 using GoodsReseller.Infrastructure.DataCatalogContext.Models;
-using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
@@ -41,18 +41,40 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
                 return null;
             }
 
-            var state = JsonConvert.DeserializeObject<ProductState>(
-                existing.Document.ToJson(new JsonWriterSettings { OutputMode = JsonOutputMode.Shell }),
-                new JsonSerializerSettings
-                {
-                    ContractResolver = new DefaultContractResolver
-                    {
-                        NamingStrategy = new CamelCaseNamingStrategy()
-                    },
-                    Formatting = Formatting.Indented
-                });
+            var state = GetState(existing);
 
             return state?.ToDomain();
+        }
+
+        public async Task<IEnumerable<Product>> GetListByIdsAsync(IEnumerable<Guid> productIds, CancellationToken cancellationToken)
+        {
+            if (productIds == null)
+            {
+                throw new ArgumentNullException(nameof(productIds));
+            }
+
+            var ids = productIds.ToArray();
+
+            if (ids.Length == 0)
+            {
+                return Array.Empty<Product>();
+            }
+
+            if (ids.Length == 1)
+            {
+                return new [] { await GetAsync(ids[0], cancellationToken) };
+            }
+            
+            var cursor = await _products.FindAsync(
+                new FilterDefinitionBuilder<ProductDocument>().In(x=> x.Id , ids),
+                new FindOptions<ProductDocument>(),
+                cancellationToken);
+            
+            var documents = await cursor.ToListAsync(cancellationToken);
+            
+            return documents.Select(x => GetState(x).ToDomain())
+                .ToList()
+                .AsReadOnly();
         }
 
         public async Task SaveAsync(Product product, CancellationToken cancellationToken)
@@ -95,13 +117,27 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
                 await _products.ReplaceOneAsync(x => x.Id == product.Id, document, new ReplaceOptions(), cancellationToken);
             }
         }
-        
+
         private async Task<ProductDocument> GetExisting(Guid id, CancellationToken cancellationToken)
         {
             return await (await _products.FindAsync(
                 x => x.Id == id && !x.IsRemoved,
                 new FindOptions<ProductDocument>(),
                 cancellationToken)).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        private static ProductState GetState(ProductDocument existing)
+        {
+            return JsonConvert.DeserializeObject<ProductState>(
+                existing.Document.ToJson(new JsonWriterSettings {OutputMode = JsonOutputMode.Shell}),
+                new JsonSerializerSettings
+                {
+                    ContractResolver = new DefaultContractResolver
+                    {
+                        NamingStrategy = new CamelCaseNamingStrategy()
+                    },
+                    Formatting = Formatting.Indented
+                });
         }
     }
 }

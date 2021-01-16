@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using GoodsReseller.DataCatalogContext.Contracts.Models;
 using GoodsReseller.DataCatalogContext.Models.Products;
 
@@ -6,7 +8,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
 {
     public static class ProductConverters
     {
-        public static ProductContract ToContract(this Product product)
+        public static ProductContract ToContract(this Product product, IEnumerable<Product> innerProducts = null)
         {
             if (product == null)
             {
@@ -20,7 +22,8 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
                 Name = product.Name,
                 Description = product.Description,
                 UnitPrice = product.UnitPrice.Value,
-                DiscountPerUnit = product.DiscountPerUnit.Value
+                DiscountPerUnit = product.DiscountPerUnit.Value,
+                Products = innerProducts?.Select(x => x.ToContract()).ToArray()
             };
         }
     }
