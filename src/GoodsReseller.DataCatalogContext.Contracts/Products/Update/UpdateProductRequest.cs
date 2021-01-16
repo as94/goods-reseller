@@ -1,5 +1,6 @@
 using System;
 using GoodsReseller.DataCatalogContext.Contracts.Models;
+using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
 using MediatR;
 
 namespace GoodsReseller.DataCatalogContext.Contracts.Products.Update

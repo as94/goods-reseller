@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GoodsReseller.DataCatalogContext.Contracts.Models;
+using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
 using GoodsReseller.DataCatalogContext.Models.Products;
 
 namespace GoodsReseller.DataCatalogContext.Handlers.Converters
@@ -24,6 +25,17 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
                 UnitPrice = product.UnitPrice.Value,
                 DiscountPerUnit = product.DiscountPerUnit.Value,
                 Products = innerProducts?.Select(x => x.ToContract()).ToArray()
+            };
+        }
+
+        public static ProductListItemContract ToListItemContract(this Product product)
+        {
+            return new ProductListItemContract
+            {
+                Id = product.Id,
+                Version = product.Version,
+                Label = product.Label,
+                Name = product.Name
             };
         }
     }

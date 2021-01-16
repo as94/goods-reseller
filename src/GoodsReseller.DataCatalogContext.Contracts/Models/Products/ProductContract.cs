@@ -1,6 +1,6 @@
 using System;
 
-namespace GoodsReseller.DataCatalogContext.Contracts.Models
+namespace GoodsReseller.DataCatalogContext.Contracts.Models.Products
 {
     public class ProductContract
     {
