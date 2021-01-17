@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container'
 import authApi from '../Api/Auth/authApi'
 import { LoginUserContract } from '../Api/Auth/contracts'
 import Copyright from '../Copyright/Copyright'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 
 const Login = () => {
 	const classes = useStyles()
+	const history = useHistory()
 
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -44,7 +46,7 @@ const Login = () => {
 			password,
 		} as LoginUserContract)
 
-		// TODO: add redirect to Main Page
+		history.push('/')
 	}, [email, password, authApi])
 
 	return (
