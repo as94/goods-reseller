@@ -7,10 +7,9 @@ import LockOpenOutlinedIcon from '@material-ui/icons/LockOpenOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import authApi from '../Api/Auth/authApi'
-import { LoginUserContract } from '../Api/Auth/contracts'
 import Copyright from '../Copyright/Copyright'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
+import { useAuth } from '../Hooks/useAuth'
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -34,19 +33,21 @@ const useStyles = makeStyles(theme => ({
 
 const Register = () => {
 	const classes = useStyles()
+
 	const history = useHistory()
+	const location = useLocation()
+	const auth = useAuth()
+
+	const { from } = (location.state as any) || { from: { pathname: '/' } }
 
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
 	const signUp = useCallback(async () => {
-		await authApi.Register({
-			email,
-			password,
-		} as LoginUserContract)
+		await auth.signUp(email, password)
 
-		history.push('/')
-	}, [email, password, authApi])
+		history.replace(from)
+	}, [email, password, auth.signUp, history])
 
 	return (
 		<Container component="main" maxWidth="xs">

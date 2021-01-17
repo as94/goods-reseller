@@ -3,15 +3,14 @@ import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
-import Link from '@material-ui/core/Link'
+import MaterialLink from '@material-ui/core/Link'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import authApi from '../Api/Auth/authApi'
-import { LoginUserContract } from '../Api/Auth/contracts'
 import Copyright from '../Copyright/Copyright'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
+import { useAuth } from '../Hooks/useAuth'
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -35,19 +34,21 @@ const useStyles = makeStyles(theme => ({
 
 const Login = () => {
 	const classes = useStyles()
+
 	const history = useHistory()
+	const location = useLocation()
+	const auth = useAuth()
+
+	const { from } = (location.state as any) || { from: { pathname: '/' } }
 
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
 	const signIn = useCallback(async () => {
-		await authApi.Login({
-			email,
-			password,
-		} as LoginUserContract)
+		await auth.signIn(email, password)
 
-		history.push('/')
-	}, [email, password, authApi])
+		history.replace(from)
+	}, [email, password, auth.signIn, history])
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -89,9 +90,9 @@ const Login = () => {
 					<Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={signIn}>
 						Sign In
 					</Button>
-					<Link href="#" variant="body2">
-						{"Don't have an account? Sign Up"}
-					</Link>
+					<MaterialLink variant="body2">
+						<Link to="/admin/register">{"Don't have an account? Sign Up"}</Link>
+					</MaterialLink>
 				</form>
 			</div>
 			<Copyright />
