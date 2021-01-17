@@ -1,12 +1,23 @@
 import React from 'react'
-import { CssBaseline } from '@material-ui/core'
 import Login from './Login/Login'
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
+import Home from './Home/Home'
+import Register from './Register/Register'
 
 const App = () => (
-	<React.Fragment>
-		<CssBaseline />
-		<Login />
-	</React.Fragment>
+	<Router>
+		<Switch>
+			<Route exact path={['/', '/admin']}>
+				<Home />
+			</Route>
+			<Route path="/admin/login">
+				<Login />
+			</Route>
+			<Route path="/admin/register">
+				<Register />
+			</Route>
+		</Switch>
+	</Router>
 )
 
 export default App

@@ -76,7 +76,11 @@ namespace GoodsReseller.Api
             }
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            
+            app.UseWhen(context => context.Request.Path.StartsWithSegments("/admin"),
+                appBuilder =>
+                {
+                    appBuilder.UseStatusCodePagesWithReExecute("/");
+                });
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
