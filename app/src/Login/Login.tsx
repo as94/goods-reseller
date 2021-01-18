@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -46,9 +46,14 @@ const Login = () => {
 
 	const signIn = useCallback(async () => {
 		await auth.signIn(email, password)
-
 		history.replace(from)
 	}, [email, password, auth.signIn, history])
+
+	useEffect(() => {
+		if (auth.user) {
+			history.replace(from)
+		}
+	}, [auth.user, history])
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -90,8 +95,8 @@ const Login = () => {
 					<Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={signIn}>
 						Sign In
 					</Button>
-					<MaterialLink variant="body2">
-						<Link to="/admin/register">{"Don't have an account? Sign Up"}</Link>
+					<MaterialLink variant="body2" component={Link} to="/admin/register">
+						{"Don't have an account? Sign Up"}
 					</MaterialLink>
 				</form>
 			</div>

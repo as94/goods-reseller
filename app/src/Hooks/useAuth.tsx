@@ -1,7 +1,8 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { createContext, useContext } from 'react'
 import authApi from '../Api/Auth/authApi'
 import { LoginUserContract } from '../Api/Auth/contracts'
+import usersApi from '../Api/Users/usersApi'
 
 export interface IUser {
 	email: string
@@ -15,7 +16,7 @@ export interface IAuthContext {
 }
 
 const defaultContext = {
-	user: {} as IUser,
+	user: null as IUser | null,
 	signIn: (email: string, password: string) => {},
 	signOut: () => {},
 	signUp: (email: string, password: string) => {},
@@ -62,6 +63,19 @@ const useAuthProvider = () => {
 		},
 		[authApi, setUser],
 	)
+
+	const getMyUserInfo = useCallback(async () => {
+		try {
+			const u = await usersApi.GetMyUserInfo()
+			setUser({ email: u.email })
+		} catch (e) {
+			setUser(null)
+		}
+	}, [usersApi, setUser])
+
+	useEffect(() => {
+		getMyUserInfo()
+	}, [getMyUserInfo])
 
 	return { user, signIn, signOut, signUp }
 }
