@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using GoodsReseller.AuthContext.Domain.ValidationRules;
 using MediatR;
 
 namespace GoodsReseller.AuthContext.Contracts.Users.Login

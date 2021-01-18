@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,6 +25,17 @@ namespace GoodsReseller.SeedWork
                                              BindingFlags.Static |
                                              BindingFlags.DeclaredOnly);
             return fields.Select(f => f.GetValue(null)).Cast<T>();
+        }
+
+        public static bool TryParse<T>(string name, out T value) where T : Enumeration
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            value = GetAll<T>().FirstOrDefault(x => x.Name == name);
+            return value != null;
         }
 
         public override bool Equals(object obj)
