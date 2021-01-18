@@ -10,7 +10,7 @@ using MediatR;
 
 namespace GoodsReseller.AuthContext.Handlers.Users
 {
-    public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, Unit>
+    public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, RegisterUserResponse>
     {
         private readonly IUsersRepository _usersRepository;
 
@@ -19,7 +19,7 @@ namespace GoodsReseller.AuthContext.Handlers.Users
             _usersRepository = usersRepository;
         }
         
-        public async Task<Unit> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
+        public async Task<RegisterUserResponse> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
         {
             var existingUser = await _usersRepository.GetUserByEmailAsync(request.Email, cancellationToken);
             if (existingUser != null)
@@ -41,7 +41,10 @@ namespace GoodsReseller.AuthContext.Handlers.Users
 
             await _usersRepository.SaveUserAsync(user, cancellationToken);
             
-            return new Unit();
+            return new RegisterUserResponse
+            {
+                UserId = userId
+            };
         }
     }
 }

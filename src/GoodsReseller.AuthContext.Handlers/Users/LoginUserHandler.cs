@@ -28,6 +28,7 @@ namespace GoodsReseller.AuthContext.Handlers.Users
             
             return new LoginUserResponse
             {
+                UserId = existingUser.Id,
                 Role = existingUser.Role
             };
         }

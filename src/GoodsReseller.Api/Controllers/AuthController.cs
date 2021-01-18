@@ -34,14 +34,14 @@ namespace GoodsReseller.Api.Controllers
             [FromBody] [Required] RegisterUserContract registerUser,
             CancellationToken cancellationToken)
         {
-            await _mediator.Send(new RegisterUserRequest
+            var response = await _mediator.Send(new RegisterUserRequest
             {
                 Email = registerUser.Email,
                 Password = registerUser.Password,
                 Role = Role.Admin
             }, cancellationToken);
             
-            await AuthenticateAsync(registerUser.Email, Role.Admin.Name);
+            await AuthenticateAsync(response.UserId, registerUser.Email, Role.Admin);
         }
         
         [HttpPost("register")]
@@ -49,14 +49,14 @@ namespace GoodsReseller.Api.Controllers
             [FromBody] [Required] RegisterUserContract registerUser,
             CancellationToken cancellationToken)
         {
-            await _mediator.Send(new RegisterUserRequest
+            var response = await _mediator.Send(new RegisterUserRequest
             {
                 Email = registerUser.Email,
                 Password = registerUser.Password,
                 Role = Role.Customer
             }, cancellationToken);
             
-            await AuthenticateAsync(registerUser.Email, Role.Customer.Name);
+            await AuthenticateAsync(response.UserId, registerUser.Email, Role.Customer);
         }
 
         [HttpPost("login")]
@@ -70,29 +70,31 @@ namespace GoodsReseller.Api.Controllers
                 Password = loginUser.Password
             }, cancellationToken);
             
-            await AuthenticateAsync(loginUser.Email, response.Role.Name);
+            await AuthenticateAsync(response.UserId, loginUser.Email, response.Role);
         }
         
         [Authorize]
         [HttpPost("logout")]
         public async Task LogoutAsync()
         {
+            var a = User.Claims;
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
-        private async Task AuthenticateAsync(string userName, string role)
+        private async Task AuthenticateAsync(Guid id, string email, Role role)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, role)
+                new Claim(nameof(AuthContext.Domain.Users.Entities.User.Id), id.ToString()),
+                new Claim(nameof(AuthContext.Domain.Users.Entities.User.Email), email),
+                new Claim(nameof(AuthContext.Domain.Users.Entities.User.Role), role.Name),
             };
             
             var identity = new ClaimsIdentity(
-                claims, 
+                claims,
                 "ApplicationCookie",
-                ClaimsIdentity.DefaultNameClaimType,
-                ClaimsIdentity.DefaultRoleClaimType);
+                nameof(AuthContext.Domain.Users.Entities.User.Id),
+                nameof(AuthContext.Domain.Users.Entities.User.Role));
 
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
