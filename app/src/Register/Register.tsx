@@ -45,9 +45,13 @@ const Register = () => {
 
 	const signUp = useCallback(async () => {
 		await auth.signUp(email, password)
+	}, [email, password, auth.signUp])
 
-		history.replace(from)
-	}, [email, password, auth.signUp, history])
+	useEffect(() => {
+		if (auth.user) {
+			history.replace(from)
+		}
+	}, [history, auth.user])
 
 	return (
 		<Container component="main" maxWidth="xs">
