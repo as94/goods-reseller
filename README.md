@@ -15,3 +15,7 @@ Customer -> Landing Page (payment included) -> Order -> Supply (transfer +) -> D
 
 ## MongoDB Migrations
 https://thegreatco.com/posts/20180821/
+
+## Nginx
+
+docker run -it --rm -d -p 8080:80 --name web -v ~/Desktop/pet-projects/GoodsReseller/landings/yoga:/usr/share/nginx/html nginx 

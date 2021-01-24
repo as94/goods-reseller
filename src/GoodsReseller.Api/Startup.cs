@@ -58,6 +58,12 @@ namespace GoodsReseller.Api
             services.RegisterAuthContextHandlers();
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
+            
+            services.AddCors(options => options.AddPolicy("LandingCorsPolicy", builder =>
+            {
+                builder.WithOrigins("http://localhost:8080").AllowAnyMethod().AllowAnyHeader();
+            }));
+            
             services.AddControllers();
             services.AddMvc();
             services.AddSwaggerGen();
@@ -93,6 +99,8 @@ namespace GoodsReseller.Api
             app.UseStaticFiles();
             
             app.UseRouting();
+            
+            app.UseCors("LandingCorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

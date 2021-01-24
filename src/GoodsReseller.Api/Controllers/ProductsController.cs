@@ -7,6 +7,7 @@ using GoodsReseller.DataCatalogContext.Contracts.Products.BatchByIds;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Create;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Delete;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
+using GoodsReseller.DataCatalogContext.Contracts.Products.GetByLabel;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Update;
 using GoodsReseller.DataCatalogContext.Contracts.Queries;
 using MediatR;
@@ -43,7 +44,24 @@ namespace GoodsReseller.Api.Controllers
             return Ok(response.Product);
         }
 
+        [AllowAnonymous]
         [HttpGet]
+        public async Task<IActionResult> GetProductAsync([FromQuery] string label, CancellationToken cancellationToken)
+        {
+            var response = await _mediator.Send(new GetProductByLabelRequest
+            {
+                Label = label
+            }, cancellationToken);
+
+            if (response.Product == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response.Product);
+        }
+
+        [HttpGet("list")]
         public async Task<IActionResult> GetProductListAsync([FromQuery] BatchProductsQuery query, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(new BatchProductsByIdsRequest
