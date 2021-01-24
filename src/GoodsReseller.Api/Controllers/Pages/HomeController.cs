@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace GoodsReseller.Api.Controllers.LandingPages
+namespace GoodsReseller.Api.Controllers.Pages
 {
     [Controller]
     [ApiExplorerSettings(IgnoreApi = true)]

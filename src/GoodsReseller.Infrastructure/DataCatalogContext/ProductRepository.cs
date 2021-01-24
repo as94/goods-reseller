@@ -46,6 +46,25 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
             return state?.ToDomain();
         }
 
+        public async Task<Product> GetAsync(string label, CancellationToken cancellationToken)
+        {
+            if (label == null)
+            {
+                throw new ArgumentNullException(nameof(label));
+            }
+            
+            var existing = await GetExisting(label, cancellationToken);
+            
+            if (existing == null)
+            {
+                return null;
+            }
+
+            var state = GetState(existing);
+
+            return state?.ToDomain();
+        }
+
         public async Task<IEnumerable<Product>> BatchAsync(int offset, int count, CancellationToken cancellationToken)
         {
             if (offset < 0)
@@ -159,6 +178,14 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
         {
             return await (await _products.FindAsync(
                 x => x.Id == id && !x.IsRemoved,
+                new FindOptions<ProductDocument>(),
+                cancellationToken)).FirstOrDefaultAsync(cancellationToken);
+        }
+        
+        private async Task<ProductDocument> GetExisting(string label, CancellationToken cancellationToken)
+        {
+            return await (await _products.FindAsync(
+                x => x.Label == label && !x.IsRemoved,
                 new FindOptions<ProductDocument>(),
                 cancellationToken)).FirstOrDefaultAsync(cancellationToken);
         }
