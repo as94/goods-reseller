@@ -8,5 +8,8 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Models.Products
         public int Version { get; set; }
         public string Label { get; set; }
         public string Name { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal DiscountPerUnit { get; set; }
+        public bool IsSet { get; set; }
     }
 }

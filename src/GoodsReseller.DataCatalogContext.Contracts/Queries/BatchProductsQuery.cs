@@ -5,6 +5,8 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Queries
 {
     public class BatchProductsQuery : IValidatableObject
     {
+        private const int MaxCount = 1000;
+        
         public int Offset { get; set; } = 0;
 
         public int Count { get; set; } = 10;
@@ -21,9 +23,9 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Queries
                 yield return new ValidationResult("Count should be positive");
             }
 
-            if (Count > 50)
+            if (Count > MaxCount)
             {
-                yield return new ValidationResult("Count should be less or equal 50");
+                yield return new ValidationResult($"Count should be less or equal {MaxCount}");
             }
         }
     }

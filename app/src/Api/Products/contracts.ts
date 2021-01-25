@@ -1,19 +1,22 @@
 export interface ProductContract {
-	Id: string
-	Version: number
-	Label: string
-	Name: string
-	Description: string
-	UnitPrice: number
-	DiscountPerUnit: number
-	Products: ProductContract[]
+	id: string
+	version: number
+	label: string
+	name: string
+	description: string
+	unitPrice: number
+	discountPerUnit: number
+	products: ProductContract[]
 }
 
 export interface ProductListItemContract {
-	Id: string
-	Version: number
-	Label: string
-	Name: string
+	id: string
+	version: number
+	label: string
+	name: string
+	unitPrice: number
+	discountPerUnit: number
+	isSet: boolean
 }
 
 export interface ProductListContract {

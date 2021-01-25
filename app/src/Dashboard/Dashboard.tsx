@@ -1,4 +1,4 @@
-import { AppBar, Box, List, Paper, Toolbar } from '@material-ui/core'
+import { AppBar, Box, List, ListItemText, Paper, Toolbar } from '@material-ui/core'
 import { CssBaseline, makeStyles } from '@material-ui/core'
 import React, { useCallback } from 'react'
 import clsx from 'clsx'
@@ -7,16 +7,22 @@ import MenuIcon from '@material-ui/icons/Menu'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import { Typography } from '@material-ui/core'
-import { Badge } from '@material-ui/core'
 import { Drawer } from '@material-ui/core'
 import { Divider } from '@material-ui/core'
-import { mainListItems, secondaryListItems } from './listItems'
 import { Container } from '@material-ui/core'
 import { Grid } from '@material-ui/core'
 import Copyright from '../Copyright/Copyright'
 import Orders from './Orders'
 import { useHistory } from 'react-router-dom'
 import { useAuth } from '../Hooks/useAuth'
+import { ListItem } from '@material-ui/core'
+import { ListItemIcon } from '@material-ui/core'
+import DashboardIcon from '@material-ui/icons/Dashboard'
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import PeopleIcon from '@material-ui/icons/People'
+import BarChartIcon from '@material-ui/icons/BarChart'
+import LayersIcon from '@material-ui/icons/Layers'
+import Products from './Products/Products'
 
 const drawerWidth = 240
 
@@ -81,7 +87,7 @@ const useStyles = makeStyles(theme => ({
 	appBarSpacer: theme.mixins.toolbar,
 	content: {
 		flexGrow: 1,
-		height: '100vh',
+		minHeight: '100vh',
 		overflow: 'auto',
 	},
 	container: {
@@ -157,9 +163,34 @@ const Dashboard = () => {
 						</IconButton>
 					</div>
 					<Divider />
-					<List>{mainListItems}</List>
-					<Divider />
-					<List>{secondaryListItems}</List>
+					<List>
+						<div>
+							<ListItem button>
+								<ListItemIcon>
+									<DashboardIcon />
+								</ListItemIcon>
+								<ListItemText primary="Dashboard" />
+							</ListItem>
+							<ListItem button>
+								<ListItemIcon>
+									<ShoppingCartIcon />
+								</ListItemIcon>
+								<ListItemText primary="Orders" />
+							</ListItem>
+							<ListItem button>
+								<ListItemIcon>
+									<PeopleIcon />
+								</ListItemIcon>
+								<ListItemText primary="Customers" />
+							</ListItem>
+							{/* <ListItem button>
+								<ListItemIcon>
+									<BarChartIcon />
+								</ListItemIcon>
+								<ListItemText primary="Reports" />
+							</ListItem> */}
+						</div>
+					</List>
 				</Drawer>
 				<main className={classes.content}>
 					<div className={classes.appBarSpacer} />
@@ -178,9 +209,15 @@ const Dashboard = () => {
 							</Paper>
 						</Grid> */}
 							{/* Recent Orders */}
-							<Grid item xs={12}>
+							{/* <Grid item xs={12}>
 								<Paper className={classes.paper}>
 									<Orders />
+								</Paper>
+							</Grid> */}
+
+							<Grid item xs={12}>
+								<Paper className={classes.paper}>
+									<Products />
 								</Paper>
 							</Grid>
 						</Grid>
