@@ -29,14 +29,17 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
             };
         }
 
-        public static ProductListItemContract ToListItemContract(this Product product)
+        public static ProductListItemContract ToListItemContract(this Product product, bool isSet)
         {
             return new ProductListItemContract
             {
                 Id = product.Id,
                 Version = product.Version,
                 Label = product.Label,
-                Name = product.Name
+                Name = product.Name,
+                UnitPrice = product.UnitPrice.Value,
+                DiscountPerUnit = product.DiscountPerUnit.Value,
+                IsSet = isSet
             };
         }
     }

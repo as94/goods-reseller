@@ -26,7 +26,9 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
             {
                 ProductList = new ProductListContract
                 {
-                    Items = products.Select(x => x.ToListItemContract()).ToArray()
+                    Items = products
+                        .Select(x => x.ToListItemContract(x.ProductIds != null && x.ProductIds.Any()))
+                        .ToArray()
                 }
             };
         }

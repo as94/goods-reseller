@@ -13,9 +13,23 @@ Customer -> Landing Page (payment included) -> Order -> Supply (transfer +) -> D
 
 # Tech Documentation
 
-## MongoDB Migrations
+## MongoDB
+
+Commands
+- mongo [go to shell]
+- show dbs
+- use goods-reseller
+- db.orders.find()
+- db.orders.remove({})
+
+Migrations
 https://thegreatco.com/posts/20180821/
+
+Docker
+- docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:latest
+- docker exec -it mongodb bash
 
 ## Nginx
 
-docker run -it --rm -d -p 8080:80 --name web -v ~/Desktop/pet-projects/GoodsReseller/landings/yoga:/usr/share/nginx/html nginx 
+Docker
+- docker run -it --rm -d -p 8080:80 --name web -v ~/Desktop/pet-projects/GoodsReseller/landings/yoga:/usr/share/nginx/html nginx 
