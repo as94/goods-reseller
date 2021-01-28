@@ -30,18 +30,6 @@ const commonConfig: Configuration = {
 
 	module: {
 		rules: [
-			// {
-			// 	test: /\.js$/,
-			// 	use: [
-			// 		{
-			// 			loader: 'cache-loader',
-			// 			options: {
-			// 				cacheDirectory: __dirname + '/node_modules/.cache/cache-loader',
-			// 			},
-			// 		},
-			// 		'babel-loader',
-			// 	],
-			// },
 			{ enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
 			{
 				test: /\.tsx?$/,
@@ -52,6 +40,7 @@ const commonConfig: Configuration = {
 					babelCore: '@babel/core',
 				},
 			},
+			{ test: /\.css$/, use: ['style-loader', 'css-loader'] },
 		],
 	},
 	plugins: [
