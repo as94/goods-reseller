@@ -1,6 +1,6 @@
 import { AppBar, Box, List, ListItemText, Paper, Toolbar } from '@material-ui/core'
 import { CssBaseline, makeStyles } from '@material-ui/core'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import clsx from 'clsx'
 import { IconButton } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -23,6 +23,7 @@ import PeopleIcon from '@material-ui/icons/People'
 import BarChartIcon from '@material-ui/icons/BarChart'
 import LayersIcon from '@material-ui/icons/Layers'
 import Products from './Products/Products'
+import Product from './Products/Product/Product'
 
 const drawerWidth = 240
 
@@ -124,6 +125,9 @@ const Dashboard = () => {
 	}, [auth.signOut])
 	// const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
+	const [selectedProductId, setSelectedProductId] = useState(null as string | null)
+	const productHideHandler = useCallback(() => setSelectedProductId(null), [setSelectedProductId])
+
 	return (
 		auth.user && (
 			<div className={classes.root}>
@@ -215,11 +219,23 @@ const Dashboard = () => {
 								</Paper>
 							</Grid> */}
 
-							<Grid item xs={12}>
-								<Paper className={classes.paper}>
-									<Products />
-								</Paper>
-							</Grid>
+							{!selectedProductId && (
+								<Grid item xs={12}>
+									<Paper className={classes.paper}>
+										<Products setSelectedProductId={setSelectedProductId} />
+									</Paper>
+								</Grid>
+							)}
+
+							{selectedProductId && (
+								<Grid item xs={12}>
+									{' '}
+									<Paper className={classes.paper}>
+										{' '}
+										<Product productId={selectedProductId} hide={productHideHandler} />
+									</Paper>
+								</Grid>
+							)}
 						</Grid>
 						<Box pt={4}>
 							<Copyright />
