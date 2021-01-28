@@ -5,7 +5,7 @@ namespace GoodsReseller.SeedWork
 {
     public abstract class ValueObject
     {
-        protected static bool EqualOperator(ValueObject left, ValueObject right)
+        public static bool operator ==(ValueObject left, ValueObject right)
         {
             if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
             {
@@ -13,6 +13,11 @@ namespace GoodsReseller.SeedWork
             }
 
             return ReferenceEquals(left, null) || left.Equals(right);
+        }
+
+        public static bool operator !=(ValueObject left, ValueObject right)
+        {
+            return !(left == right);
         }
 
         protected abstract IEnumerable<object> GetEqualityComponents();

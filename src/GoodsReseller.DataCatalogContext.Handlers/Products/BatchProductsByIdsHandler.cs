@@ -21,12 +21,14 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
         public async Task<BatchProductsByIdsResponse> Handle(BatchProductsByIdsRequest request, CancellationToken cancellationToken)
         {
             var products = await _productRepository.BatchAsync(request.Query.Offset, request.Query.Count, cancellationToken);
-            
+
             return new BatchProductsByIdsResponse
             {
                 ProductList = new ProductListContract
                 {
                     Items = products
+                        .OrderByDescending(x => x.LastUpdateDate ?? x.CreationDate)
+                        .ToArray()
                         .Select(x => x.ToListItemContract(x.ProductIds != null && x.ProductIds.Any()))
                         .ToArray()
                 }
