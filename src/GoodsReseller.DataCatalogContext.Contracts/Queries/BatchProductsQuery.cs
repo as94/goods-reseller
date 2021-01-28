@@ -5,11 +5,11 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Queries
 {
     public class BatchProductsQuery : IValidatableObject
     {
-        private const int MaxCount = 1000;
+        public const int MaxCount = 1000;
         
         public int Offset { get; set; } = 0;
 
-        public int Count { get; set; } = 10;
+        public int Count { get; set; } = MaxCount;
         
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

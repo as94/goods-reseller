@@ -77,7 +77,7 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
                 throw new ArgumentException(nameof(count));
             }
 
-            if (count > 100)
+            if (count > 1000)
             {
                 throw new ArgumentException($"{nameof(count)} more than 100");
             }
