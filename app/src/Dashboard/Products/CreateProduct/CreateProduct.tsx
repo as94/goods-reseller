@@ -5,6 +5,7 @@ import { ProductInfoContract } from '../../../Api/Products/contracts'
 import productsApi from '../../../Api/Products/productsApi'
 import Title from '../../Title'
 import { Alert } from '@material-ui/lab'
+import { formIsValid, FormValidation, initialFormValidation, initialProduct } from '../utils'
 
 interface IOwnProps {
 	hide: () => void
@@ -21,40 +22,11 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const initialProduct = {
-	label: '',
-	name: '',
-	description: '',
-	unitPrice: 0,
-	discountPerUnit: 0,
-	productIds: [],
-} as ProductInfoContract
-
-interface FormValidation {
-	labelValid: boolean
-	nameValid: boolean
-	unitPriceValid: boolean
-	discountPerUnitValid: boolean
-}
-
-const initialFormValidation = {
-	labelValid: false,
-	nameValid: false,
-	unitPriceValid: false,
-	discountPerUnitValid: false,
-} as FormValidation
-
-const formIsValid = (formValidation: FormValidation) =>
-	formValidation.labelValid &&
-	formValidation.nameValid &&
-	formValidation.unitPriceValid &&
-	formValidation.discountPerUnitValid
-
 const CreateProduct = ({ hide }: IOwnProps) => {
 	const classes = useStyles()
 
 	const [product, setProduct] = useState(initialProduct as ProductInfoContract)
-	const [formValidation, setFormValidation] = useState(initialFormValidation as FormValidation)
+	const [formValidation, setFormValidation] = useState(initialFormValidation(false) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
 	const backHandler = useCallback(() => hide(), [hide])
@@ -97,7 +69,7 @@ const CreateProduct = ({ hide }: IOwnProps) => {
 		(e: any) => {
 			const discountPerUnit = Number(e.target.value)
 			setProduct({ ...product, discountPerUnit })
-			setFormValidation({ ...formValidation, discountPerUnitValid: discountPerUnit >= 0 })
+			setFormValidation({ ...formValidation, discountPerUnitValid: discountPerUnit >= 0 && discountPerUnit <= 1 })
 		},
 		[product, setProduct, formValidation, setFormValidation],
 	)
