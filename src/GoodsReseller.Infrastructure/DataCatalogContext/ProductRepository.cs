@@ -83,7 +83,7 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
             }
             
             var cursor = await _products.FindAsync(
-                new FilterDefinitionBuilder<ProductDocument>().Empty,
+                x => !x.IsRemoved,
                 new FindOptions<ProductDocument>
                 {
                     Skip = offset,
