@@ -6,6 +6,7 @@ import productsApi from '../../../Api/Products/productsApi'
 import Title from '../../Title'
 import { formIsValid, FormValidation, initialFormValidation, initialProduct } from '../utils'
 import { Alert } from '@material-ui/lab'
+import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
 
 interface IOwnProps {
 	productId: string | null
@@ -41,6 +42,8 @@ const Product = ({ productId, hide }: IOwnProps) => {
 	const [product, setProduct] = useState(initialProduct as ProductInfoContract)
 	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
 	const [errorText, setErrorText] = useState('')
+
+	const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
 	const backHandler = useCallback(() => hide(), [hide])
 
@@ -108,6 +111,11 @@ const Product = ({ productId, hide }: IOwnProps) => {
 		}
 	}, [formIsValid, formValidation, product, productsApi, hide, setErrorText])
 
+	const deleteProduct = useCallback(async () => {
+		await productsApi.Delete(productId)
+		hide()
+	}, [productsApi, productId])
+
 	useEffect(() => {
 		getProduct()
 	}, [getProduct])
@@ -173,7 +181,7 @@ const Product = ({ productId, hide }: IOwnProps) => {
 				)}
 			</Grid>
 			<div className={classes.buttons}>
-				<Button variant="contained" onClick={() => null} className={classes.removeButton}>
+				<Button variant="contained" onClick={() => setShowDeleteDialog(true)} className={classes.removeButton}>
 					Remove
 				</Button>
 				<Button onClick={backHandler} className={classes.button}>
@@ -183,6 +191,14 @@ const Product = ({ productId, hide }: IOwnProps) => {
 					Save
 				</Button>
 			</div>
+			{showDeleteDialog && (
+				<ResponsiveDialog
+					title={`'${product.name}' will be removed. Continue?`}
+					content={'This change cannot be undone'}
+					cancel={() => setShowDeleteDialog(false)}
+					confirm={deleteProduct}
+				/>
+			)}
 		</React.Fragment>
 	)
 }

@@ -60,7 +60,7 @@ const Products = ({ setSelectedProductId, showCreateProduct }: IOwnProps) => {
 					Create
 				</Button>
 			</div>
-			<div style={{ height: 700, width: '100%' }}>
+			<div style={{ height: 650, width: '100%' }}>
 				<DataGrid rows={products} columns={columns} pageSize={10} onRowClick={productClickHandler} />
 			</div>
 		</React.Fragment>
