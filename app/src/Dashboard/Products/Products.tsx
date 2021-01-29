@@ -3,8 +3,18 @@ import { DataGrid, RowParams } from '@material-ui/data-grid'
 import Title from '../Title'
 import productsApi from '../../Api/Products/productsApi'
 import { ProductListItemContract } from '../../Api/Products/contracts'
-import Product from './Product/Product'
 import './Products.css'
+import { Button } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+	header: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		marginBottom: theme.spacing(2),
+		marginLeft: theme.spacing(1),
+	},
+}))
 
 const columns = [
 	{ field: 'name', headerName: 'Name', width: 200 },
@@ -16,9 +26,12 @@ const columns = [
 
 interface IOwnProps {
 	setSelectedProductId: (selectedProductId: string) => void
+	showCreateProduct: () => void
 }
 
-const Products = ({ setSelectedProductId }: IOwnProps) => {
+const Products = ({ setSelectedProductId, showCreateProduct }: IOwnProps) => {
+	const classes = useStyles()
+
 	const [products, setProducts] = useState([] as ProductListItemContract[])
 
 	const getProducts = useCallback(async () => {
@@ -33,13 +46,20 @@ const Products = ({ setSelectedProductId }: IOwnProps) => {
 		[setSelectedProductId],
 	)
 
+	const showCreateProductHandler = useCallback(() => showCreateProduct(), [showCreateProduct])
+
 	useEffect(() => {
 		getProducts()
 	}, [getProducts])
 
 	return (
 		<React.Fragment>
-			<Title>Products</Title>
+			<div className={classes.header}>
+				<Title>Products</Title>
+				<Button variant="contained" color="primary" onClick={showCreateProductHandler}>
+					Create
+				</Button>
+			</div>
 			<div style={{ height: 700, width: '100%' }}>
 				<DataGrid rows={products} columns={columns} pageSize={10} onRowClick={productClickHandler} />
 			</div>

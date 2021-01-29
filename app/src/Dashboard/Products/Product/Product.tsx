@@ -41,7 +41,7 @@ const Product = ({ productId, hide }: IOwnProps) => {
 	const getProduct = useCallback(async () => {
 		const response = await productsApi.GetProduct(productId)
 		setProduct(response)
-	}, [setProduct])
+	}, [setProduct, productId])
 
 	useEffect(() => {
 		getProduct()
