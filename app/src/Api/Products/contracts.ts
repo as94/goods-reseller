@@ -22,3 +22,12 @@ export interface ProductListItemContract {
 export interface ProductListContract {
 	items: ProductListItemContract[]
 }
+
+export interface ProductInfoContract {
+	label: string
+	name: string
+	description: string
+	unitPrice: number
+	discountPerUnit: number
+	productIds: string[]
+}

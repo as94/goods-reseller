@@ -24,6 +24,7 @@ import BarChartIcon from '@material-ui/icons/BarChart'
 import LayersIcon from '@material-ui/icons/Layers'
 import Products from './Products/Products'
 import Product from './Products/Product/Product'
+import CreateProduct from './Products/CreateProduct/CreateProduct'
 
 const drawerWidth = 240
 
@@ -126,7 +127,10 @@ const Dashboard = () => {
 	// const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
 	const [selectedProductId, setSelectedProductId] = useState(null as string | null)
+	const [showCreateProduct, setShowCreateProduct] = useState(false)
 	const productHideHandler = useCallback(() => setSelectedProductId(null), [setSelectedProductId])
+	const createProductShowHandler = useCallback(() => setShowCreateProduct(true), [setShowCreateProduct])
+	const createProductHideHandler = useCallback(() => setShowCreateProduct(false), [setShowCreateProduct])
 
 	return (
 		auth.user && (
@@ -219,10 +223,21 @@ const Dashboard = () => {
 								</Paper>
 							</Grid> */}
 
-							{!selectedProductId && (
+							{!selectedProductId && !showCreateProduct && (
 								<Grid item xs={12}>
 									<Paper className={classes.paper}>
-										<Products setSelectedProductId={setSelectedProductId} />
+										<Products
+											setSelectedProductId={setSelectedProductId}
+											showCreateProduct={createProductShowHandler}
+										/>
+									</Paper>
+								</Grid>
+							)}
+
+							{showCreateProduct && (
+								<Grid item xs={12}>
+									<Paper className={classes.paper}>
+										<CreateProduct hide={createProductHideHandler} />
 									</Paper>
 								</Grid>
 							)}
