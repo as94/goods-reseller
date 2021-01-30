@@ -25,14 +25,14 @@ const columns = [
 ]
 
 interface IOwnProps {
+	products: ProductListItemContract[]
+	setProducts: (products: ProductListItemContract[]) => void
 	setSelectedProductId: (selectedProductId: string) => void
 	showCreateProduct: () => void
 }
 
-const Products = ({ setSelectedProductId, showCreateProduct }: IOwnProps) => {
+const Products = ({ products, setProducts, setSelectedProductId, showCreateProduct }: IOwnProps) => {
 	const classes = useStyles()
-
-	const [products, setProducts] = useState([] as ProductListItemContract[])
 
 	const getProducts = useCallback(async () => {
 		const response = await productsApi.GetProductList()

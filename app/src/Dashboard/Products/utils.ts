@@ -11,8 +11,8 @@ export const initialFormValidation = (formIsValid: boolean) =>
 	({
 		labelValid: formIsValid,
 		nameValid: formIsValid,
-		unitPriceValid: formIsValid,
-		discountPerUnitValid: formIsValid,
+		unitPriceValid: true,
+		discountPerUnitValid: true,
 	} as FormValidation)
 
 export const formIsValid = (formValidation: FormValidation) =>
