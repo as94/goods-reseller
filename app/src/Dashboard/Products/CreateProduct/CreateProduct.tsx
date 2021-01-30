@@ -27,6 +27,7 @@ const useStyles = makeStyles(theme => ({
 const CreateProduct = ({ products, hide }: IOwnProps) => {
 	const classes = useStyles()
 
+	const [simpleProducts] = useState(products.filter(p => !p.isSet))
 	const [product, setProduct] = useState(initialProduct as ProductInfoContract)
 	const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
 	const [formValidation, setFormValidation] = useState(initialFormValidation(false) as FormValidation)
@@ -144,8 +145,8 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 				<Grid item xs={12} md={12}>
 					<MultipleSelect
 						title={'Products'}
-						items={products.filter(p => !p.isSet)}
-						selectedIds={[]}
+						items={simpleProducts}
+						selectedIds={selectedProductIds}
 						setSelectedIds={setSelectedProductIds}
 					/>
 				</Grid>
