@@ -1,13 +1,15 @@
 import { Box, Button, FormControl, FormHelperText, Grid, Input, InputLabel, TextField } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { ProductInfoContract } from '../../../Api/Products/contracts'
+import { ProductInfoContract, ProductListItemContract } from '../../../Api/Products/contracts'
 import productsApi from '../../../Api/Products/productsApi'
 import Title from '../../Title'
 import { Alert } from '@material-ui/lab'
 import { formIsValid, FormValidation, initialFormValidation, initialProduct } from '../utils'
+import MultipleSelect from '../../../MultipleSelect/MultipleSelect'
 
 interface IOwnProps {
+	products: ProductListItemContract[]
 	hide: () => void
 }
 
@@ -22,10 +24,11 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const CreateProduct = ({ hide }: IOwnProps) => {
+const CreateProduct = ({ products, hide }: IOwnProps) => {
 	const classes = useStyles()
 
 	const [product, setProduct] = useState(initialProduct as ProductInfoContract)
+	const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
 	const [formValidation, setFormValidation] = useState(initialFormValidation(false) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
@@ -76,12 +79,12 @@ const CreateProduct = ({ hide }: IOwnProps) => {
 
 	const createProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await productsApi.Create(product)
+			await productsApi.Create({ ...product, productIds: selectedProductIds })
 			hide()
 		} else {
 			setErrorText('Form is invalid')
 		}
-	}, [formIsValid, formValidation, product, productsApi, hide, setErrorText])
+	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, hide, setErrorText])
 
 	useEffect(() => {
 		if (formIsValid(formValidation)) {
@@ -137,6 +140,14 @@ const CreateProduct = ({ hide }: IOwnProps) => {
 							onChange={discountPerUnitChangeHandler}
 						/>
 					</FormControl>
+				</Grid>
+				<Grid item xs={12} md={12}>
+					<MultipleSelect
+						title={'Products'}
+						items={products.filter(p => !p.isSet)}
+						selectedIds={[]}
+						setSelectedIds={setSelectedProductIds}
+					/>
 				</Grid>
 				{errorText && (
 					<Grid item xs={12} md={12}>

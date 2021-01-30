@@ -25,6 +25,7 @@ import LayersIcon from '@material-ui/icons/Layers'
 import Products from './Products/Products'
 import Product from './Products/Product/Product'
 import CreateProduct from './Products/CreateProduct/CreateProduct'
+import { ProductListItemContract } from '../Api/Products/contracts'
 
 const drawerWidth = 240
 
@@ -125,6 +126,8 @@ const Dashboard = () => {
 		history.push('/')
 	}, [auth.signOut])
 	// const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
+
+	const [products, setProducts] = useState([] as ProductListItemContract[])
 
 	const [selectedProductId, setSelectedProductId] = useState(null as string | null)
 	const [showCreateProduct, setShowCreateProduct] = useState(false)
@@ -227,6 +230,8 @@ const Dashboard = () => {
 								<Grid item xs={12}>
 									<Paper className={classes.paper}>
 										<Products
+											products={products}
+											setProducts={setProducts}
 											setSelectedProductId={setSelectedProductId}
 											showCreateProduct={createProductShowHandler}
 										/>
@@ -237,7 +242,7 @@ const Dashboard = () => {
 							{showCreateProduct && (
 								<Grid item xs={12}>
 									<Paper className={classes.paper}>
-										<CreateProduct hide={createProductHideHandler} />
+										<CreateProduct products={products} hide={createProductHideHandler} />
 									</Paper>
 								</Grid>
 							)}
@@ -247,7 +252,11 @@ const Dashboard = () => {
 									{' '}
 									<Paper className={classes.paper}>
 										{' '}
-										<Product productId={selectedProductId} hide={productHideHandler} />
+										<Product
+											products={products}
+											productId={selectedProductId}
+											hide={productHideHandler}
+										/>
 									</Paper>
 								</Grid>
 							)}

@@ -1,14 +1,16 @@
 import { Box, Button, FormControl, FormHelperText, Grid, Input, InputLabel, TextField } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { ProductContract, ProductInfoContract } from '../../../Api/Products/contracts'
+import { ProductContract, ProductInfoContract, ProductListItemContract } from '../../../Api/Products/contracts'
 import productsApi from '../../../Api/Products/productsApi'
 import Title from '../../Title'
 import { formIsValid, FormValidation, initialFormValidation, initialProduct } from '../utils'
 import { Alert } from '@material-ui/lab'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
+import MultipleSelect from '../../../MultipleSelect/MultipleSelect'
 
 interface IOwnProps {
+	products: ProductListItemContract[]
 	productId: string | null
 	hide: () => void
 }
@@ -32,14 +34,16 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const Product = ({ productId, hide }: IOwnProps) => {
+const Product = ({ products, productId, hide }: IOwnProps) => {
 	if (!productId) {
 		return null
 	}
 
 	const classes = useStyles()
 
+	const [simpleProducts] = useState(products.filter(p => !p.isSet))
 	const [product, setProduct] = useState(initialProduct as ProductInfoContract)
+	const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
 	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
@@ -104,12 +108,12 @@ const Product = ({ productId, hide }: IOwnProps) => {
 
 	const updateProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await productsApi.Update(productId, product)
+			await productsApi.Update(productId, { ...product, productIds: selectedProductIds })
 			hide()
 		} else {
 			setErrorText('Form is invalid')
 		}
-	}, [formIsValid, formValidation, product, productsApi, hide, setErrorText])
+	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, hide, setErrorText])
 
 	const deleteProduct = useCallback(async () => {
 		await productsApi.Delete(productId)
@@ -173,6 +177,14 @@ const Product = ({ productId, hide }: IOwnProps) => {
 							onChange={discountPerUnitChangeHandler}
 						/>
 					</FormControl>
+				</Grid>
+				<Grid item xs={12} md={12}>
+					<MultipleSelect
+						title={'Products'}
+						items={simpleProducts}
+						selectedIds={product.productIds}
+						setSelectedIds={setSelectedProductIds}
+					/>
 				</Grid>
 				{errorText && (
 					<Grid item xs={12} md={12}>
