@@ -30,16 +30,10 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
             {
                 return new GetProductByLabelResponse();
             }
-
-            IEnumerable<Product> innerProducts = null;
-            if (product.ProductIds?.Length > 0)
-            {
-                innerProducts = await _productRepository.GetListByIdsAsync(product.ProductIds, cancellationToken);
-            }
-
+            
             return new GetProductByLabelResponse
             {
-                Product = product.ToContract(innerProducts)
+                Product = product.ToContract()
             };
         }
     }

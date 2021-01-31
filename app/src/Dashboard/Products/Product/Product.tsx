@@ -41,7 +41,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 
 	const classes = useStyles()
 
-	const [simpleProducts] = useState(products.filter(p => !p.isSet))
+	const [simpleProducts] = useState(products.filter(p => !p.isSet && p.id !== productId))
 	const [product, setProduct] = useState(initialProduct as ProductInfoContract)
 	const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
 	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
@@ -96,14 +96,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 
 	const getProduct = useCallback(async () => {
 		const response = await productsApi.GetProduct(productId)
-		setProduct({
-			name: response.name,
-			label: response.label,
-			description: response.description,
-			unitPrice: response.unitPrice,
-			discountPerUnit: response.discountPerUnit,
-			productIds: response.products ? response.products.map(p => p.id) : [],
-		} as ProductInfoContract)
+		setProduct(response)
 	}, [setProduct, productId])
 
 	const updateProduct = useCallback(async () => {
