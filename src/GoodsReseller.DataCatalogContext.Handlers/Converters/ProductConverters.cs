@@ -9,7 +9,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
 {
     public static class ProductConverters
     {
-        public static ProductContract ToContract(this Product product, IEnumerable<Product> innerProducts = null)
+        public static ProductContract ToContract(this Product product)
         {
             if (product == null)
             {
@@ -25,7 +25,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
                 Description = product.Description,
                 UnitPrice = product.UnitPrice.Value,
                 DiscountPerUnit = product.DiscountPerUnit.Value,
-                Products = innerProducts?.Select(x => x.ToContract()).ToArray()
+                ProductIds = product.ProductIds
             };
         }
 

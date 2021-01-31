@@ -25,15 +25,9 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 return new GetProductByIdResponse();
             }
 
-            IEnumerable<Product> innerProducts = null;
-            if (product.ProductIds?.Length > 0)
-            {
-                innerProducts = await _productRepository.GetListByIdsAsync(product.ProductIds, cancellationToken);
-            }
-
             return new GetProductByIdResponse
             {
-                Product = product.ToContract(innerProducts)
+                Product = product.ToContract()
             };
         }
     }

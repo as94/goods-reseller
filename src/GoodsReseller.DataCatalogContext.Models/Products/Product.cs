@@ -52,7 +52,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             DiscountPerUnit = discountPerUnit;
             CreationDate = creationDate;
             IsRemoved = false;
-            ProductIds = productIds;
+            ProductIds = productIds ?? Array.Empty<Guid>();
         }
 
         public static Product Restore(
@@ -91,7 +91,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Money unitPrice,
             Discount discountPerUnit,
             DateValueObject lastUpdateDate,
-            Guid[]? productIds = null)
+            Guid[] productIds = null)
         {
             if (IsRemoved)
             {
@@ -123,7 +123,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Description = description;
             UnitPrice = unitPrice;
             DiscountPerUnit = discountPerUnit;
-            ProductIds = productIds;
+            ProductIds = productIds ?? Array.Empty<Guid>();
             
             IncrementVersion();
             LastUpdateDate = lastUpdateDate;

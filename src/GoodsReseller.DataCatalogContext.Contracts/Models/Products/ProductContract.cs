@@ -13,6 +13,6 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Models.Products
         public decimal UnitPrice { get; set; }
         public decimal DiscountPerUnit { get; set; }
 
-        public ProductContract[] Products { get; set; }
+        public Guid[] ProductIds { get; set; }
     }
 }

@@ -6,7 +6,7 @@ export interface ProductContract {
 	description: string
 	unitPrice: number
 	discountPerUnit: number
-	products: ProductContract[]
+	productIds: string[]
 }
 
 export interface ProductListItemContract {
