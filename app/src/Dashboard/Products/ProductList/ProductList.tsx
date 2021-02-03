@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { DataGrid, RowParams } from '@material-ui/data-grid'
 import Title from '../../Title'
 import productsApi from '../../../Api/Products/productsApi'
