@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { DataGrid, RowParams } from '@material-ui/data-grid'
-import Title from '../Title'
-import productsApi from '../../Api/Products/productsApi'
-import { ProductListItemContract } from '../../Api/Products/contracts'
-import './Products.css'
+import Title from '../../Title'
+import productsApi from '../../../Api/Products/productsApi'
+import { ProductListItemContract } from '../../../Api/Products/contracts'
 import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import './ProductList.css'
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -31,7 +31,7 @@ interface IOwnProps {
 	showCreateProduct: () => void
 }
 
-const Products = ({ products, setProducts, setSelectedProductId, showCreateProduct }: IOwnProps) => {
+const ProductList = ({ products, setProducts, setSelectedProductId, showCreateProduct }: IOwnProps) => {
 	const classes = useStyles()
 
 	const getProducts = useCallback(async () => {
@@ -67,4 +67,4 @@ const Products = ({ products, setProducts, setSelectedProductId, showCreateProdu
 	)
 }
 
-export default Products
+export default ProductList

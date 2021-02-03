@@ -12,20 +12,14 @@ import { Divider } from '@material-ui/core'
 import { Container } from '@material-ui/core'
 import { Grid } from '@material-ui/core'
 import Copyright from '../Copyright/Copyright'
-import Orders from './Orders'
 import { useHistory } from 'react-router-dom'
 import { useAuth } from '../Hooks/useAuth'
 import { ListItem } from '@material-ui/core'
 import { ListItemIcon } from '@material-ui/core'
 import DashboardIcon from '@material-ui/icons/Dashboard'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
-import PeopleIcon from '@material-ui/icons/People'
-import BarChartIcon from '@material-ui/icons/BarChart'
-import LayersIcon from '@material-ui/icons/Layers'
-import Products from './Products/Products'
-import Product from './Products/Product/Product'
-import CreateProduct from './Products/CreateProduct/CreateProduct'
-import { ProductListItemContract } from '../Api/Products/contracts'
+import LocalMallIcon from '@material-ui/icons/LocalMall'
+import ProductBlock from './Products/ProductBlock/ProductBlock'
 
 const drawerWidth = 240
 
@@ -103,10 +97,13 @@ const useStyles = makeStyles(theme => ({
 		overflow: 'auto',
 		flexDirection: 'column',
 	},
-	fixedHeight: {
-		height: 240,
-	},
 }))
+
+const menuItems = {
+	dashboard: 'dashboard',
+	orders: 'orders',
+	products: 'products',
+}
 
 const Dashboard = () => {
 	const classes = useStyles()
@@ -125,15 +122,8 @@ const Dashboard = () => {
 		await auth.signOut()
 		history.push('/')
 	}, [auth.signOut])
-	// const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
-	const [products, setProducts] = useState([] as ProductListItemContract[])
-
-	const [selectedProductId, setSelectedProductId] = useState(null as string | null)
-	const [showCreateProduct, setShowCreateProduct] = useState(false)
-	const productHideHandler = useCallback(() => setSelectedProductId(null), [setSelectedProductId])
-	const createProductShowHandler = useCallback(() => setShowCreateProduct(true), [setShowCreateProduct])
-	const createProductHideHandler = useCallback(() => setShowCreateProduct(false), [setShowCreateProduct])
+	const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems.dashboard)
 
 	return (
 		auth.user && (
@@ -176,30 +166,36 @@ const Dashboard = () => {
 					<Divider />
 					<List>
 						<div>
-							<ListItem button>
+							<ListItem
+								button
+								selected={selectedMenuItem === menuItems.dashboard}
+								onClick={() => setSelectedMenuItem(menuItems.dashboard)}
+							>
 								<ListItemIcon>
 									<DashboardIcon />
 								</ListItemIcon>
 								<ListItemText primary="Dashboard" />
 							</ListItem>
-							<ListItem button>
+							<ListItem
+								button
+								selected={selectedMenuItem === menuItems.orders}
+								onClick={() => setSelectedMenuItem(menuItems.orders)}
+							>
 								<ListItemIcon>
 									<ShoppingCartIcon />
 								</ListItemIcon>
 								<ListItemText primary="Orders" />
 							</ListItem>
-							<ListItem button>
+							<ListItem
+								button
+								selected={selectedMenuItem === menuItems.products}
+								onClick={() => setSelectedMenuItem(menuItems.products)}
+							>
 								<ListItemIcon>
-									<PeopleIcon />
+									<LocalMallIcon />
 								</ListItemIcon>
-								<ListItemText primary="Customers" />
+								<ListItemText primary="Products" />
 							</ListItem>
-							{/* <ListItem button>
-								<ListItemIcon>
-									<BarChartIcon />
-								</ListItemIcon>
-								<ListItemText primary="Reports" />
-							</ListItem> */}
 						</div>
 					</List>
 				</Drawer>
@@ -207,59 +203,13 @@ const Dashboard = () => {
 					<div className={classes.appBarSpacer} />
 					<Container maxWidth="lg" className={classes.container}>
 						<Grid container spacing={3}>
-							{/* Chart */}
-							{/* <Grid item xs={12} md={8} lg={9}>
-							<Paper className={fixedHeightPaper}>
-								<Chart />
-							</Paper>
-						</Grid> */}
-							{/* Recent Deposits */}
-							{/* <Grid item xs={12} md={4} lg={3}>
-							<Paper className={fixedHeightPaper}>
-								<Deposits />
-							</Paper>
-						</Grid> */}
-							{/* Recent Orders */}
-							{/* <Grid item xs={12}>
-								<Paper className={classes.paper}>
-									<Orders />
-								</Paper>
-							</Grid> */}
-
-							{!selectedProductId && !showCreateProduct && (
-								<Grid item xs={12}>
-									<Paper className={classes.paper}>
-										<Products
-											products={products}
-											setProducts={setProducts}
-											setSelectedProductId={setSelectedProductId}
-											showCreateProduct={createProductShowHandler}
-										/>
-									</Paper>
-								</Grid>
+							{selectedMenuItem === menuItems.dashboard && (
+								<div>
+									<h1>Dashboard</h1> <p>Not implemented yet</p>
+								</div>
 							)}
 
-							{showCreateProduct && (
-								<Grid item xs={12}>
-									<Paper className={classes.paper}>
-										<CreateProduct products={products} hide={createProductHideHandler} />
-									</Paper>
-								</Grid>
-							)}
-
-							{selectedProductId && (
-								<Grid item xs={12}>
-									{' '}
-									<Paper className={classes.paper}>
-										{' '}
-										<Product
-											products={products}
-											productId={selectedProductId}
-											hide={productHideHandler}
-										/>
-									</Paper>
-								</Grid>
-							)}
+							{selectedMenuItem === menuItems.products && <ProductBlock />}
 						</Grid>
 						<Box pt={4}>
 							<Copyright />
