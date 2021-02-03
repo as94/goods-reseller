@@ -1,18 +1,12 @@
-using System;
 using GoodsReseller.OrderContext.Contracts.Models;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 
 namespace GoodsReseller.OrderContext.Handlers.Converters
 {
-    public static class OrderItemConverters
+    internal static class OrderItemConverters
     {
         public static OrderItemContract ToContract(this OrderItem orderItem)
         {
-            if (orderItem == null)
-            {
-                throw new ArgumentNullException(nameof(orderItem));
-            }
-            
             return new OrderItemContract
             {
                 Id = orderItem.Id,

@@ -1,4 +1,3 @@
-using GoodsReseller.DataCatalogContext.Contracts.Models;
 using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
 using MediatR;
 

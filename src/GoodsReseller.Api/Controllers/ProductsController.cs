@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
-using GoodsReseller.DataCatalogContext.Contracts.Products.BatchByIds;
+using GoodsReseller.DataCatalogContext.Contracts.Products.BatchByQuery;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Create;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Delete;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
@@ -64,7 +64,7 @@ namespace GoodsReseller.Api.Controllers
         [HttpGet("list")]
         public async Task<IActionResult> GetProductListAsync([FromQuery] BatchProductsQuery query, CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(new BatchProductsByIdsRequest
+            var response = await _mediator.Send(new BatchProductsByQueryRequest
             {
                 Query = query
             }, cancellationToken);

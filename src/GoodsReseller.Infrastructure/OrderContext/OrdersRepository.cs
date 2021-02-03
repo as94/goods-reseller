@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GoodsReseller.Infrastructure.Configurations;
 using GoodsReseller.Infrastructure.OrderContext.Models;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
-using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
@@ -23,7 +23,42 @@ namespace GoodsReseller.Infrastructure.OrderContext
         {
             _orders = mongoDatabase.GetCollection<OrderDocument>("orders");
         }
-        
+
+        public async Task<IEnumerable<Order>> BatchAsync(int offset, int count, CancellationToken cancellationToken)
+        {
+            if (offset < 0)
+            {
+                throw new ArgumentException(nameof(offset));
+            }
+            
+            if (count < 0)
+            {
+                throw new ArgumentException(nameof(count));
+            }
+
+            if (count > 1000)
+            {
+                throw new ArgumentException($"{nameof(count)} more than 100");
+            }
+            
+            // TODO: filter archived orders
+            var cursor = await _orders.FindAsync(
+                new FilterDefinitionBuilder<OrderDocument>().Empty,
+                new FindOptions<OrderDocument>
+                {
+                    Skip = offset,
+                    Limit = count,
+                    MaxTime = TimeSpan.FromSeconds(5),
+                    MaxAwaitTime = TimeSpan.FromSeconds(5),
+                },
+                cancellationToken);
+            
+            return (await cursor.ToListAsync(cancellationToken))
+                .Select(x => GetState(x).ToDomain())
+                .ToList()
+                .AsReadOnly();
+        }
+
         public async Task<Order> GetAsync(Guid orderId, CancellationToken cancellationToken)
         {
             var existing = await GetExisting(orderId, cancellationToken);
@@ -33,8 +68,15 @@ namespace GoodsReseller.Infrastructure.OrderContext
                 return null;
             }
 
+            var state = GetState(existing);
+
+            return state?.ToDomain();
+        }
+
+        private static OrderState GetState(OrderDocument existing)
+        {
             var state = JsonConvert.DeserializeObject<OrderState>(
-                existing.Document.ToJson(new JsonWriterSettings { OutputMode = JsonOutputMode.Shell }),
+                existing.Document.ToJson(new JsonWriterSettings {OutputMode = JsonOutputMode.Shell}),
                 new JsonSerializerSettings
                 {
                     ContractResolver = new DefaultContractResolver
@@ -43,8 +85,7 @@ namespace GoodsReseller.Infrastructure.OrderContext
                     },
                     Formatting = Formatting.Indented
                 });
-
-            return state?.ToDomain();
+            return state;
         }
 
         public async Task SaveAsync(Order order, CancellationToken cancellationToken)

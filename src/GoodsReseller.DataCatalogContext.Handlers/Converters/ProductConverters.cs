@@ -1,21 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using GoodsReseller.DataCatalogContext.Contracts.Models;
 using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
 using GoodsReseller.DataCatalogContext.Models.Products;
 
 namespace GoodsReseller.DataCatalogContext.Handlers.Converters
 {
-    public static class ProductConverters
+    internal static class ProductConverters
     {
         public static ProductContract ToContract(this Product product)
         {
-            if (product == null)
-            {
-                throw new ArgumentNullException(nameof(product));
-            }
-            
             return new ProductContract
             {
                 Id = product.Id,

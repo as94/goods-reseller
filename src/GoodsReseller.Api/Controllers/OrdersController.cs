@@ -4,8 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Contracts.Models;
 using GoodsReseller.OrderContext.Contracts.OrderItems.PatchOrderItem;
+using GoodsReseller.OrderContext.Contracts.Orders.BatchByQuery;
 using GoodsReseller.OrderContext.Contracts.Orders.Create;
 using GoodsReseller.OrderContext.Contracts.Orders.GetById;
+using GoodsReseller.OrderContext.Contracts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,6 +40,17 @@ namespace GoodsReseller.Api.Controllers
             }
 
             return Ok(response.Order);
+        }
+        
+        [HttpGet("list")]
+        public async Task<IActionResult> GetQrderListAsync([FromQuery] BatchOrdersQuery query, CancellationToken cancellationToken)
+        {
+            var response = await _mediator.Send(new BatchOrdersByQueryRequest
+            {
+                Query = query
+            }, cancellationToken);
+            
+            return Ok(response.OrderList);
         }
 
         [HttpPost]

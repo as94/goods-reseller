@@ -1,19 +1,12 @@
-using System;
 using GoodsReseller.OrderContext.Contracts.Models;
-using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
 using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.OrderContext.Handlers.Converters
 {
-    public static class MoneyConverters
+    internal static class MoneyConverters
     {
         public static MoneyContract ToContract(this Money money)
         {
-            if (money == null)
-            {
-                throw new ArgumentNullException(nameof(money));
-            }
-            
             return new MoneyContract
             {
                 Value = money.Value
