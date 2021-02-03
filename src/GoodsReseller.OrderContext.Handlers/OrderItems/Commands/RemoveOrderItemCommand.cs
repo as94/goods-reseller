@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
 using GoodsReseller.OrderContext.Domain.Orders;
-using GoodsReseller.SeedWork;
 using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 

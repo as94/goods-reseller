@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using GoodsReseller.AuthContext.Domain.Users;
 using GoodsReseller.AuthContext.Domain.Users.Entities;
 using GoodsReseller.Infrastructure.AuthContext.Models;
-using GoodsReseller.Infrastructure.Configurations;
-using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;

@@ -1,8 +1,8 @@
 using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
 
-namespace GoodsReseller.DataCatalogContext.Contracts.Products.BatchByIds
+namespace GoodsReseller.DataCatalogContext.Contracts.Products.BatchByQuery
 {
-    public class BatchProductsByIdsResponse
+    public class BatchProductsByQueryResponse
     {
         public ProductListContract ProductList { get; set; }
     }

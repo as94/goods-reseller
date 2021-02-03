@@ -1,18 +1,12 @@
-using System;
 using GoodsReseller.OrderContext.Contracts.Models;
 using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
 
 namespace GoodsReseller.OrderContext.Handlers.Converters
 {
-    public static class AddressConverters
+    internal static class AddressConverters
     {
         public static AddressContract ToContract(this Address address)
         {
-            if (address == null)
-            {
-                throw new ArgumentNullException(nameof(address));
-            }
-
             return new AddressContract
             {
                 City = address.City,
@@ -28,11 +22,6 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
 
         public static Address ToDomain(this AddressContract contract)
         {
-            if (contract == null)
-            {
-                throw new ArgumentNullException(nameof(contract));
-            }
-
             return new Address(
                 contract.City,
                 contract.Street,

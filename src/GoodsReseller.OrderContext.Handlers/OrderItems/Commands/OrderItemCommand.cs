@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Contracts.Models;
-using GoodsReseller.OrderContext.Domain.Orders.Entities;
 
 namespace GoodsReseller.OrderContext.Handlers.OrderItems.Commands
 {

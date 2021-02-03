@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using GoodsReseller.OrderContext.Domain.ValidationRules;
 using GoodsReseller.SeedWork;
 

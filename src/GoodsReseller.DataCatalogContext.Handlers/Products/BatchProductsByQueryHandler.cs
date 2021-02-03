@@ -2,33 +2,32 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
-using GoodsReseller.DataCatalogContext.Contracts.Products.BatchByIds;
+using GoodsReseller.DataCatalogContext.Contracts.Products.BatchByQuery;
 using GoodsReseller.DataCatalogContext.Handlers.Converters;
 using GoodsReseller.DataCatalogContext.Models.Products;
 using MediatR;
 
 namespace GoodsReseller.DataCatalogContext.Handlers.Products
 {
-    public class BatchProductsByIdsHandler : IRequestHandler<BatchProductsByIdsRequest, BatchProductsByIdsResponse>
+    public class BatchProductsByQueryHandler : IRequestHandler<BatchProductsByQueryRequest, BatchProductsByQueryResponse>
     {
         private readonly IProductRepository _productRepository;
 
-        public BatchProductsByIdsHandler(IProductRepository productRepository)
+        public BatchProductsByQueryHandler(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
         
-        public async Task<BatchProductsByIdsResponse> Handle(BatchProductsByIdsRequest request, CancellationToken cancellationToken)
+        public async Task<BatchProductsByQueryResponse> Handle(BatchProductsByQueryRequest request, CancellationToken cancellationToken)
         {
             var products = await _productRepository.BatchAsync(request.Query.Offset, request.Query.Count, cancellationToken);
 
-            return new BatchProductsByIdsResponse
+            return new BatchProductsByQueryResponse
             {
                 ProductList = new ProductListContract
                 {
                     Items = products
                         .OrderByDescending(x => x.LastUpdateDate ?? x.CreationDate)
-                        .ToArray()
                         .Select(x => x.ToListItemContract(x.ProductIds != null && x.ProductIds.Any()))
                         .ToArray()
                 }
