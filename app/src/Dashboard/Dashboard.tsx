@@ -20,6 +20,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import LocalMallIcon from '@material-ui/icons/LocalMall'
 import ProductBlock from './Products/ProductBlock/ProductBlock'
+import OrderBlock from './Orders/OrderBlock/OrderBlock'
 
 const drawerWidth = 240
 
@@ -209,6 +210,7 @@ const Dashboard = () => {
 								</div>
 							)}
 
+							{selectedMenuItem === menuItems.orders && <OrderBlock />}
 							{selectedMenuItem === menuItems.products && <ProductBlock />}
 						</Grid>
 						<Box pt={4}>
