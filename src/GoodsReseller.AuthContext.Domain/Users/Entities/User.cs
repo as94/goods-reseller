@@ -13,6 +13,7 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
 
         public Role Role { get; }
 
+        // TODO: extract to Metadata
         public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
@@ -87,6 +88,7 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
             PasswordHash.Authenticate(password);
         }
         
+        // TODO: extract to VersionedEntity
         public void Remove(DateValueObject lastUpdateDate)
         {
             if (IsRemoved)
