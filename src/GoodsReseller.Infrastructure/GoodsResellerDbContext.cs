@@ -16,5 +16,18 @@ namespace GoodsReseller.Infrastructure
         {
             Database.EnsureCreated();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.ToTable("orders");
+
+                entity.Property(e => e.Id).IsRequired().HasColumnType("binary(16)");
+                entity.HasKey(x => x.Id);
+
+                entity.Property(e => e.Version).IsRequired().HasColumnType("int(11)");
+            });
+        }
     }
 }

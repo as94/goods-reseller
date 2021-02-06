@@ -12,6 +12,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public Money UnitPrice { get; private set; }
         public Discount DiscountPerUnit { get; private set; }
         
+        // TODO: extract to Metadata
         public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
@@ -129,6 +130,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             LastUpdateDate = lastUpdateDate;
         }
 
+        // TODO: extract to VersionedEntity
         public void Remove(DateValueObject lastUpdateDate)
         {
             if (IsRemoved)
