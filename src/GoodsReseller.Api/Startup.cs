@@ -54,7 +54,9 @@ namespace GoodsReseller.Api
                     };  
                 });
             
-            services.RegisterInfrastructure(goodsResellerDatabaseSection.Get<GoodsResellerDatabaseOptions>());
+            services.RegisterInfrastructure(
+                goodsResellerDatabaseSection.Get<GoodsResellerDatabaseOptions>(),
+                _configuration.GetSection(nameof(DatabaseOptions)).Get<DatabaseOptions>());
             services.RegisterAuthContextHandlers();
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
