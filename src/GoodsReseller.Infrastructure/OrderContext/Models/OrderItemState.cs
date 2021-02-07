@@ -9,14 +9,14 @@ namespace GoodsReseller.Infrastructure.OrderContext.Models
     {
         public Guid Id { get; set; }
         
-        public Product Product { get; set; }
+        public Guid ProductId { get; set; }
         public Money UnitPrice { get; set; }
         public Quantity Quantity { get; set; }
         public Discount DiscountPerUnit { get; set; }
 
         public OrderItem ToDomain()
         {
-            return new OrderItem(Id, Product, UnitPrice, Quantity, DiscountPerUnit);
+            return new OrderItem(Id, ProductId, UnitPrice, Quantity, DiscountPerUnit);
         }
     }
 }

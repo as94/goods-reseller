@@ -7,19 +7,14 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {
     public sealed class OrderItem : Entity
     {
-        public Product Product { get; }
+        public Guid ProductId { get; }
         public Money UnitPrice { get; }
         public Quantity Quantity { get; private set; }
         public Discount DiscountPerUnit { get; }
 
-        public OrderItem(Guid id, Product product, Money unitPrice, Quantity quantity, Discount discountPerUnit)
+        public OrderItem(Guid id, Guid productId, Money unitPrice, Quantity quantity, Discount discountPerUnit)
             : base(id)
         {
-            if (product == null)
-            {
-                throw new ArgumentNullException(nameof(product));
-            }
-            
             if (unitPrice == null)
             {
                 throw new ArgumentNullException(nameof(unitPrice));
@@ -35,7 +30,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(quantity));
             }
             
-            Product = product;
+            ProductId = productId;
             UnitPrice = unitPrice;
             Quantity = quantity;
             DiscountPerUnit = discountPerUnit;

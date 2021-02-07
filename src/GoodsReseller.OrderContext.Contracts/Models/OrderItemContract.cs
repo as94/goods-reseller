@@ -6,7 +6,7 @@ namespace GoodsReseller.OrderContext.Contracts.Models
     {
         public Guid Id { get; set; }
         
-        public ProductContract Product { get; set; }
+        public Guid ProductId { get; set; }
         
         public MoneyContract UnitPrice { get; set; }
         public int Quantity { get; set; }
