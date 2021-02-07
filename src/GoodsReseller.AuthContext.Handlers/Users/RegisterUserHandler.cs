@@ -36,8 +36,7 @@ namespace GoodsReseller.AuthContext.Handlers.Users
                 version,
                 request.Email,
                 passwordHash,
-                request.Role,
-                new DateValueObject(DateTime.Now));
+                request.Role);
 
             await _usersRepository.SaveUserAsync(user, cancellationToken);
             

@@ -17,7 +17,7 @@ namespace GoodsReseller.Infrastructure
             GoodsResellerDatabaseOptions goodsResellerDatabaseOptions,
             DatabaseOptions databaseOptions)
         {
-            serviceCollection.AddDbContext<GoodsResellerDbContext>(options =>
+            serviceCollection.AddDbContextPool<GoodsResellerDbContext>(options =>
                 options.UseNpgsql(databaseOptions.ConnectionString));
             
             var mongoClient = new MongoClient(goodsResellerDatabaseOptions.ConnectionString);

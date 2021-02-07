@@ -9,16 +9,10 @@ namespace GoodsReseller.AuthContext.Domain.Users.ValueObjects
     {
         private readonly HashingManager _hashingManager = new HashingManager();
         
-        public string Value { get; }
+        public string Value { get; private set; }
 
-        public PasswordHash(string value)
+        private PasswordHash()
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-            
-            Value = value;
         }
 
         public static PasswordHash Generate(string password)
@@ -28,7 +22,10 @@ namespace GoodsReseller.AuthContext.Domain.Users.ValueObjects
                 throw new ArgumentNullException(nameof(password));
             }
             
-            return new PasswordHash(new HashingManager().HashToString(password));
+            return new PasswordHash
+            {
+                Value = new HashingManager().HashToString(password)
+            };
         }
 
         public void Authenticate(string password)

@@ -9,21 +9,21 @@ namespace GoodsReseller.Infrastructure
     public sealed class GoodsResellerDbContext : DbContext
     {
         public DbSet<User> Users { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
+        // public DbSet<Product> Products { get; set; }
+        // public DbSet<Order> Orders { get; set; }
+        // public DbSet<OrderItem> OrderItems { get; set; }
         
-        public GoodsResellerDbContext()
+        public GoodsResellerDbContext(DbContextOptions<GoodsResellerDbContext> options)
+            : base(options)
         {
-            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+            // modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
+            // modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
+            // modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
         }
     }
 }
