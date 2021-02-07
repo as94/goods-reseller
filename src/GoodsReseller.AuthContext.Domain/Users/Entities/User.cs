@@ -8,24 +8,30 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
 {
     public sealed class User : VersionedEntity, IAggregateRoot
     {
-        public string Email { get; }
-        public PasswordHash PasswordHash { get; }
+        public string Email { get; private set; }
+        public PasswordHash PasswordHash { get; private set; }
 
-        public Role Role { get; }
+        public Role Role { get; private set; }
 
         // TODO: extract to Metadata
-        public DateValueObject CreationDate { get; }
+        public DateValueObject CreationDate { get; private set; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
+
+        private User(
+            Guid id,
+            int version)
+            : base(id, version)
+        {
+        }
 
         public User(
             Guid id,
             int version,
             string email,
             PasswordHash passwordHash,
-            Role role,
-            DateValueObject creationDate) : base(id,
-            version)
+            string role)
+                : base(id, version)
         {
             if (email == null)
             {
@@ -48,10 +54,16 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
                 throw new ArgumentException($"Email '{email}' is invalid");
             }
 
+            if (!Enumeration.TryParse<Role>(role, out var parsedRole))
+            {
+                // TODO: business rule, add translations
+                throw new ArgumentException($"Role '{role}' is invalid");
+            }
+
             Email = email;
             PasswordHash = passwordHash;
-            Role = role;
-            CreationDate = creationDate;
+            Role = parsedRole;
+            CreationDate = new DateValueObject(DateTime.Now);
             IsRemoved = false;
         }
 
@@ -65,14 +77,12 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
             DateValueObject? lastUpdateDate,
             bool isRemoved)
         {
-            return new User(
-                id,
-                version,
-                email,
-                passwordHash,
-                role,
-                creationDate)
+            return new User(id, version)
             {
+                Email = email,
+                PasswordHash = passwordHash,
+                Role = role,
+                CreationDate = creationDate,
                 LastUpdateDate = lastUpdateDate,
                 IsRemoved = isRemoved
             };

@@ -38,7 +38,7 @@ namespace GoodsReseller.Api.Controllers
             {
                 Email = registerUser.Email,
                 Password = registerUser.Password,
-                Role = Role.Admin
+                Role = Role.Admin.Name
             }, cancellationToken);
             
             await AuthenticateAsync(response.UserId, registerUser.Email, Role.Admin);
@@ -53,7 +53,7 @@ namespace GoodsReseller.Api.Controllers
             {
                 Email = registerUser.Email,
                 Password = registerUser.Password,
-                Role = Role.Customer
+                Role = Role.Customer.Name
             }, cancellationToken);
             
             await AuthenticateAsync(response.UserId, registerUser.Email, Role.Customer);

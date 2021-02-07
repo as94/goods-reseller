@@ -11,6 +11,12 @@ namespace GoodsReseller.SeedWork.ValueObjects
             DateUtc = date.ToUniversalTime();
         }
 
+        public DateValueObject(DateTime date, DateTime dateUtc)
+        {
+            Date = date;
+            DateUtc = dateUtc;
+        }
+
         public DateTime Date { get; }
         public DateTime DateUtc { get; }
         
