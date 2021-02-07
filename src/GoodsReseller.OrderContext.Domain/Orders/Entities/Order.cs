@@ -71,13 +71,8 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             return order;
         }
 
-        public void AddOrderItem(Product product, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
+        public void AddOrderItem(Guid productId, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
         {
-            if (product == null)
-            {
-                throw new ArgumentNullException(nameof(product));
-            }
-            
             if (unitPrice == null)
             {
                 throw new ArgumentNullException(nameof(unitPrice));
@@ -93,14 +88,14 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(lastUpdateDate));
             }
 
-            var existingOrderItem = _orderItems.FirstOrDefault(x => x.Product.Id == product.Id);
+            var existingOrderItem = _orderItems.FirstOrDefault(x => x.ProductId == productId);
             if (existingOrderItem != null)
             {
                 existingOrderItem.IncrementQuantity();
             }
             else
             {
-                var newOrderItem = new OrderItem(Guid.NewGuid(), product, unitPrice, new Quantity(1), discountPerUnit);
+                var newOrderItem = new OrderItem(Guid.NewGuid(), productId, unitPrice, new Quantity(1), discountPerUnit);
                 _orderItems.Add(newOrderItem);
             }
 
@@ -116,7 +111,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(lastUpdateDate));
             }
             
-            var existingOrderItem = _orderItems.FirstOrDefault(x => x.Product.Id == productId);
+            var existingOrderItem = _orderItems.FirstOrDefault(x => x.ProductId == productId);
             if (existingOrderItem != null)
             {
                 if (existingOrderItem.Quantity.Value > 1)

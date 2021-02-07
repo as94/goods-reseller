@@ -10,7 +10,7 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
             return new OrderItemContract
             {
                 Id = orderItem.Id,
-                Product = orderItem.Product.ToContract(),
+                ProductId = orderItem.ProductId,
                 UnitPrice = orderItem.UnitPrice.ToContract(),
                 Quantity = orderItem.Quantity.Value,
                 DiscountPerUnit = orderItem.DiscountPerUnit.Value

@@ -11,13 +11,13 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public string Description { get; private set; }
         public Money UnitPrice { get; private set; }
         public Discount DiscountPerUnit { get; private set; }
+        public Guid[] ProductIds { get; private set; }
+        
         
         // TODO: extract to Metadata
         public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
-
-        public Guid[] ProductIds { get; private set; }
         
         public Product(
             Guid id,
