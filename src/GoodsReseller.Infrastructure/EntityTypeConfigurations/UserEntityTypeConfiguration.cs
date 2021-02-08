@@ -46,6 +46,8 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
                     x.Property(x => x.DateUtc).HasColumnName("LastUpdateDateUtc");
                     x.WithOwner();
                 });
+
+            builder.Property(x => x.IsRemoved).IsRequired().HasColumnType("boolean");
         }
     }
 }
