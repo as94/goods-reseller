@@ -11,14 +11,17 @@ namespace GoodsReseller.SeedWork.ValueObjects
             DateUtc = date.ToUniversalTime();
         }
 
-        public DateValueObject(DateTime date, DateTime dateUtc)
+        /// <summary>
+        /// EF constructor
+        /// </summary>
+        private DateValueObject(DateTime date, DateTime dateUtc)
         {
             Date = date;
             DateUtc = dateUtc;
         }
 
-        public DateTime Date { get; }
-        public DateTime DateUtc { get; }
+        public DateTime Date { get; private set; }
+        public DateTime DateUtc { get; private set; }
         
         protected override IEnumerable<object> GetEqualityComponents()
         {

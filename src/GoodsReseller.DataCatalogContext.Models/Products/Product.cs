@@ -15,7 +15,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         
         
         // TODO: extract to Metadata
-        public DateValueObject CreationDate { get; }
+        public DateValueObject CreationDate { get; private set; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
         
@@ -27,7 +27,19 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string description,
             Money unitPrice,
             Discount discountPerUnit,
-            DateValueObject creationDate,
+            Guid[] productIds = null)
+            : this(id, version, label, name, description, productIds)
+        {
+            UnitPrice = unitPrice;
+            DiscountPerUnit = discountPerUnit;
+        }
+
+        private Product(
+            Guid id,
+            int version,
+            string label,
+            string name,
+            string description,
             Guid[] productIds = null)
             : base(id, version)
         {
@@ -49,12 +61,10 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Label = label;
             Name = name;
             Description = description;
-            UnitPrice = unitPrice;
-            DiscountPerUnit = discountPerUnit;
-            CreationDate = creationDate;
+            CreationDate = new DateValueObject(DateTime.Now);
             IsRemoved = false;
             ProductIds = productIds ?? Array.Empty<Guid>();
-        }
+        } 
 
         public static Product Restore(
             Guid id,
@@ -77,9 +87,9 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
                 description,
                 unitPrice,
                 discountPerUnit,
-                creationDate,
                 productIds)
             {
+                CreationDate = creationDate,
                 LastUpdateDate = lastUpdateDate,
                 IsRemoved = isRemoved
             };
