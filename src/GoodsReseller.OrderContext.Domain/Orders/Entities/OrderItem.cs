@@ -13,7 +13,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Discount DiscountPerUnit { get; }
 
         public OrderItem(Guid id, Guid productId, Money unitPrice, Quantity quantity, Discount discountPerUnit)
-            : base(id)
+            : this(id, productId)
         {
             if (unitPrice == null)
             {
@@ -30,10 +30,14 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(quantity));
             }
             
-            ProductId = productId;
             UnitPrice = unitPrice;
             Quantity = quantity;
             DiscountPerUnit = discountPerUnit;
+        }
+
+        private OrderItem(Guid id, Guid productId) : base(id)
+        {
+            ProductId = productId;
         }
 
         public void IncrementQuantity()
