@@ -10,8 +10,8 @@ namespace GoodsReseller.Infrastructure
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
-        // public DbSet<Order> Orders { get; set; }
-        // public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         
         public GoodsResellerDbContext(DbContextOptions<GoodsResellerDbContext> options)
             : base(options)
@@ -22,8 +22,8 @@ namespace GoodsReseller.Infrastructure
         {
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
-            // modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
-            // modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
         }
     }
 }

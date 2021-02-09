@@ -22,12 +22,12 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Money TotalCost { get; private set; }
         
         // TODO: extract to Metadata
-        public DateValueObject CreationDate { get; }
+        public DateValueObject CreationDate { get; private set; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
 
-        public Order(Guid id, int version, Address address, CustomerInfo customerInfo, DateValueObject creationDate)
-            : base(id, version)
+        public Order(Guid id, int version, Address address, CustomerInfo customerInfo)
+            : this(id, version)
         {
             if (address == null)
             {
@@ -38,15 +38,14 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             {
                 throw new ArgumentNullException(nameof(customerInfo));
             }
-
-            if (creationDate == null)
-            {
-                throw new ArgumentNullException(nameof(creationDate));
-            }
             
             Address = address;
             CustomerInfo = customerInfo;
-            CreationDate = creationDate;
+        }
+
+        private Order(Guid id, int version) : base(id, version)
+        {
+            CreationDate = new DateValueObject(DateTime.Now);
             _orderItems = new List<OrderItem>();
             TotalCost = Money.Zero;
         }
@@ -61,8 +60,9 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             List<OrderItem> orderItems,
             Money totalCost)
         {
-            var order = new Order(id, version, address, customerInfo, creationDate)
+            var order = new Order(id, version, address, customerInfo)
             {
+                CreationDate = creationDate,
                 LastUpdateDate = lastUpdateDate,
                 _orderItems = orderItems,
                 TotalCost = totalCost

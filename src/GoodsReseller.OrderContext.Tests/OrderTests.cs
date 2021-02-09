@@ -14,7 +14,7 @@ namespace GoodsReseller.OrderContext.Tests
         {
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
-            var newOrder = GetOrder(orderId, orderCreationDate);
+            var newOrder = GetOrder(orderId);
 
             newOrder.AddOrderItem(
                 Guid.NewGuid(),
@@ -30,7 +30,7 @@ namespace GoodsReseller.OrderContext.Tests
         {
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
-            var newOrder = GetOrder(orderId, orderCreationDate);
+            var newOrder = GetOrder(orderId);
 
             newOrder.AddOrderItem(
                 Guid.NewGuid(),
@@ -46,7 +46,7 @@ namespace GoodsReseller.OrderContext.Tests
         {
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
-            var newOrder = GetOrder(orderId, orderCreationDate);
+            var newOrder = GetOrder(orderId);
             var productId = Guid.NewGuid();
             
             newOrder.AddOrderItem(
@@ -68,12 +68,12 @@ namespace GoodsReseller.OrderContext.Tests
         {
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
-            var newOrder = GetOrder(orderId, orderCreationDate);
+            var newOrder = GetOrder(orderId);
             var productId = Guid.NewGuid();
             
             newOrder.RemoveOrderItem(productId, new DateValueObject(orderCreationDate.AddMinutes(2)));
             
-            newOrder.Should().BeEquivalentTo(GetOrder(orderId, orderCreationDate));
+            newOrder.Should().BeEquivalentTo(GetOrder(orderId));
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace GoodsReseller.OrderContext.Tests
         {
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
-            var newOrder = GetOrder(orderId, orderCreationDate);
+            var newOrder = GetOrder(orderId);
             var productId = Guid.NewGuid();
             
             newOrder.AddOrderItem(
@@ -99,7 +99,7 @@ namespace GoodsReseller.OrderContext.Tests
         {
             var orderId = Guid.NewGuid();
             var orderCreationDate = DateTime.Now;
-            var newOrder = GetOrder(orderId, orderCreationDate);
+            var newOrder = GetOrder(orderId);
             var productId = Guid.NewGuid();
             
             newOrder.AddOrderItem(
@@ -117,14 +117,13 @@ namespace GoodsReseller.OrderContext.Tests
             newOrder.TotalCost.Should().Be(new Money(10000));
         }
 
-        private Order GetOrder(Guid orderId, DateTime orderCreationDate)
+        private Order GetOrder(Guid orderId)
         {
             return new Order(
                 orderId,
                 1,
                 new Address("Russia", "Moscow", "Tverskoy Boulevard", "123104"),
-                new CustomerInfo("+7 999 999 99 99"), 
-                new DateValueObject(orderCreationDate));
+                new CustomerInfo("+7 999 999 99 99"));
         }
     }
 }

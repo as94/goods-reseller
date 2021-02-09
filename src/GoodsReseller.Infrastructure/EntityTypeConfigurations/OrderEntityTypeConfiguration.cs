@@ -18,11 +18,8 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
             builder.ToTable("orders");
 
             builder.Property(e => e.Id).IsRequired();
-            // .HasColumnType("binary(16)");
             builder.HasKey(x => x.Id);
-
-            builder.Property(e => e.Version).IsRequired();
-            // .HasColumnType("int(11)");
+            builder.Property(e => e.Version).IsRequired().HasColumnType("integer");
 
             builder.Property(e => e.Address)
                 .HasColumnType("json")
@@ -36,9 +33,12 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
                     x => JsonConvert.SerializeObject(x, _jsonSerializerSettings),
                     x => JsonConvert.DeserializeObject<CustomerInfo>(x, _jsonSerializerSettings));
 
-            builder.Property(e => e.TotalCost.Value).IsRequired()
-                .HasColumnName("TotalCost");
-            // .HasColumnType("int(11)");
+            builder
+                .OwnsOne(o => o.TotalCost, x =>
+                {
+                    x.Property(x => x.Value).IsRequired().HasColumnName("TotalCostValue");
+                    x.WithOwner();
+                });
                 
             var navigation =
                 builder.Metadata.FindNavigation(nameof(Order.OrderItems));
@@ -46,12 +46,23 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
             // builder.HasMany(x => x.OrderItems);
 
-            builder.Property(x => x.IsRemoved).IsRequired();//.HasColumnType("bit(1)");
-            
-            builder.Property(x => x.CreationDate.Date).IsRequired().HasColumnName("CreationDate").HasColumnType("datetime");
-            builder.Property(x => x.CreationDate.DateUtc).IsRequired().HasColumnName("CreationDateUtc").HasColumnType("datetime");
-            builder.Property(x => x.LastUpdateDate.Date).HasColumnName("LastUpdateDate").HasColumnType("datetime");
-            builder.Property(x => x.LastUpdateDate.DateUtc).HasColumnName("LastUpdateDateUtc").HasColumnType("datetime");
+            builder
+                .OwnsOne(o => o.CreationDate, x =>
+                {
+                    x.Property(x => x.Date).IsRequired().HasColumnName("CreationDate");
+                    x.Property(x => x.DateUtc).IsRequired().HasColumnName("CreationDateUtc");
+                    x.WithOwner();
+                });
+
+            builder
+                .OwnsOne(o => o.LastUpdateDate, x =>
+                {
+                    x.Property(x => x.Date).HasColumnName("LastUpdateDate");
+                    x.Property(x => x.DateUtc).HasColumnName("LastUpdateDateUtc");
+                    x.WithOwner();
+                });
+
+            builder.Property(x => x.IsRemoved).IsRequired().HasColumnType("boolean");
         }
     }
 }

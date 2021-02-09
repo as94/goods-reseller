@@ -37,6 +37,8 @@ docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=qwe123 -e POST
 ### Migrations
 dotnet ef migrations add InitialCreate -s GoodsReseller.Api/GoodsReseller.Api.csproj -p  GoodsReseller.Infrastructure/GoodsReseller.Infrastructure.csproj -c GoodsResellerDbContext
 
+dotnet ef database update -s GoodsReseller.Api/GoodsReseller.Api.csproj -p  GoodsReseller.Infrastructure/GoodsReseller.Infrastructure.csproj -c GoodsResellerDbContext
+
 ## Nginx
 
 Docker

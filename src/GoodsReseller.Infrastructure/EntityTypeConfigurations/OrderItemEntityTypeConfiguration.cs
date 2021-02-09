@@ -14,10 +14,27 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
             builder.HasKey(x => x.Id);
 
             builder.Property(e => e.ProductId).IsRequired();
-                
-            builder.Property(e => e.Quantity.Value).IsRequired().HasColumnName("Quantity");
-            builder.Property(e => e.UnitPrice.Value).IsRequired().HasColumnName("UnitPrice");
-            builder.Property(e => e.DiscountPerUnit.Value).IsRequired().HasColumnName("DiscountPerUnit");
+            
+            builder
+                .OwnsOne(o => o.Quantity, x =>
+                {
+                    x.Property(x => x.Value).IsRequired().HasColumnName("QuantityValue");
+                    x.WithOwner();
+                });
+            
+            builder
+                .OwnsOne(o => o.UnitPrice, x =>
+                {
+                    x.Property(x => x.Value).IsRequired().HasColumnName("UnitPriceValue");
+                    x.WithOwner();
+                });
+            
+            builder
+                .OwnsOne(o => o.DiscountPerUnit, x =>
+                {
+                    x.Property(x => x.Value).IsRequired().HasColumnName("DiscountPerUnitValue");
+                    x.WithOwner();
+                });
         }
     }
 }
