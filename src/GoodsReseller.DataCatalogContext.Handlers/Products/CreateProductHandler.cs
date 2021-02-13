@@ -10,11 +10,11 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 {
     public class CreateProductHandler : IRequestHandler<CreateProductRequest, CreateProductResponse>
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductsRepository _productsRepository;
 
-        public CreateProductHandler(IProductRepository productRepository)
+        public CreateProductHandler(IProductsRepository productsRepository)
         {
-            _productRepository = productRepository;
+            _productsRepository = productsRepository;
         }
         
         public async Task<CreateProductResponse> Handle(CreateProductRequest request, CancellationToken cancellationToken)
@@ -32,7 +32,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 new Discount(request.ProductInfo.DiscountPerUnit),
                 request.ProductInfo.ProductIds);
 
-            await _productRepository.SaveAsync(product, cancellationToken);
+            await _productsRepository.SaveAsync(product, cancellationToken);
             
             return new CreateProductResponse
             {

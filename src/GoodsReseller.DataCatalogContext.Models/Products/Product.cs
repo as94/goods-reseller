@@ -64,35 +64,6 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             CreationDate = new DateValueObject(DateTime.Now);
             IsRemoved = false;
             ProductIds = productIds ?? Array.Empty<Guid>();
-        } 
-
-        public static Product Restore(
-            Guid id,
-            int version,
-            string label,
-            string name,
-            string description,
-            Money unitPrice,
-            Discount discountPerUnit,
-            DateValueObject creationDate,
-            DateValueObject? lastUpdateDate,
-            bool isRemoved,
-            Guid[]? productIds = null)
-        {
-            return new Product(
-                id,
-                version,
-                label,
-                name,
-                description,
-                unitPrice,
-                discountPerUnit,
-                productIds)
-            {
-                CreationDate = creationDate,
-                LastUpdateDate = lastUpdateDate,
-                IsRemoved = isRemoved
-            };
         }
 
         public void Update(

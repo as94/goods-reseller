@@ -9,11 +9,11 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 {
     public class GetProductByLabelHandler : IRequestHandler<GetProductByLabelRequest, GetProductByLabelResponse>
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductsRepository _productsRepository;
 
-        public GetProductByLabelHandler(IProductRepository productRepository)
+        public GetProductByLabelHandler(IProductsRepository productsRepository)
         {
-            _productRepository = productRepository;
+            _productsRepository = productsRepository;
         }
         
         public async Task<GetProductByLabelResponse> Handle(GetProductByLabelRequest request, CancellationToken cancellationToken)
@@ -23,7 +23,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 return new GetProductByLabelResponse();
             }
             
-            var product = await _productRepository.GetAsync(request.Label, cancellationToken);
+            var product = await _productsRepository.GetAsync(request.Label, cancellationToken);
             
             if (product == null)
             {

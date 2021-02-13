@@ -44,7 +44,6 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
                 builder.Metadata.FindNavigation(nameof(Order.OrderItems));
 
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
-            // builder.HasMany(x => x.OrderItems);
 
             builder
                 .OwnsOne(o => o.CreationDate, x =>

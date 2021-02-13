@@ -10,16 +10,16 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 {
     public class UpdateProductHandler : IRequestHandler<UpdateProductRequest, Unit>
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductsRepository _productsRepository;
 
-        public UpdateProductHandler(IProductRepository productRepository)
+        public UpdateProductHandler(IProductsRepository productsRepository)
         {
-            _productRepository = productRepository;
+            _productsRepository = productsRepository;
         }
         
         public async Task<Unit> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetAsync(request.ProductId, cancellationToken);
+            var product = await _productsRepository.GetAsync(request.ProductId, cancellationToken);
             if (product == null)
             {
                 throw new InvalidOperationException($"Product with Id = {request.ProductId} doesn't exist");
@@ -34,7 +34,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 new DateValueObject(DateTime.Now),
                 request.ProductInfo.ProductIds);
 
-            await _productRepository.SaveAsync(product, cancellationToken);
+            await _productsRepository.SaveAsync(product, cancellationToken);
             
             return new Unit();
         }

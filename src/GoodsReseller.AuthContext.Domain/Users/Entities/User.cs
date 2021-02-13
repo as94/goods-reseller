@@ -67,27 +67,6 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
             IsRemoved = false;
         }
 
-        public static User Restore(
-            Guid id,
-            int version,
-            string email,
-            PasswordHash passwordHash,
-            Role role,
-            DateValueObject creationDate,
-            DateValueObject? lastUpdateDate,
-            bool isRemoved)
-        {
-            return new User(id, version)
-            {
-                Email = email,
-                PasswordHash = passwordHash,
-                Role = role,
-                CreationDate = creationDate,
-                LastUpdateDate = lastUpdateDate,
-                IsRemoved = isRemoved
-            };
-        }
-
         public void Authenticate(string password)
         {
             if (password == null)

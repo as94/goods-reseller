@@ -9,8 +9,8 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {
     public sealed class Order : VersionedEntity, IAggregateRoot
     {
-        private List<OrderItem> _orderItems;
-        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems;
+        private readonly List<OrderItem> _orderItems;
+        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.Where(x => !x.IsRemoved).ToList();
         
         // TODO: order status
         
@@ -50,27 +50,6 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             TotalCost = Money.Zero;
         }
 
-        public static Order Restore(
-            Guid id,
-            int version,
-            Address address,
-            CustomerInfo customerInfo,
-            DateValueObject creationDate,
-            DateValueObject? lastUpdateDate,
-            List<OrderItem> orderItems,
-            Money totalCost)
-        {
-            var order = new Order(id, version, address, customerInfo)
-            {
-                CreationDate = creationDate,
-                LastUpdateDate = lastUpdateDate,
-                _orderItems = orderItems,
-                TotalCost = totalCost
-            };
-
-            return order;
-        }
-
         public void AddOrderItem(Guid productId, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
         {
             if (unitPrice == null)
@@ -88,10 +67,10 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(lastUpdateDate));
             }
 
-            var existingOrderItem = _orderItems.FirstOrDefault(x => x.ProductId == productId);
+            var existingOrderItem = OrderItems.FirstOrDefault(x => x.ProductId == productId);
             if (existingOrderItem != null)
             {
-                existingOrderItem.IncrementQuantity();
+                existingOrderItem.IncrementQuantity(lastUpdateDate);
             }
             else
             {
@@ -111,16 +90,16 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(lastUpdateDate));
             }
             
-            var existingOrderItem = _orderItems.FirstOrDefault(x => x.ProductId == productId);
+            var existingOrderItem = OrderItems.FirstOrDefault(x => x.ProductId == productId);
             if (existingOrderItem != null)
             {
                 if (existingOrderItem.Quantity.Value > 1)
                 {
-                    existingOrderItem.DecrementQuantity();
+                    existingOrderItem.DecrementQuantity(lastUpdateDate);
                 }
                 else
                 {
-                    _orderItems.Remove(existingOrderItem);
+                    existingOrderItem.Remove(lastUpdateDate);
                 }
 
                 RecalculateTotalCost();
@@ -152,7 +131,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         {
             var totalCost = Money.Zero;
 
-            foreach (var orderItem in _orderItems)
+            foreach (var orderItem in OrderItems)
             {
                 var unitPriceFactor = new Factor(1 - orderItem.DiscountPerUnit.Value);
                 var quantityFactor = new Factor(orderItem.Quantity.Value);

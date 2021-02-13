@@ -11,16 +11,16 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 {
     public class BatchProductsByQueryHandler : IRequestHandler<BatchProductsByQueryRequest, BatchProductsByQueryResponse>
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductsRepository _productsRepository;
 
-        public BatchProductsByQueryHandler(IProductRepository productRepository)
+        public BatchProductsByQueryHandler(IProductsRepository productsRepository)
         {
-            _productRepository = productRepository;
+            _productsRepository = productsRepository;
         }
         
         public async Task<BatchProductsByQueryResponse> Handle(BatchProductsByQueryRequest request, CancellationToken cancellationToken)
         {
-            var products = await _productRepository.BatchAsync(request.Query.Offset, request.Query.Count, cancellationToken);
+            var products = await _productsRepository.BatchAsync(request.Query.Offset, request.Query.Count, cancellationToken);
 
             return new BatchProductsByQueryResponse
             {

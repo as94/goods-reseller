@@ -26,9 +26,9 @@ namespace GoodsReseller.Infrastructure
             serviceCollection.AddSingleton<IMongoClient>(mongoClient);
             serviceCollection.AddSingleton(mongoDatabase);
             
-            serviceCollection.AddScoped<IProductRepository, ProductRepository>();
-            serviceCollection.AddScoped<IUsersRepository, UserRepository>();
-            serviceCollection.AddSingleton<IOrdersRepository, OrdersRepository>();
+            serviceCollection.AddScoped<IProductsRepository, ProductsRepository>();
+            serviceCollection.AddScoped<IUsersRepository, UsersRepository>();
+            serviceCollection.AddScoped<IOrdersRepository, OrdersRepository>();
         }
     }
 }

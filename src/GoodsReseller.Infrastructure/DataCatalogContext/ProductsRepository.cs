@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GoodsReseller.Infrastructure.DataCatalogContext
 {
-    internal sealed class ProductRepository : IProductRepository
+    internal sealed class ProductsRepository : IProductsRepository
     {
         private readonly GoodsResellerDbContext _dbContext;
 
-        public ProductRepository(GoodsResellerDbContext dbContext)
+        public ProductsRepository(GoodsResellerDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -34,6 +34,7 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
         public async Task<IEnumerable<Product>> BatchAsync(int offset, int count, CancellationToken cancellationToken)
         {
             return (await _dbContext.Products
+                    .Where(x => !x.IsRemoved)
                     .Skip(offset)
                     .Take(count)
                     .ToListAsync(cancellationToken))
