@@ -10,16 +10,16 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 {
     public class DeleteProductByIdHandler : IRequestHandler<DeleteProductByIdRequest, Unit>
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductsRepository _productsRepository;
 
-        public DeleteProductByIdHandler(IProductRepository productRepository)
+        public DeleteProductByIdHandler(IProductsRepository productsRepository)
         {
-            _productRepository = productRepository;
+            _productsRepository = productsRepository;
         }
         
         public async Task<Unit> Handle(DeleteProductByIdRequest request, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetAsync(request.ProductId, cancellationToken);
+            var product = await _productsRepository.GetAsync(request.ProductId, cancellationToken);
             if (product == null)
             {
                 throw new InvalidOperationException($"Product with Id = {request.ProductId} doesn't exist");
@@ -27,7 +27,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
             
             product.Remove(new DateValueObject(DateTime.Now));
 
-            await _productRepository.SaveAsync(product, cancellationToken);
+            await _productsRepository.SaveAsync(product, cancellationToken);
             
             return new Unit();
         }

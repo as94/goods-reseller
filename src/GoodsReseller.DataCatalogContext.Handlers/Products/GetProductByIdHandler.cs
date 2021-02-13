@@ -9,15 +9,15 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 {
     public class GetProductByIdHandler : IRequestHandler<GetProductByIdRequest, GetProductByIdResponse>
     {
-        private readonly IProductRepository _productRepository;
-        public GetProductByIdHandler(IProductRepository productRepository)
+        private readonly IProductsRepository _productsRepository;
+        public GetProductByIdHandler(IProductsRepository productsRepository)
         {
-            _productRepository = productRepository;
+            _productsRepository = productsRepository;
         }
         
         public async Task<GetProductByIdResponse> Handle(GetProductByIdRequest request, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetAsync(request.ProductId, cancellationToken);
+            var product = await _productsRepository.GetAsync(request.ProductId, cancellationToken);
             
             if (product == null)
             {

@@ -11,6 +11,10 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Money UnitPrice { get; }
         public Quantity Quantity { get; private set; }
         public Discount DiscountPerUnit { get; }
+        
+        public DateValueObject CreationDate { get; private set; }
+        public DateValueObject? LastUpdateDate { get; private set; }
+        public bool IsRemoved { get; private set; }
 
         public OrderItem(Guid id, Guid productId, Money unitPrice, Quantity quantity, Discount discountPerUnit)
             : this(id, productId)
@@ -29,10 +33,12 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             {
                 throw new ArgumentNullException(nameof(quantity));
             }
-            
+
             UnitPrice = unitPrice;
             Quantity = quantity;
             DiscountPerUnit = discountPerUnit;
+            CreationDate = new DateValueObject(DateTime.Now);
+            IsRemoved = false;
         }
 
         private OrderItem(Guid id, Guid productId) : base(id)
@@ -40,14 +46,32 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             ProductId = productId;
         }
 
-        public void IncrementQuantity()
+        public void IncrementQuantity(DateValueObject lastUpdateDate)
         {
             Quantity = new Quantity(Quantity.Value + 1);
+            LastUpdateDate = lastUpdateDate;
         }
 
-        public void DecrementQuantity()
+        public void DecrementQuantity(DateValueObject lastUpdateDate)
         {
             Quantity = new Quantity(Quantity.Value - 1);
+            LastUpdateDate = lastUpdateDate;
+        }
+        
+        public void Remove(DateValueObject lastUpdateDate)
+        {
+            if (IsRemoved)
+            {
+                return;
+            }
+            
+            if (lastUpdateDate == null)
+            {
+                throw new ArgumentNullException(nameof(lastUpdateDate));
+            }
+            
+            IsRemoved = true;
+            LastUpdateDate = lastUpdateDate;
         }
     }
 }

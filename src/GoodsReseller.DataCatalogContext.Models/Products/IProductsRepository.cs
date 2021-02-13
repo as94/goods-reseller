@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GoodsReseller.DataCatalogContext.Models.Products
 {
-    public interface IProductRepository
+    public interface IProductsRepository
     {
         Task<Product> GetAsync(Guid productId, CancellationToken cancellationToken);
         Task<Product> GetAsync(string label, CancellationToken cancellationToken);

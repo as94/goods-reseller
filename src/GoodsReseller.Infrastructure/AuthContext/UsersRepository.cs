@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GoodsReseller.Infrastructure.AuthContext
 {
-    internal sealed class UserRepository : IUsersRepository
+    internal sealed class UsersRepository : IUsersRepository
     {
         private readonly GoodsResellerDbContext _dbContext;
 
-        public UserRepository(GoodsResellerDbContext dbContext)
+        public UsersRepository(GoodsResellerDbContext dbContext)
         {
             _dbContext = dbContext;
         }
