@@ -23,7 +23,9 @@ namespace GoodsReseller.Infrastructure.AuthContext
                 throw new ArgumentNullException(nameof(email));
             }
 
-            return await _dbContext.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+            return await _dbContext.Users.FirstOrDefaultAsync(
+                x => x.Email == email && !x.IsRemoved,
+                cancellationToken);
         }
 
         public async Task SaveUserAsync(User user, CancellationToken cancellationToken)
@@ -41,10 +43,6 @@ namespace GoodsReseller.Infrastructure.AuthContext
             {
                 await _dbContext.Users.AddAsync(user, cancellationToken);
             }
-            // else
-            // {
-            //     _dbContext.Entry(existing).CurrentValues.SetValues(user);
-            // }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
