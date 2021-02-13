@@ -30,9 +30,6 @@ namespace GoodsReseller.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var goodsResellerDatabaseSection = _configuration.GetSection(nameof(GoodsResellerDatabaseOptions));
-            services.Configure<GoodsResellerDatabaseOptions>(goodsResellerDatabaseSection);
-            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.MinimumSameSitePolicy = SameSiteMode.Strict;
@@ -53,10 +50,9 @@ namespace GoodsReseller.Api
                         }
                     };  
                 });
-            
-            services.RegisterInfrastructure(
-                goodsResellerDatabaseSection.Get<GoodsResellerDatabaseOptions>(),
-                _configuration.GetSection(nameof(DatabaseOptions)).Get<DatabaseOptions>());
+
+            var databaseOptions = _configuration.GetSection(nameof(DatabaseOptions)).Get<DatabaseOptions>();
+            services.RegisterInfrastructure(databaseOptions);
             services.RegisterAuthContextHandlers();
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
