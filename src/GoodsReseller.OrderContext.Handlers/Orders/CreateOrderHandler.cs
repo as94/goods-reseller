@@ -5,7 +5,6 @@ using GoodsReseller.OrderContext.Contracts.Orders.Create;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.OrderContext.Handlers.Converters;
-using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 
 namespace GoodsReseller.OrderContext.Handlers.Orders

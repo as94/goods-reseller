@@ -1,6 +1,6 @@
 import { AppBar, Box, List, ListItemText, Paper, Toolbar } from '@material-ui/core'
 import { CssBaseline, makeStyles } from '@material-ui/core'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { IconButton } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -21,6 +21,8 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import LocalMallIcon from '@material-ui/icons/LocalMall'
 import ProductBlock from './Products/ProductBlock/ProductBlock'
 import OrderBlock from './Orders/OrderBlock/OrderBlock'
+import { ProductListItemContract } from '../Api/Products/contracts'
+import productsApi from '../Api/Products/productsApi'
 
 const drawerWidth = 240
 
@@ -116,6 +118,8 @@ const Dashboard = () => {
 		setOpen(false)
 	}
 
+	const [products, setProducts] = useState([] as ProductListItemContract[])
+
 	const history = useHistory()
 	const auth = useAuth()
 
@@ -124,7 +128,16 @@ const Dashboard = () => {
 		history.push('/')
 	}, [auth.signOut])
 
+	const getProducts = useCallback(async () => {
+		const response = await productsApi.GetProductList()
+		setProducts(response.items)
+	}, [setProducts])
+
 	const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems.dashboard)
+
+	useEffect(() => {
+		getProducts()
+	}, [getProducts])
 
 	return (
 		auth.user && (
@@ -210,8 +223,8 @@ const Dashboard = () => {
 								</div>
 							)}
 
-							{selectedMenuItem === menuItems.orders && <OrderBlock />}
-							{selectedMenuItem === menuItems.products && <ProductBlock />}
+							{selectedMenuItem === menuItems.orders && <OrderBlock products={products} />}
+							{selectedMenuItem === menuItems.products && <ProductBlock products={products} />}
 						</Grid>
 						<Box pt={4}>
 							<Copyright />

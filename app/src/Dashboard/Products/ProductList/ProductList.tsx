@@ -26,18 +26,12 @@ const columns = [
 
 interface IOwnProps {
 	products: ProductListItemContract[]
-	setProducts: (products: ProductListItemContract[]) => void
 	setSelectedProductId: (selectedProductId: string) => void
 	showCreateProduct: () => void
 }
 
-const ProductList = ({ products, setProducts, setSelectedProductId, showCreateProduct }: IOwnProps) => {
+const ProductList = ({ products, setSelectedProductId, showCreateProduct }: IOwnProps) => {
 	const classes = useStyles()
-
-	const getProducts = useCallback(async () => {
-		const response = await productsApi.GetProductList()
-		setProducts(response.items)
-	}, [setProducts])
 
 	const productClickHandler = useCallback(
 		(param: RowParams) => {
@@ -48,20 +42,22 @@ const ProductList = ({ products, setProducts, setSelectedProductId, showCreatePr
 
 	const showCreateProductHandler = useCallback(() => showCreateProduct(), [showCreateProduct])
 
-	useEffect(() => {
-		getProducts()
-	}, [getProducts])
-
 	return (
 		<React.Fragment>
 			<div className={classes.header}>
-				<Title>Products</Title>
+				<Title color="primary">Products</Title>
 				<Button variant="contained" color="primary" onClick={showCreateProductHandler}>
 					Create
 				</Button>
 			</div>
 			<div style={{ height: 650, width: '100%' }}>
-				<DataGrid rows={products} columns={columns} pageSize={10} onRowClick={productClickHandler} />
+				<DataGrid
+					disableColumnMenu={true}
+					rows={products}
+					columns={columns}
+					pageSize={10}
+					onRowClick={productClickHandler}
+				/>
 			</div>
 		</React.Fragment>
 	)

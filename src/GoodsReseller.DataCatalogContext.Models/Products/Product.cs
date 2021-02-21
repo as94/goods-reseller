@@ -61,7 +61,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Label = label;
             Name = name;
             Description = description;
-            CreationDate = new DateValueObject(DateTime.Now);
+            CreationDate = new DateValueObject();
             IsRemoved = false;
             ProductIds = productIds ?? Array.Empty<Guid>();
         }
@@ -112,22 +112,17 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         }
 
         // TODO: extract to VersionedEntity
-        public void Remove(DateValueObject lastUpdateDate)
+        public void Remove()
         {
             if (IsRemoved)
             {
                 return;
             }
             
-            if (lastUpdateDate == null)
-            {
-                throw new ArgumentNullException(nameof(lastUpdateDate));
-            }
-            
             IsRemoved = true;
             
             IncrementVersion();
-            LastUpdateDate = lastUpdateDate;
+            LastUpdateDate = new DateValueObject();
         }
     }
 }

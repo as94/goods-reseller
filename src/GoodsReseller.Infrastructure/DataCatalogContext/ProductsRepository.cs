@@ -35,6 +35,7 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
         {
             return (await _dbContext.Products
                     .Where(x => !x.IsRemoved)
+                    .OrderBy(x => x.LastUpdateDate != null ? x.LastUpdateDate.DateUtc : x.CreationDate.DateUtc)
                     .Skip(offset)
                     .Take(count)
                     .ToListAsync(cancellationToken))

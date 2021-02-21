@@ -5,7 +5,6 @@ using GoodsReseller.AuthContext.Contracts.Users.Register;
 using GoodsReseller.AuthContext.Domain.Users;
 using GoodsReseller.AuthContext.Domain.Users.Entities;
 using GoodsReseller.AuthContext.Domain.Users.ValueObjects;
-using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 
 namespace GoodsReseller.AuthContext.Handlers.Users

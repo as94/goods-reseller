@@ -48,7 +48,9 @@ const OrderList = ({ orders, setOrders, setSelectedOrderId, showCreateOrder }: I
 		[setSelectedOrderId],
 	)
 
-	const showCreateOrderHandler = useCallback(() => showCreateOrder(), [showCreateOrder])
+	const showCreateOrderHandler = useCallback(() => {
+		showCreateOrder()
+	}, [showCreateOrder])
 
 	useEffect(() => {
 		getOrders()
@@ -57,13 +59,19 @@ const OrderList = ({ orders, setOrders, setSelectedOrderId, showCreateOrder }: I
 	return (
 		<React.Fragment>
 			<div className={classes.header}>
-				<Title>Orders</Title>
+				<Title color="primary">Orders</Title>
 				<Button variant="contained" color="primary" onClick={showCreateOrderHandler}>
 					Create
 				</Button>
 			</div>
 			<div style={{ height: 650, width: '100%' }}>
-				<DataGrid rows={orders} columns={columns} pageSize={10} onRowClick={orderClickHandler} />
+				<DataGrid
+					disableColumnMenu={true}
+					rows={orders}
+					columns={columns}
+					pageSize={10}
+					onRowClick={orderClickHandler}
+				/>
 			</div>
 		</React.Fragment>
 	)

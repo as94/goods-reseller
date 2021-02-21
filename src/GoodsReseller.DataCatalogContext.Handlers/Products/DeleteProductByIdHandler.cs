@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Delete;
 using GoodsReseller.DataCatalogContext.Models.Products;
-using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 
 namespace GoodsReseller.DataCatalogContext.Handlers.Products
@@ -25,7 +24,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 throw new InvalidOperationException($"Product with Id = {request.ProductId} doesn't exist");
             }
             
-            product.Remove(new DateValueObject(DateTime.Now));
+            product.Remove();
 
             await _productsRepository.SaveAsync(product, cancellationToken);
             

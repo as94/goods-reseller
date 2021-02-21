@@ -13,14 +13,13 @@ namespace GoodsReseller.OrderContext.Tests
         public void WhenAddOrderItem_ThenOrderHaveCorrectTotalCost()
         {
             var orderId = Guid.NewGuid();
-            var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId);
 
             newOrder.AddOrderItem(
                 Guid.NewGuid(),
                 new Money(10000),
                 Discount.Empty,
-                new DateValueObject(orderCreationDate.AddMinutes(2)));
+                new DateValueObject());
 
             newOrder.TotalCost.Should().Be(new Money(10000));
         }
@@ -29,14 +28,13 @@ namespace GoodsReseller.OrderContext.Tests
         public void WhenAddOrderItemWithDiscount_ThenOrderHaveCorrectTotalCost()
         {
             var orderId = Guid.NewGuid();
-            var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId);
 
             newOrder.AddOrderItem(
                 Guid.NewGuid(),
                 new Money(10000),
                 new Discount(0.3M), 
-                new DateValueObject(orderCreationDate.AddMinutes(2)));
+                new DateValueObject());
 
             newOrder.TotalCost.Should().Be(new Money(7000));
         }
@@ -45,7 +43,6 @@ namespace GoodsReseller.OrderContext.Tests
         public void WhenAddOrderItemWithDiscountTwice_ThenOrderHaveCorrectTotalCost()
         {
             var orderId = Guid.NewGuid();
-            var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId);
             var productId = Guid.NewGuid();
             
@@ -53,12 +50,12 @@ namespace GoodsReseller.OrderContext.Tests
                 productId,
                 new Money(10000),
                 new Discount(0.3M), 
-                new DateValueObject(orderCreationDate.AddMinutes(2)));
+                new DateValueObject());
             newOrder.AddOrderItem(
                 productId,
                 new Money(10000),
                 new Discount(0.3M), 
-                new DateValueObject(orderCreationDate.AddMinutes(3)));
+                new DateValueObject());
 
             newOrder.TotalCost.Should().Be(new Money(14000));
         }
@@ -67,11 +64,10 @@ namespace GoodsReseller.OrderContext.Tests
         public void WhenRemoveNotExistingOrderItem_ThenOrderStateDidNotChange()
         {
             var orderId = Guid.NewGuid();
-            var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId);
             var productId = Guid.NewGuid();
             
-            newOrder.RemoveOrderItem(productId, new DateValueObject(orderCreationDate.AddMinutes(2)));
+            newOrder.RemoveOrderItem(productId, new DateValueObject());
             
             newOrder.Should().BeEquivalentTo(GetOrder(orderId));
         }
@@ -80,7 +76,6 @@ namespace GoodsReseller.OrderContext.Tests
         public void WhenRemoveOrderItemAfterAddingIt_ThenOrderHaveCorrectTotalCost()
         {
             var orderId = Guid.NewGuid();
-            var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId);
             var productId = Guid.NewGuid();
             
@@ -88,8 +83,8 @@ namespace GoodsReseller.OrderContext.Tests
                 productId,
                 new Money(10000),
                 Discount.Empty,
-                new DateValueObject(orderCreationDate.AddMinutes(2)));
-            newOrder.RemoveOrderItem(productId, new DateValueObject(orderCreationDate.AddMinutes(3)));
+                new DateValueObject());
+            newOrder.RemoveOrderItem(productId, new DateValueObject());
 
             newOrder.TotalCost.Should().Be(Money.Zero);
         }
@@ -98,7 +93,6 @@ namespace GoodsReseller.OrderContext.Tests
         public void WhenRemoveOrderItemAfterAddingItTwice_ThenOrderHaveCorrectTotalCost()
         {
             var orderId = Guid.NewGuid();
-            var orderCreationDate = DateTime.Now;
             var newOrder = GetOrder(orderId);
             var productId = Guid.NewGuid();
             
@@ -106,13 +100,13 @@ namespace GoodsReseller.OrderContext.Tests
                 productId,
                 new Money(10000),
                 Discount.Empty,
-                new DateValueObject(orderCreationDate.AddMinutes(2)));
+                new DateValueObject());
             newOrder.AddOrderItem(
                 productId,
                 new Money(10000),
                 Discount.Empty,
-                new DateValueObject(orderCreationDate.AddMinutes(3)));
-            newOrder.RemoveOrderItem(productId, new DateValueObject(orderCreationDate.AddMinutes(4)));
+                new DateValueObject());
+            newOrder.RemoveOrderItem(productId, new DateValueObject());
 
             newOrder.TotalCost.Should().Be(new Money(10000));
         }

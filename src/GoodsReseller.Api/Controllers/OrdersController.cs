@@ -6,7 +6,9 @@ using GoodsReseller.OrderContext.Contracts.Models;
 using GoodsReseller.OrderContext.Contracts.OrderItems.PatchOrderItem;
 using GoodsReseller.OrderContext.Contracts.Orders.BatchByQuery;
 using GoodsReseller.OrderContext.Contracts.Orders.Create;
+using GoodsReseller.OrderContext.Contracts.Orders.DeleteById;
 using GoodsReseller.OrderContext.Contracts.Orders.GetById;
+using GoodsReseller.OrderContext.Contracts.Orders.Update;
 using GoodsReseller.OrderContext.Contracts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +45,7 @@ namespace GoodsReseller.Api.Controllers
         }
         
         [HttpGet("list")]
-        public async Task<IActionResult> GetQrderListAsync([FromQuery] BatchOrdersQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetOrderListAsync([FromQuery] BatchOrdersQuery query, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(new BatchOrdersByQueryRequest
             {
@@ -55,13 +57,25 @@ namespace GoodsReseller.Api.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(
-            [FromBody] [Required] CreateOrder createOrder,
+            [FromBody] [Required] CreateOrderContract createOrder,
             CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(new CreateOrderRequest
             {
                 Address = createOrder.Address,
                 CustomerInfo = createOrder.CustomerInfo
+            }, cancellationToken));
+        }
+
+        [HttpPatch("{orderId}/orderInfo")]
+        public async Task<IActionResult> PatchOrderInfoAsync(
+            [FromBody] [Required] OrderInfoContract orderInfo,
+            CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(new UpdateOrderRequest
+            {
+                Address = orderInfo.Address,
+                CustomerInfo = orderInfo.CustomerInfo
             }, cancellationToken));
         }
 
@@ -76,6 +90,19 @@ namespace GoodsReseller.Api.Controllers
                 OrderId = orderId,
                 Op = patchOrderItem.Op,
                 ProductId = patchOrderItem.ProductId
+            }, cancellationToken);
+            
+            return Ok();
+        }
+        
+        [HttpDelete("{orderId}")]
+        public async Task<IActionResult> DeleteOrderAsync(
+            [FromRoute] [Required] Guid orderId,
+            CancellationToken cancellationToken)
+        {
+            await _mediator.Send(new DeleteOrderByIdRequest
+            {
+                OrderId = orderId
             }, cancellationToken);
             
             return Ok();

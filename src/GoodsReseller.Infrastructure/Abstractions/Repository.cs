@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using GoodsReseller.SeedWork;
-
 namespace GoodsReseller.Infrastructure.Abstractions
 {
     // public abstract class Repository<TAggregateRoot> : IRepository<TAggregateRoot> where TAggregateRoot : class, IAggregateRoot

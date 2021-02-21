@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
 using GoodsReseller.OrderContext.Domain.Orders;
-using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 
@@ -43,7 +42,7 @@ namespace GoodsReseller.OrderContext.Handlers.OrderItems.Commands
             var unitPrice = new Money(response.Product.UnitPrice);
             var discountPerUnit = new Discount(response.Product.DiscountPerUnit);
             
-            order.AddOrderItem(response.Product.Id, unitPrice, discountPerUnit, new DateValueObject(DateTime.Now));
+            order.AddOrderItem(response.Product.Id, unitPrice, discountPerUnit, new DateValueObject());
             await _ordersRepository.SaveAsync(order, cancellationToken);
         }
     }

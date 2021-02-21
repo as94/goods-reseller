@@ -5,10 +5,10 @@ namespace GoodsReseller.SeedWork.ValueObjects
 {
     public sealed class DateValueObject : ValueObject, IComparable<DateValueObject>
     {
-        public DateValueObject(DateTime date)
+        public DateValueObject()
         {
-            Date = date;
-            DateUtc = date.ToUniversalTime();
+            Date = DateTime.Now;
+            DateUtc = Date.ToUniversalTime();
         }
 
         /// <summary>
