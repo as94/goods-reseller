@@ -37,7 +37,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             UnitPrice = unitPrice;
             Quantity = quantity;
             DiscountPerUnit = discountPerUnit;
-            CreationDate = new DateValueObject(DateTime.Now);
+            CreationDate = new DateValueObject();
             IsRemoved = false;
         }
 

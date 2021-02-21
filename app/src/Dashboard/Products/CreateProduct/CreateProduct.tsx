@@ -96,7 +96,7 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 	return (
 		<React.Fragment>
 			<Box pt={2}>
-				<Title>Create product</Title>
+				<Title color="primary">Create product</Title>
 			</Box>
 
 			<Grid container spacing={3}>

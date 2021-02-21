@@ -3,6 +3,13 @@ import React, { useCallback, useState } from 'react'
 import OrderList from '../OrderList/OrderList'
 import { makeStyles } from '@material-ui/core/styles'
 import { OrderListItemContract } from '../../../Api/Orders/contracts'
+import CreateOrder from '../CreateOrder/CreateOrder'
+import { ProductListItemContract } from '../../../Api/Products/contracts'
+import Order from '../Order/Order'
+
+interface IOwnProps {
+	products: ProductListItemContract[]
+}
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -13,47 +20,47 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const OrderBlock = () => {
+const OrderBlock = ({ products }: IOwnProps) => {
 	const classes = useStyles()
 	const [orders, setOrders] = useState([] as OrderListItemContract[])
 
 	const [selectedOrderId, setSelectedOrderId] = useState(null as string | null)
-	// const [showCreateOrder, setShowCreateOrder] = useState(false)
-	// const orderHideHandler = useCallback(() => setSelectedOrderId(null), [setSelectedOrderId])
-	// const createOrderShowHandler = useCallback(() => setShowCreateOrder(true), [setShowCreateOrder])
-	// const createOrderHideHandler = useCallback(() => setShowCreateOrder(false), [setShowCreateOrder])
+	const [showCreateOrder, setShowCreateOrder] = useState(false)
+	const orderHideHandler = useCallback(() => setSelectedOrderId(null), [setSelectedOrderId])
+	const createOrderShowHandler = useCallback(() => setShowCreateOrder(true), [setShowCreateOrder])
+	const createOrderHideHandler = useCallback(() => setShowCreateOrder(false), [setShowCreateOrder])
 
-	// showCreateOrder
 	return (
 		<>
-			{!selectedOrderId && (
+			{!selectedOrderId && !showCreateOrder && (
 				<Grid item xs={12}>
 					<Paper className={classes.paper}>
 						<OrderList
 							orders={orders}
 							setOrders={setOrders}
 							setSelectedOrderId={setSelectedOrderId}
-							showCreateOrder={() => null} //{createOrderShowHandler}
+							showCreateOrder={createOrderShowHandler}
 						/>
 					</Paper>
 				</Grid>
 			)}
-			{/* {showCreateOrder && (
+			{showCreateOrder && (
 				<Grid item xs={12}>
 					<Paper className={classes.paper}>
-						<CreateOrder orders={orders} hide={createOrderHideHandler} />
+						<CreateOrder hide={createOrderHideHandler} />
 					</Paper>
 				</Grid>
 			)}
+
 			{selectedOrderId && (
 				<Grid item xs={12}>
 					{' '}
 					<Paper className={classes.paper}>
 						{' '}
-						<Order orders={orders} orderId={selectedOrderId} hide={orderHideHandler} />
+						<Order orderId={selectedOrderId} products={products} hide={orderHideHandler} />
 					</Paper>
 				</Grid>
-			)} */}
+			)}
 		</>
 	)
 }

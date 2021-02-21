@@ -45,7 +45,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 
         private Order(Guid id, int version) : base(id, version)
         {
-            CreationDate = new DateValueObject(DateTime.Now);
+            CreationDate = new DateValueObject();
             _orderItems = new List<OrderItem>();
             TotalCost = Money.Zero;
         }
@@ -109,22 +109,17 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         }
         
         // TODO: extract to VersionedEntity
-        public void Remove(DateValueObject lastUpdateDate)
+        public void Remove()
         {
             if (IsRemoved)
             {
                 return;
             }
             
-            if (lastUpdateDate == null)
-            {
-                throw new ArgumentNullException(nameof(lastUpdateDate));
-            }
-            
             IsRemoved = true;
             
             IncrementVersion();
-            LastUpdateDate = lastUpdateDate;
+            LastUpdateDate = new DateValueObject();
         }
 
         private void RecalculateTotalCost()

@@ -39,7 +39,7 @@ namespace GoodsReseller.OrderContext.Handlers.OrderItems.Commands
                 throw new InvalidOperationException($"Product with Id = {parameters.ProductId} doesn't exist");
             }
             
-            order.RemoveOrderItem(parameters.ProductId, new DateValueObject(DateTime.Now));
+            order.RemoveOrderItem(parameters.ProductId, new DateValueObject());
             await _ordersRepository.SaveAsync(order, cancellationToken);
         }
     }

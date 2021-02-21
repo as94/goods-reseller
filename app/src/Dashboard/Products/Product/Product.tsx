@@ -126,7 +126,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 	return (
 		<React.Fragment>
 			<Box pt={2}>
-				<Title>Edit product</Title>
+				<Title color="primary">Edit product</Title>
 			</Box>
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={12}>

@@ -63,7 +63,7 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
             Email = email;
             PasswordHash = passwordHash;
             Role = parsedRole;
-            CreationDate = new DateValueObject(DateTime.Now);
+            CreationDate = new DateValueObject();
             IsRemoved = false;
         }
 
@@ -78,22 +78,17 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
         }
         
         // TODO: extract to VersionedEntity
-        public void Remove(DateValueObject lastUpdateDate)
+        public void Remove()
         {
             if (IsRemoved)
             {
                 return;
             }
             
-            if (lastUpdateDate == null)
-            {
-                throw new ArgumentNullException(nameof(lastUpdateDate));
-            }
-            
             IsRemoved = true;
             
             IncrementVersion();
-            LastUpdateDate = lastUpdateDate;
+            LastUpdateDate = new DateValueObject();
         }
     }
 }

@@ -15,9 +15,12 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const ProductBlock = () => {
+export interface IOwnProps {
+	products: ProductListItemContract[]
+}
+
+const ProductBlock = ({ products }: IOwnProps) => {
 	const classes = useStyles()
-	const [products, setProducts] = useState([] as ProductListItemContract[])
 
 	const [selectedProductId, setSelectedProductId] = useState(null as string | null)
 	const [showCreateProduct, setShowCreateProduct] = useState(false)
@@ -32,7 +35,6 @@ const ProductBlock = () => {
 					<Paper className={classes.paper}>
 						<ProductList
 							products={products}
-							setProducts={setProducts}
 							setSelectedProductId={setSelectedProductId}
 							showCreateProduct={createProductShowHandler}
 						/>
