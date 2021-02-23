@@ -8,13 +8,13 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
 {
     public sealed class User : VersionedEntity, IAggregateRoot
     {
-        public string Email { get; private set; }
-        public PasswordHash PasswordHash { get; private set; }
+        public string Email { get; }
+        public PasswordHash PasswordHash { get; }
 
-        public Role Role { get; private set; }
+        public Role Role { get; }
 
         // TODO: extract to Metadata
-        public DateValueObject CreationDate { get; private set; }
+        public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
 

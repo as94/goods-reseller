@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const columns = [
+	{ field: 'date', headerName: 'Date', width: 200 },
 	{ field: 'orderStatus', type: 'number', headerName: 'Status', width: 150 },
 	{ field: 'customerPhoneNumber', headerName: 'Phone', width: 200 },
 	{ field: 'customerName', headerName: 'Name', width: 150 },
@@ -67,7 +68,7 @@ const OrderList = ({ orders, setOrders, setSelectedOrderId, showCreateOrder }: I
 			<div style={{ height: 650, width: '100%' }}>
 				<DataGrid
 					disableColumnMenu={true}
-					rows={orders}
+					rows={orders.map(x => ({ ...x, date: new Date(x.date).toLocaleString() }))}
 					columns={columns}
 					pageSize={10}
 					onRowClick={orderClickHandler}

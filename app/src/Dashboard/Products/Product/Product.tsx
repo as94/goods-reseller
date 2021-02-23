@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, FormHelperText, Grid, Input, InputLabel, TextField } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { ProductContract, ProductInfoContract, ProductListItemContract } from '../../../Api/Products/contracts'
+import { ProductContract, ProductListItemContract } from '../../../Api/Products/contracts'
 import productsApi from '../../../Api/Products/productsApi'
 import Title from '../../Title'
 import { formIsValid, FormValidation, initialFormValidation, initialProduct } from '../utils'
@@ -42,7 +42,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 	const classes = useStyles()
 
 	const [simpleProducts] = useState(products.filter(p => !p.isSet && p.id !== productId))
-	const [product, setProduct] = useState(initialProduct as ProductInfoContract)
+	const [product, setProduct] = useState({} as ProductContract)
 	const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
 	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
 	const [errorText, setErrorText] = useState('')
@@ -128,63 +128,71 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 			<Box pt={2}>
 				<Title color="primary">Edit product</Title>
 			</Box>
-			<Grid container spacing={3}>
-				<Grid item xs={12} md={12}>
-					<FormControl error={!formValidation.nameValid} fullWidth>
-						<InputLabel htmlFor="name">Name</InputLabel>
-						<Input id="name" value={product.name} onChange={nameChangeHandler} />
-					</FormControl>
-				</Grid>
-				<Grid item xs={12} md={12}>
-					<FormControl error={!formValidation.labelValid} fullWidth>
-						<InputLabel htmlFor="label">Label</InputLabel>
-						<Input id="label" value={product.label} onChange={labelChangeHandler} />
-					</FormControl>
-				</Grid>
-				<Grid item xs={12} md={12}>
-					<FormControl fullWidth>
-						<InputLabel htmlFor="description">Description</InputLabel>
-						<Input id="description" value={product.description} onChange={descriptionChangeHandler} />
-					</FormControl>
-				</Grid>
-				<Grid item xs={12} md={12}>
-					<FormControl error={!formValidation.unitPriceValid} fullWidth>
-						<InputLabel htmlFor="unitPrice">Unit Price</InputLabel>
-						<Input
-							required
-							type="number"
-							id="unitPrice"
-							value={product.unitPrice}
-							onChange={unitPriceChangeHandler}
-						/>
-					</FormControl>
-				</Grid>
-				<Grid item xs={12} md={12}>
-					<FormControl error={!formValidation.discountPerUnitValid} fullWidth>
-						<InputLabel htmlFor="discountPerUnit">Discount Per Unit</InputLabel>
-						<Input
-							required
-							type="number"
-							id="discountPerUnit"
-							value={product.discountPerUnit}
-							onChange={discountPerUnitChangeHandler}
-						/>
-					</FormControl>
-				</Grid>
-				<Grid item xs={12} md={12}>
-					<MultipleSelect
-						title={'Products'}
-						items={simpleProducts}
-						selectedIds={product.productIds}
-						setSelectedIds={setSelectedProductIds}
-					/>
-				</Grid>
-				{errorText && (
+			{product && product.id && (
+				<Grid container spacing={3}>
 					<Grid item xs={12} md={12}>
-						<Alert severity="error">{errorText}</Alert>
+						<FormControl fullWidth>
+							<InputLabel htmlFor="date">Date</InputLabel>
+							<Input id="date" value={new Date(product.date).toLocaleString()} readOnly />
+						</FormControl>
 					</Grid>
-				)}
-			</Grid>
+					<Grid item xs={12} md={12}>
+						<FormControl error={!formValidation.nameValid} fullWidth>
+							<InputLabel htmlFor="name">Name</InputLabel>
+							<Input id="name" value={product.name} onChange={nameChangeHandler} />
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} md={12}>
+						<FormControl error={!formValidation.labelValid} fullWidth>
+							<InputLabel htmlFor="label">Label</InputLabel>
+							<Input id="label" value={product.label} onChange={labelChangeHandler} />
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} md={12}>
+						<FormControl fullWidth>
+							<InputLabel htmlFor="description">Description</InputLabel>
+							<Input id="description" value={product.description} onChange={descriptionChangeHandler} />
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} md={12}>
+						<FormControl error={!formValidation.unitPriceValid} fullWidth>
+							<InputLabel htmlFor="unitPrice">Unit Price</InputLabel>
+							<Input
+								required
+								type="number"
+								id="unitPrice"
+								value={product.unitPrice}
+								onChange={unitPriceChangeHandler}
+							/>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} md={12}>
+						<FormControl error={!formValidation.discountPerUnitValid} fullWidth>
+							<InputLabel htmlFor="discountPerUnit">Discount Per Unit</InputLabel>
+							<Input
+								required
+								type="number"
+								id="discountPerUnit"
+								value={product.discountPerUnit}
+								onChange={discountPerUnitChangeHandler}
+							/>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} md={12}>
+						<MultipleSelect
+							title={'Products'}
+							items={simpleProducts}
+							selectedIds={product.productIds}
+							setSelectedIds={setSelectedProductIds}
+						/>
+					</Grid>
+					{errorText && (
+						<Grid item xs={12} md={12}>
+							<Alert severity="error">{errorText}</Alert>
+						</Grid>
+					)}
+				</Grid>
+			)}
 			<div className={classes.buttons}>
 				<Button variant="contained" onClick={() => setShowDeleteDialog(true)} className={classes.removeButton}>
 					Remove

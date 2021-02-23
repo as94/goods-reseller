@@ -11,6 +11,9 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
             {
                 Id = product.Id,
                 Version = product.Version,
+                Date = product.LastUpdateDate != null
+                    ? product.LastUpdateDate.Date 
+                    : product.CreationDate.Date,
                 Label = product.Label,
                 Name = product.Name,
                 Description = product.Description,
@@ -26,6 +29,9 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
             {
                 Id = product.Id,
                 Version = product.Version,
+                Date = product.LastUpdateDate != null
+                    ? product.LastUpdateDate.Date 
+                    : product.CreationDate.Date,
                 Label = product.Label,
                 Name = product.Name,
                 UnitPrice = product.UnitPrice.Value,

@@ -12,7 +12,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Quantity Quantity { get; private set; }
         public Discount DiscountPerUnit { get; }
         
-        public DateValueObject CreationDate { get; private set; }
+        public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
 
