@@ -30,8 +30,8 @@ export default {
 		}
 	},
 
-	PatchOrderItem: async (patchOrderItem: PatchOrderItem): Promise<void> => {
-		const response = await api.post('/orderItems', patchOrderItem)
+	PatchOrderItem: async (orderId: string, patchOrderItem: PatchOrderItem): Promise<void> => {
+		const response = await api.patch(`orders/${orderId}/orderItems`, patchOrderItem)
 
 		if (response.status !== 200) {
 			throw new Error()

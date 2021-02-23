@@ -34,7 +34,6 @@ export enum Operation {
 }
 
 export interface PatchOrderItem {
-	orderId: string
 	op: Operation
 	productId: string
 }
