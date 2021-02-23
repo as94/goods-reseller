@@ -134,6 +134,12 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 
 			{order && order.id && (
 				<Grid container spacing={3}>
+					<Grid item xs={12} md={12}>
+						<FormControl fullWidth>
+							<InputLabel htmlFor="date">Date</InputLabel>
+							<Input id="date" value={new Date(order.date).toLocaleString()} readOnly />
+						</FormControl>
+					</Grid>
 					<Box pt={2} pl={2}>
 						<Title color="secondary">Customer Info</Title>
 					</Box>
@@ -182,7 +188,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 									onChange={changeSelectedProductId}
 								>
 									{allProducts.map(x => (
-										<MenuItem value={x.id}>
+										<MenuItem key={x.id} value={x.id}>
 											{x.name} - {x.unitPrice} ({x.discountPerUnit * 100} %)
 										</MenuItem>
 									))}

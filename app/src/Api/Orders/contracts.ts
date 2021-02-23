@@ -5,6 +5,7 @@ export interface OrderListContract {
 export interface OrderListItemContract {
 	id: string
 	version: number
+	date: string
 	orderStatus: number
 	customerPhoneNumber: string
 	customerName: string
@@ -17,6 +18,7 @@ export interface OrderListItemContract {
 export interface OrderContract {
 	id: string
 	version: string
+	date: string
 	address: AddressContract
 	customerInfo: CustomerInfoContract
 	orderItems: OrderItemContract[]

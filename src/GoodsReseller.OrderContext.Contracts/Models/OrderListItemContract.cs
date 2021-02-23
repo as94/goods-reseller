@@ -6,6 +6,8 @@ namespace GoodsReseller.OrderContext.Contracts.Models
     {
         public Guid Id { get; set; }
         public int Version { get; set; }
+
+        public DateTime Date { get; set; }
         
         public int OrderStatus { get; set; }
         

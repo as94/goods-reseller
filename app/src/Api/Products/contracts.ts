@@ -1,6 +1,7 @@
 export interface ProductContract {
 	id: string
 	version: number
+	date: string
 	label: string
 	name: string
 	description: string
@@ -12,6 +13,7 @@ export interface ProductContract {
 export interface ProductListItemContract {
 	id: string
 	version: number
+	date: string
 	label: string
 	name: string
 	unitPrice: number

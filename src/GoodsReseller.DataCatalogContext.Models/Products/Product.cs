@@ -15,7 +15,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         
         
         // TODO: extract to Metadata
-        public DateValueObject CreationDate { get; private set; }
+        public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
         

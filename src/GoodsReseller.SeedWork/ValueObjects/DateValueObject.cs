@@ -20,8 +20,8 @@ namespace GoodsReseller.SeedWork.ValueObjects
             DateUtc = dateUtc;
         }
 
-        public DateTime Date { get; private set; }
-        public DateTime DateUtc { get; private set; }
+        public DateTime Date { get; }
+        public DateTime DateUtc { get; }
         
         protected override IEnumerable<object> GetEqualityComponents()
         {
