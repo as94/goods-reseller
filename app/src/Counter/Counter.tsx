@@ -12,13 +12,13 @@ const Counter = ({ initialValue, addHandler, removeHandler }: IOwnProps) => {
 	const [counter, setCounter] = useState(initialValue)
 
 	const handleIncrement = useCallback(async () => {
-		setCounter(prev => prev + 1)
 		await addHandler()
+		setCounter(prev => prev + 1)
 	}, [setCounter, addHandler])
 
 	const handleDecrement = useCallback(async () => {
-		setCounter(prev => prev - 1)
 		await removeHandler()
+		setCounter(prev => prev - 1)
 	}, [setCounter, removeHandler])
 
 	return (
