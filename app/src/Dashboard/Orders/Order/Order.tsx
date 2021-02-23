@@ -14,11 +14,13 @@ import {
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Title from '../../Title'
-import { Operation, OrderContract } from '../../../Api/Orders/contracts'
+import { Operation, OrderContract, OrderInfoContract } from '../../../Api/Orders/contracts'
 import ordersApi from '../../../Api/Orders/ordersApi'
 import { ProductListItemContract } from '../../../Api/Products/contracts'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
 import Counter from '../../../Counter/Counter'
+import { formIsValid, FormValidation, initialFormValidation, initialOrder } from '../utils'
+import { Alert } from '@material-ui/lab'
 
 interface IOwnProps {
 	orderId: string
@@ -54,6 +56,10 @@ const useStyles = makeStyles(theme => ({
 const Order = ({ orderId, products, hide }: IOwnProps) => {
 	const classes = useStyles()
 
+	const [orderInfo, setOrderInfo] = useState(initialOrder as OrderInfoContract)
+	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
+	const [errorText, setErrorText] = useState('')
+
 	const [allProducts, setAllProducts] = useState(
 		products.sort((a, b) => {
 			if (a.isSet && !b.isSet) return -1
@@ -70,7 +76,72 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	const getOrder = useCallback(async () => {
 		const response = await ordersApi.Get(orderId)
 		setOrder(response)
-	}, [orderId, ordersApi, setOrder])
+		setOrderInfo({ address: response.address, customerInfo: response.customerInfo } as OrderInfoContract)
+	}, [orderId, ordersApi, setOrder, setOrderInfo])
+
+	const phoneNumberChangeHandler = useCallback(
+		(e: any) => {
+			const phoneNumber = e.target.value
+			setOrderInfo({ ...orderInfo, customerInfo: { ...orderInfo.customerInfo, phoneNumber } })
+			setFormValidation({
+				...formValidation,
+				customerInfoValid: { ...formValidation.customerInfoValid, phoneNumberValid: phoneNumber },
+			})
+		},
+		[orderInfo, setOrderInfo, formValidation, setFormValidation],
+	)
+
+	const customerNameChangeHandler = useCallback(
+		(e: any) => {
+			const customerName = e.target.value
+			if (customerName) {
+				setOrderInfo({ ...orderInfo, customerInfo: { ...orderInfo.customerInfo, name: customerName } })
+			}
+		},
+		[orderInfo, setOrderInfo],
+	)
+
+	const cityChangeHandler = useCallback(
+		(e: any) => {
+			const city = e.target.value
+			setOrderInfo({ ...orderInfo, address: { ...orderInfo.address, city } })
+			setFormValidation({ ...formValidation, addressValid: { ...formValidation.addressValid, cityValid: city } })
+		},
+		[orderInfo, setOrderInfo, formValidation, setFormValidation],
+	)
+
+	const streetChangeHandler = useCallback(
+		(e: any) => {
+			const street = e.target.value
+			setOrderInfo({ ...orderInfo, address: { ...orderInfo.address, street } })
+			setFormValidation({
+				...formValidation,
+				addressValid: { ...formValidation.addressValid, streetValid: street },
+			})
+		},
+		[orderInfo, setOrderInfo, formValidation, setFormValidation],
+	)
+
+	const zipCodeChangeHandler = useCallback(
+		(e: any) => {
+			const zipCode = e.target.value
+			setOrderInfo({ ...orderInfo, address: { ...orderInfo.address, zipCode } })
+			setFormValidation({
+				...formValidation,
+				addressValid: { ...formValidation.addressValid, zipCodeValid: zipCode },
+			})
+		},
+		[orderInfo, setOrderInfo, formValidation, setFormValidation],
+	)
+
+	const saveOrderInfo = useCallback(async () => {
+		if (formIsValid(formValidation)) {
+			await ordersApi.Update(order.id, orderInfo)
+			hide()
+		} else {
+			setErrorText('Form is invalid')
+		}
+	}, [formIsValid, formValidation, order, orderInfo, ordersApi, hide, setErrorText])
 
 	const deleteOrder = useCallback(async () => {
 		await ordersApi.Delete(orderId)
@@ -126,6 +197,12 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 		}
 	}, [order, products, setAllProducts])
 
+	useEffect(() => {
+		if (formIsValid(formValidation)) {
+			setErrorText('')
+		}
+	}, [formValidation, formIsValid, setErrorText])
+
 	return (
 		<React.Fragment>
 			<Box pt={2}>
@@ -144,38 +221,51 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 						<Title color="secondary">Customer Info</Title>
 					</Box>
 					<Grid item xs={12} md={12}>
-						<FormControl fullWidth>
+						<FormControl error={!formValidation.customerInfoValid.phoneNumberValid} fullWidth>
 							<InputLabel htmlFor="phoneNumber">Phone number</InputLabel>
-							<Input id="phoneNumber" value={order.customerInfo.phoneNumber} readOnly />
+							<Input
+								id="phoneNumber"
+								value={orderInfo.customerInfo.phoneNumber}
+								onChange={phoneNumberChangeHandler}
+							/>
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl fullWidth>
 							<InputLabel htmlFor="customerName">Customer name (optional)</InputLabel>
-							<Input id="customerName" value={order.customerInfo.name ?? ''} readOnly />
+							<Input
+								id="customerName"
+								value={orderInfo.customerInfo.name}
+								onChange={customerNameChangeHandler}
+							/>
 						</FormControl>
 					</Grid>
 					<Box pt={2} pl={2}>
 						<Title color="secondary">Shipping address</Title>
 					</Box>
 					<Grid item xs={12} md={12}>
-						<FormControl fullWidth>
+						<FormControl error={!formValidation.addressValid.cityValid} fullWidth>
 							<InputLabel htmlFor="city">City</InputLabel>
-							<Input id="city" value={order.address.city} readOnly />
+							<Input id="city" value={orderInfo.address.city} onChange={cityChangeHandler} />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
-						<FormControl fullWidth>
+						<FormControl error={!formValidation.addressValid.streetValid} fullWidth>
 							<InputLabel htmlFor="street">Street</InputLabel>
-							<Input id="street" value={order.address.street} readOnly />
+							<Input id="street" value={orderInfo.address.street} onChange={streetChangeHandler} />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
-						<FormControl fullWidth>
+						<FormControl error={!formValidation.addressValid.zipCodeValid} fullWidth>
 							<InputLabel htmlFor="zipCode">Zip code</InputLabel>
-							<Input id="zipCode" value={order.address.zipCode} readOnly />
+							<Input id="zipCode" value={orderInfo.address.zipCode} onChange={zipCodeChangeHandler} />
 						</FormControl>
 					</Grid>
+					{errorText && (
+						<Grid item xs={12} md={12}>
+							<Alert severity="error">{errorText}</Alert>
+						</Grid>
+					)}
 					<Box pt={2} pl={2}>
 						<Title color="secondary">Order items</Title>
 						{allProducts.length > 0 && (
@@ -235,6 +325,9 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 				</Button>
 				<Button onClick={backHandler} className={classes.button}>
 					Back
+				</Button>
+				<Button variant="contained" color="primary" onClick={saveOrderInfo} className={classes.button}>
+					Save
 				</Button>
 			</div>
 			{showDeleteDialog && (

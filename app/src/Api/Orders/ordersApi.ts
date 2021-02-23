@@ -1,5 +1,5 @@
 import api from '../api'
-import { CreateOrderContract, OrderContract, OrderListContract, PatchOrderItem } from './contracts'
+import { CreateOrderContract, OrderContract, OrderInfoContract, OrderListContract, PatchOrderItem } from './contracts'
 
 export default {
 	Get: async (orderId: string): Promise<OrderContract> => {
@@ -24,6 +24,14 @@ export default {
 
 	Create: async (order: CreateOrderContract): Promise<void> => {
 		const response = await api.post('/orders', order)
+
+		if (response.status !== 200) {
+			throw new Error()
+		}
+	},
+
+	Update: async (orderId: string, orderInfo: OrderInfoContract): Promise<void> => {
+		const response = await api.patch(`/orders/${orderId}/orderInfo`, orderInfo)
 
 		if (response.status !== 200) {
 			throw new Error()

@@ -12,7 +12,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.ValueObjects
         public string City { get; }
         public string Street { get; }
         public string ZipCode { get; }
-        
+
         public string HouseNumber { get; }
         public string ApartmentNumber { get; }
         public string EntranceNumber { get; set; }
@@ -48,14 +48,27 @@ namespace GoodsReseller.OrderContext.Domain.Orders.ValueObjects
             City = city;
             Street = street;
             ZipCode = zipCode;
-            
+
             HouseNumber = houseNumber;
             ApartmentNumber = apartmentNumber;
             EntranceNumber = entranceNumber;
             Floor = floor;
             Intercom = intercom;
         }
-        
+
+        public Address Copy()
+        {
+            return new Address(
+                City,
+                Street,
+                ZipCode,
+                HouseNumber,
+                ApartmentNumber,
+                EntranceNumber,
+                Floor,
+                Intercom);
+        }
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Country;

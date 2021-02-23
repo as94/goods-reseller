@@ -17,8 +17,8 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         // payment method
         // card info
         
-        public Address Address { get; }
-        public CustomerInfo CustomerInfo { get; }
+        public Address Address { get; private set; }
+        public CustomerInfo CustomerInfo { get; private set; }
         public Money TotalCost { get; private set; }
         
         // TODO: extract to Metadata
@@ -48,6 +48,32 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             CreationDate = new DateValueObject();
             _orderItems = new List<OrderItem>();
             TotalCost = Money.Zero;
+        }
+
+        public void Update(OrderInfo orderInfo)
+        {
+            if (IsRemoved)
+            {
+                throw new InvalidOperationException($"Order with id = {Id} has already been removed");
+            }
+
+            if (orderInfo == null)
+            {
+                throw new ArgumentNullException(nameof(orderInfo));
+            }
+
+            if (orderInfo.Address != null)
+            {
+                Address = orderInfo.Address.Copy();
+            }
+
+            if (orderInfo.CustomerInfo != null)
+            {
+                CustomerInfo = orderInfo.CustomerInfo.Copy();
+            }
+            
+            IncrementVersion();
+            LastUpdateDate = new DateValueObject();
         }
 
         public void AddOrderItem(Guid productId, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)

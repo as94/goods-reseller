@@ -69,14 +69,18 @@ namespace GoodsReseller.Api.Controllers
 
         [HttpPatch("{orderId}/orderInfo")]
         public async Task<IActionResult> PatchOrderInfoAsync(
+            [FromRoute] [Required] Guid orderId,
             [FromBody] [Required] OrderInfoContract orderInfo,
             CancellationToken cancellationToken)
         {
-            return Ok(await _mediator.Send(new UpdateOrderRequest
+            await _mediator.Send(new UpdateOrderRequest
             {
+                OrderId = orderId,
                 Address = orderInfo.Address,
                 CustomerInfo = orderInfo.CustomerInfo
-            }, cancellationToken));
+            }, cancellationToken);
+            
+            return Ok();
         }
 
         [HttpPatch("{orderId}/orderItems")]
