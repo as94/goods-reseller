@@ -30,6 +30,11 @@ export interface CreateOrderContract {
 	customerInfo: CustomerInfoContract
 }
 
+export interface OrderInfoContract {
+	address: AddressContract
+	customerInfo: CustomerInfoContract
+}
+
 export enum Operation {
 	Add = 'add',
 	Remove = 'remove',

@@ -31,7 +31,6 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 request.ProductInfo.Description,
                 new Money(request.ProductInfo.UnitPrice),
                 new Discount(request.ProductInfo.DiscountPerUnit),
-                new DateValueObject(),
                 request.ProductInfo.ProductIds);
 
             await _productsRepository.SaveAsync(product, cancellationToken);

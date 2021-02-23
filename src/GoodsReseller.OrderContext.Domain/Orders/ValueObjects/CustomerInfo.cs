@@ -24,6 +24,11 @@ namespace GoodsReseller.OrderContext.Domain.Orders.ValueObjects
             Name = name;
         }
 
+        public CustomerInfo Copy()
+        {
+            return new CustomerInfo(PhoneNumber, Name);
+        }
+
         public string PhoneNumber { get; }
         public string Name { get; }
         

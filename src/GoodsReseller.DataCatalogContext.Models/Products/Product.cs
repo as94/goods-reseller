@@ -72,7 +72,6 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string description,
             Money unitPrice,
             Discount discountPerUnit,
-            DateValueObject lastUpdateDate,
             Guid[] productIds = null)
         {
             if (IsRemoved)
@@ -95,11 +94,6 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
                 throw new ArgumentNullException(nameof(description));
             }
 
-            if (lastUpdateDate == null)
-            {
-                throw new ArgumentNullException(nameof(lastUpdateDate));
-            }
-
             Label = label;
             Name = name;
             Description = description;
@@ -108,7 +102,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             ProductIds = productIds ?? Array.Empty<Guid>();
             
             IncrementVersion();
-            LastUpdateDate = lastUpdateDate;
+            LastUpdateDate = new DateValueObject();
         }
 
         // TODO: extract to VersionedEntity
