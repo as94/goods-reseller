@@ -14,7 +14,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Title from '../../Title'
-import { Operation, OrderContract, OrderInfoContract } from '../../../Api/Orders/contracts'
+import { Operation, OrderContract, OrderInfoContract, OrderStatuses } from '../../../Api/Orders/contracts'
 import ordersApi from '../../../Api/Orders/ordersApi'
 import { ProductListItemContract } from '../../../Api/Products/contracts'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
@@ -68,7 +68,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 		}),
 	)
 	const [selectedProductId, setSelectedProductId] = useState('')
-	const [order, setOrder] = useState({} as OrderContract)
+	const [order, setOrder] = useState({ status: OrderStatuses[0] } as OrderContract)
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
 	const backHandler = useCallback(() => hide(), [hide])
@@ -76,8 +76,20 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	const getOrder = useCallback(async () => {
 		const response = await ordersApi.Get(orderId)
 		setOrder(response)
-		setOrderInfo({ address: response.address, customerInfo: response.customerInfo } as OrderInfoContract)
+		setOrderInfo({
+			status: response.status,
+			address: response.address,
+			customerInfo: response.customerInfo,
+		} as OrderInfoContract)
 	}, [orderId, ordersApi, setOrder, setOrderInfo])
+
+	const orderStatusChangeHandler = useCallback(
+		(e: any) => {
+			const orderStatus = e.target.value
+			setOrderInfo({ ...orderInfo, status: orderStatus })
+		},
+		[orderInfo, setOrderInfo],
+	)
 
 	const phoneNumberChangeHandler = useCallback(
 		(e: any) => {
@@ -215,6 +227,23 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 						<FormControl fullWidth>
 							<InputLabel htmlFor="date">Date</InputLabel>
 							<Input id="date" value={new Date(order.date).toLocaleString()} readOnly />
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} md={12}>
+						<FormControl fullWidth>
+							<InputLabel htmlFor="status">Order status</InputLabel>
+							<Select
+								labelId="status"
+								id="status-select"
+								value={orderInfo.status || ''}
+								onChange={orderStatusChangeHandler}
+							>
+								{OrderStatuses.map(x => (
+									<MenuItem key={x} value={x}>
+										{x}
+									</MenuItem>
+								))}
+							</Select>
 						</FormControl>
 					</Grid>
 					<Box pt={2} pl={2}>

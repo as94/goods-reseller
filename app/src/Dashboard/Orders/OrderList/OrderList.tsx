@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 
 const columns = [
 	{ field: 'date', headerName: 'Date', width: 200 },
-	{ field: 'orderStatus', type: 'number', headerName: 'Status', width: 150 },
+	{ field: 'status', type: 'string', headerName: 'Status', width: 150 },
 	{ field: 'customerPhoneNumber', headerName: 'Phone', width: 200 },
 	{ field: 'customerName', headerName: 'Name', width: 150 },
 	{ field: 'addressCity', headerName: 'City', width: 150 },

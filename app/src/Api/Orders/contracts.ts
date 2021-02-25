@@ -5,6 +5,7 @@ export interface OrderListContract {
 export interface OrderListItemContract {
 	id: string
 	version: number
+	status: string
 	date: string
 	orderStatus: number
 	customerPhoneNumber: string
@@ -18,6 +19,7 @@ export interface OrderListItemContract {
 export interface OrderContract {
 	id: string
 	version: string
+	status: string
 	date: string
 	address: AddressContract
 	customerInfo: CustomerInfoContract
@@ -30,7 +32,20 @@ export interface CreateOrderContract {
 	customerInfo: CustomerInfoContract
 }
 
+export const OrderStatuses = [
+	'DataReceived',
+	'Accepted',
+	'Collected',
+	'Packed',
+	'Shipped',
+	'Completed',
+	'Canceled',
+] as const
+type OrderStatusTuple = typeof OrderStatuses
+export type OrderStatus = OrderStatusTuple[number]
+
 export interface OrderInfoContract {
+	status: OrderStatus
 	address: AddressContract
 	customerInfo: CustomerInfoContract
 }
