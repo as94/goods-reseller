@@ -13,22 +13,6 @@ Customer -> Landing Page (payment included) -> Order -> Supply (transfer +) -> D
 
 # Tech Documentation
 
-## MongoDB
-
-Commands
-- mongo [go to shell]
-- show dbs
-- use goods-reseller
-- db.orders.find()
-- db.orders.remove({})
-
-Migrations
-https://thegreatco.com/posts/20180821/
-
-Docker
-- docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:latest
-- docker exec -it mongodb bash
-
 ## Postgres & Entity Framework
 
 ### Docker
