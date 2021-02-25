@@ -20,6 +20,14 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
             builder.Property(e => e.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.Property(e => e.Version).IsRequired().HasColumnType("integer");
+            
+            builder
+                .OwnsOne(o => o.Status, x =>
+                {
+                    x.Property(x => x.Id).IsRequired();
+                    x.Property(x => x.Name).IsRequired().HasColumnType("varchar(255)");
+                    x.WithOwner();
+                });
 
             builder.Property(e => e.Address)
                 .HasColumnType("json")

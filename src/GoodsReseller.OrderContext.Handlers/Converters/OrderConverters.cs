@@ -12,6 +12,7 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
             {
                 Id = order.Id,
                 Version = order.Version,
+                Status = order.Status.Name,
                 Date = order.LastUpdateDate != null
                     ? order.LastUpdateDate.Date 
                     : order.CreationDate.Date,
@@ -28,6 +29,7 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
             {
                 Id = order.Id,
                 Version = order.Version,
+                Status = order.Status.Name,
                 Date = order.LastUpdateDate != null
                     ? order.LastUpdateDate.Date 
                     : order.CreationDate.Date,

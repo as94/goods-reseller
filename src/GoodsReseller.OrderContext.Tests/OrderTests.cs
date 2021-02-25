@@ -116,6 +116,7 @@ namespace GoodsReseller.OrderContext.Tests
             return new Order(
                 orderId,
                 1,
+                OrderStatus.DataReceived.Name,
                 new Address("Russia", "Moscow", "Tverskoy Boulevard", "123104"),
                 new CustomerInfo("+7 999 999 99 99"));
         }

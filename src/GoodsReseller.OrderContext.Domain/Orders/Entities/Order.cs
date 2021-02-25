@@ -11,8 +11,8 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
     {
         private readonly List<OrderItem> _orderItems;
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.Where(x => !x.IsRemoved).ToList();
-        
-        // TODO: order status
+
+        public OrderStatus Status { get; }
         
         // payment method
         // card info
@@ -26,9 +26,14 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public DateValueObject? LastUpdateDate { get; private set; }
         public bool IsRemoved { get; private set; }
 
-        public Order(Guid id, int version, Address address, CustomerInfo customerInfo)
+        public Order(Guid id, int version, string status, Address address, CustomerInfo customerInfo)
             : this(id, version)
         {
+            if (status == null)
+            {
+                throw new ArgumentNullException(nameof(status));
+            }
+            
             if (address == null)
             {
                 throw new ArgumentNullException(nameof(address));
@@ -39,6 +44,13 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(customerInfo));
             }
             
+            if (!Enumeration.TryParse<OrderStatus>(status, out var parsedStatus))
+            {
+                // TODO: business rule, add translations
+                throw new ArgumentException($"Status '{status}' is invalid");
+            }
+
+            Status = parsedStatus;
             Address = address;
             CustomerInfo = customerInfo;
         }
