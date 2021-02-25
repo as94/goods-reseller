@@ -11,6 +11,9 @@ namespace GoodsReseller.OrderContext.Contracts.Orders.Update
         public Guid OrderId { get; set; }
         
         [Required]
+        public string Status { get; set; }
+        
+        [Required]
         public AddressContract Address { get; set; }
         
         [Required]

@@ -12,7 +12,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         private readonly List<OrderItem> _orderItems;
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.Where(x => !x.IsRemoved).ToList();
 
-        public OrderStatus Status { get; }
+        public OrderStatus Status { get; private set; }
         
         // payment method
         // card info
@@ -72,6 +72,17 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             if (orderInfo == null)
             {
                 throw new ArgumentNullException(nameof(orderInfo));
+            }
+
+            if (orderInfo.Status != null)
+            {
+                if (!Enumeration.TryParse<OrderStatus>(orderInfo.Status, out var parsedStatus))
+                {
+                    // TODO: business rule, add translations
+                    throw new ArgumentException($"Status '{orderInfo.Status}' is invalid");
+                }
+                
+                Status = parsedStatus;
             }
 
             if (orderInfo.Address != null)

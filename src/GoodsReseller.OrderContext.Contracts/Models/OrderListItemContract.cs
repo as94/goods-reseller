@@ -10,8 +10,6 @@ namespace GoodsReseller.OrderContext.Contracts.Models
 
         public DateTime Date { get; set; }
         
-        public int OrderStatus { get; set; }
-        
         public string CustomerPhoneNumber { get; set; }
 
         public string CustomerName { get; set; }
