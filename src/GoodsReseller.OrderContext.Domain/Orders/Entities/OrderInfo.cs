@@ -4,12 +4,14 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {
     public sealed class OrderInfo
     {
-        public OrderInfo(Address? address, CustomerInfo? customerInfo)
+        public OrderInfo(string? status, Address? address, CustomerInfo? customerInfo)
         {
+            Status = status;
             Address = address;
             CustomerInfo = customerInfo;
         }
 
+        public string? Status { get; }
         public Address? Address { get; }
         public CustomerInfo? CustomerInfo { get; }
     }

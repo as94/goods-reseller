@@ -38,7 +38,6 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
                 AddressCity = order.Address.City,
                 AddressStreet = order.Address.Street,
                 AddressZipCode = order.Address.ZipCode,
-                OrderStatus = 0, // TODO: add order status
                 TotalCost = order.TotalCost.Value
             };
         }

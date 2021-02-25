@@ -76,6 +76,7 @@ namespace GoodsReseller.Api.Controllers
             await _mediator.Send(new UpdateOrderRequest
             {
                 OrderId = orderId,
+                Status = orderInfo.Status,
                 Address = orderInfo.Address,
                 CustomerInfo = orderInfo.CustomerInfo
             }, cancellationToken);
