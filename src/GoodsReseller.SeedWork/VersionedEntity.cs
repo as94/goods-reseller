@@ -1,26 +1,25 @@
 using System;
+using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.SeedWork
 {
-    public abstract class VersionedEntity
+    public abstract class VersionedEntity : Entity
     {
-        public Guid Id { get; }
         public int Version { get; private set; }
+        
+        public DateValueObject CreationDate { get; }
+        public DateValueObject? LastUpdateDate { get; protected set; }
+        public bool IsRemoved { get; protected set; }
 
-        protected VersionedEntity(Guid id, int version)
+        protected VersionedEntity(Guid id, int version) : base(id)
         {
             if (version <= 0)
             {
                 throw new ArgumentException("Version should be more than 0");
             }
             
-            Id = id;
             Version = version;
-        }
-
-        public bool IsTransient()
-        {
-            return Id == default;
+            CreationDate = new DateValueObject();
         }
 
         public override bool Equals(object obj)
@@ -59,24 +58,22 @@ namespace GoodsReseller.SeedWork
             return base.GetHashCode();
         }
 
-        public static bool operator ==(VersionedEntity left, VersionedEntity right)
-        {
-            if (Equals(left, null))
-            {
-                return Equals(right, null);
-            }
-
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(VersionedEntity left, VersionedEntity right)
-        {
-            return !(left == right);
-        }
-
         protected void IncrementVersion()
         {
             Version++;
+        }
+        
+        public void Remove()
+        {
+            if (IsRemoved)
+            {
+                return;
+            }
+            
+            IsRemoved = true;
+            
+            IncrementVersion();
+            LastUpdateDate = new DateValueObject();
         }
     }
 }

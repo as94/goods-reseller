@@ -119,6 +119,8 @@ const Dashboard = () => {
 	}
 
 	const [products, setProducts] = useState([] as ProductListItemContract[])
+	const [selectedProductId, setSelectedProductId] = useState(null as string | null)
+	const [showCreateProduct, setShowCreateProduct] = useState(false)
 
 	const history = useHistory()
 	const auth = useAuth()
@@ -129,9 +131,11 @@ const Dashboard = () => {
 	}, [auth.signOut])
 
 	const getProducts = useCallback(async () => {
-		const response = await productsApi.GetProductList()
-		setProducts(response.items)
-	}, [setProducts])
+		if (!showCreateProduct && !selectedProductId) {
+			const response = await productsApi.GetProductList()
+			setProducts(response.items)
+		}
+	}, [setProducts, showCreateProduct, selectedProductId])
 
 	const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems.dashboard)
 
@@ -224,7 +228,15 @@ const Dashboard = () => {
 							)}
 
 							{selectedMenuItem === menuItems.orders && <OrderBlock products={products} />}
-							{selectedMenuItem === menuItems.products && <ProductBlock products={products} />}
+							{selectedMenuItem === menuItems.products && (
+								<ProductBlock
+									products={products}
+									showCreateProduct={showCreateProduct}
+									setShowCreateProduct={setShowCreateProduct}
+									selectedProductId={selectedProductId}
+									setSelectedProductId={setSelectedProductId}
+								/>
+							)}
 						</Grid>
 						<Box pt={4}>
 							<Copyright />

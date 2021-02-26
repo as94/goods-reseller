@@ -13,12 +13,6 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public Discount DiscountPerUnit { get; private set; }
         public Guid[] ProductIds { get; private set; }
         
-        
-        // TODO: extract to Metadata
-        public DateValueObject CreationDate { get; }
-        public DateValueObject? LastUpdateDate { get; private set; }
-        public bool IsRemoved { get; private set; }
-        
         public Product(
             Guid id,
             int version,
@@ -61,8 +55,6 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Label = label;
             Name = name;
             Description = description;
-            CreationDate = new DateValueObject();
-            IsRemoved = false;
             ProductIds = productIds ?? Array.Empty<Guid>();
         }
 
@@ -100,20 +92,6 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             UnitPrice = unitPrice;
             DiscountPerUnit = discountPerUnit;
             ProductIds = productIds ?? Array.Empty<Guid>();
-            
-            IncrementVersion();
-            LastUpdateDate = new DateValueObject();
-        }
-
-        // TODO: extract to VersionedEntity
-        public void Remove()
-        {
-            if (IsRemoved)
-            {
-                return;
-            }
-            
-            IsRemoved = true;
             
             IncrementVersion();
             LastUpdateDate = new DateValueObject();
