@@ -1,15 +1,10 @@
 using System;
-using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.SeedWork
 {
     public abstract class VersionedEntity : Entity
     {
         public int Version { get; private set; }
-        
-        public DateValueObject CreationDate { get; }
-        public DateValueObject? LastUpdateDate { get; protected set; }
-        public bool IsRemoved { get; protected set; }
 
         protected VersionedEntity(Guid id, int version) : base(id)
         {
@@ -19,7 +14,6 @@ namespace GoodsReseller.SeedWork
             }
             
             Version = version;
-            CreationDate = new DateValueObject();
         }
 
         public override bool Equals(object obj)
@@ -63,17 +57,10 @@ namespace GoodsReseller.SeedWork
             Version++;
         }
         
-        public void Remove()
+        public override void Remove()
         {
-            if (IsRemoved)
-            {
-                return;
-            }
-            
-            IsRemoved = true;
-            
+            base.Remove();
             IncrementVersion();
-            LastUpdateDate = new DateValueObject();
         }
     }
 }
