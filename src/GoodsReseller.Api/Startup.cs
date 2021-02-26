@@ -5,6 +5,7 @@ using GoodsReseller.DataCatalogContext.Handlers;
 using GoodsReseller.Infrastructure;
 using GoodsReseller.Infrastructure.Configurations;
 using GoodsReseller.OrderContext.Handlers;
+using GoodsReseller.SupplyContext.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -56,6 +57,7 @@ namespace GoodsReseller.Api
             services.RegisterAuthContextHandlers();
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
+            services.RegisterSupplyContextHandlers();
             
             services.AddCors(options => options.AddPolicy("LandingCorsPolicy", builder =>
             {
