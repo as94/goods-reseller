@@ -8,6 +8,7 @@
       <ProjectReference Include="..\GoodsReseller.AuthContext.Domain\GoodsReseller.AuthContext.Domain.csproj" />
       <ProjectReference Include="..\GoodsReseller.DataCatalogContext.Models\GoodsReseller.DataCatalogContext.Models.csproj" />
       <ProjectReference Include="..\GoodsReseller.OrderContext.Domain\GoodsReseller.OrderContext.Domain.csproj" />
+      <ProjectReference Include="..\GoodsReseller.SupplyContext.Domain\GoodsReseller.SupplyContext.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
