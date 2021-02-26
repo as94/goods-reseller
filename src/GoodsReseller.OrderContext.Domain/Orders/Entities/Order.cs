@@ -142,7 +142,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 }
                 else
                 {
-                    existingOrderItem.Remove(lastUpdateDate);
+                    existingOrderItem.Remove();
                 }
 
                 RecalculateTotalCost();
