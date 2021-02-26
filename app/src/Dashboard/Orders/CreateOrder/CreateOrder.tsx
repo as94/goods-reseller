@@ -46,9 +46,7 @@ const CreateOrder = ({ hide }: IOwnProps) => {
 	const customerNameChangeHandler = useCallback(
 		(e: any) => {
 			const customerName = e.target.value
-			if (customerName) {
-				setOrder({ ...order, customerInfo: { ...order.customerInfo, name: customerName } })
-			}
+			setOrder({ ...order, customerInfo: { ...order.customerInfo, name: customerName } })
 		},
 		[order, setOrder],
 	)

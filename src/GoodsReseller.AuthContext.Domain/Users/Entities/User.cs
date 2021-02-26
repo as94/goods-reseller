@@ -13,11 +13,6 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
 
         public Role Role { get; }
 
-        // TODO: extract to Metadata
-        public DateValueObject CreationDate { get; }
-        public DateValueObject? LastUpdateDate { get; private set; }
-        public bool IsRemoved { get; private set; }
-
         private User(
             Guid id,
             int version)
@@ -63,8 +58,6 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
             Email = email;
             PasswordHash = passwordHash;
             Role = parsedRole;
-            CreationDate = new DateValueObject();
-            IsRemoved = false;
         }
 
         public void Authenticate(string password)
@@ -75,20 +68,6 @@ namespace GoodsReseller.AuthContext.Domain.Users.Entities
             }
             
             PasswordHash.Authenticate(password);
-        }
-        
-        // TODO: extract to VersionedEntity
-        public void Remove()
-        {
-            if (IsRemoved)
-            {
-                return;
-            }
-            
-            IsRemoved = true;
-            
-            IncrementVersion();
-            LastUpdateDate = new DateValueObject();
         }
     }
 }

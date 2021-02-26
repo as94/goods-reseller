@@ -17,13 +17,21 @@ const useStyles = makeStyles(theme => ({
 
 export interface IOwnProps {
 	products: ProductListItemContract[]
+	showCreateProduct: boolean
+	setShowCreateProduct: (showCreateProduct: boolean) => void
+	selectedProductId: string | null
+	setSelectedProductId: (selectedProductId: string | null) => void
 }
 
-const ProductBlock = ({ products }: IOwnProps) => {
+const ProductBlock = ({
+	products,
+	showCreateProduct,
+	setShowCreateProduct,
+	selectedProductId,
+	setSelectedProductId,
+}: IOwnProps) => {
 	const classes = useStyles()
 
-	const [selectedProductId, setSelectedProductId] = useState(null as string | null)
-	const [showCreateProduct, setShowCreateProduct] = useState(false)
 	const productHideHandler = useCallback(() => setSelectedProductId(null), [setSelectedProductId])
 	const createProductShowHandler = useCallback(() => setShowCreateProduct(true), [setShowCreateProduct])
 	const createProductHideHandler = useCallback(() => setShowCreateProduct(false), [setShowCreateProduct])

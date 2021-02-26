@@ -20,11 +20,6 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Address Address { get; private set; }
         public CustomerInfo CustomerInfo { get; private set; }
         public Money TotalCost { get; private set; }
-        
-        // TODO: extract to Metadata
-        public DateValueObject CreationDate { get; }
-        public DateValueObject? LastUpdateDate { get; private set; }
-        public bool IsRemoved { get; private set; }
 
         public Order(Guid id, int version, string status, Address address, CustomerInfo customerInfo)
             : this(id, version)
@@ -57,7 +52,6 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 
         private Order(Guid id, int version) : base(id, version)
         {
-            CreationDate = new DateValueObject();
             _orderItems = new List<OrderItem>();
             TotalCost = Money.Zero;
         }
@@ -155,20 +149,6 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 IncrementVersion();
                 LastUpdateDate = lastUpdateDate;
             }
-        }
-        
-        // TODO: extract to VersionedEntity
-        public void Remove()
-        {
-            if (IsRemoved)
-            {
-                return;
-            }
-            
-            IsRemoved = true;
-            
-            IncrementVersion();
-            LastUpdateDate = new DateValueObject();
         }
 
         private void RecalculateTotalCost()
