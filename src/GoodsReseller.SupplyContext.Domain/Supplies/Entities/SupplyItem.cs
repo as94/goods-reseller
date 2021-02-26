@@ -6,10 +6,10 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
 {
     public sealed class SupplyItem : Entity
     {
-        public Guid ProductId { get; }
-        public Money UnitPrice { get; }
-        public Quantity Quantity { get; }
-        public Discount DiscountPerUnit { get; }
+        public Guid ProductId { get; private set; }
+        public Money UnitPrice { get; private set; }
+        public Quantity Quantity { get; private set; }
+        public Discount DiscountPerUnit { get; private set; }
         
         public SupplyItem(Guid id, Guid productId, Money unitPrice, Quantity quantity, Discount discountPerUnit)
             : this(id, productId)
@@ -37,6 +37,19 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
         private SupplyItem(Guid id, Guid productId) : base(id)
         {
             ProductId = productId;
+        }
+
+        public void Update(SupplyItem supplyItem)
+        {
+            if (supplyItem == null)
+            {
+                throw new ArgumentNullException(nameof(supplyItem));
+            }
+
+            ProductId = supplyItem.ProductId;
+            UnitPrice = supplyItem.UnitPrice;
+            Quantity = supplyItem.Quantity;
+            DiscountPerUnit = supplyItem.DiscountPerUnit;
         }
     }
 }

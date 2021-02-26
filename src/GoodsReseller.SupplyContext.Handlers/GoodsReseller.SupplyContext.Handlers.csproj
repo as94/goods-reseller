@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GoodsReseller.SupplyContext.Contracts\GoodsReseller.SupplyContext.Contracts.csproj" />
+      <ProjectReference Include="..\GoodsReseller.SupplyContext.Domain\GoodsReseller.SupplyContext.Domain.csproj" />
     </ItemGroup>
 
 </Project>

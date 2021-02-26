@@ -10,7 +10,7 @@ namespace GoodsReseller.SeedWork
         
         public DateValueObject CreationDate { get; }
         public DateValueObject? LastUpdateDate { get; protected set; }
-        public bool IsRemoved { get; protected set; }
+        public bool IsRemoved { get; private set; }
 
         protected Entity(Guid id)
         {

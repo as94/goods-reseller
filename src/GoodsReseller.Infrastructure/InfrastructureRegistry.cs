@@ -4,7 +4,9 @@ using GoodsReseller.Infrastructure.AuthContext;
 using GoodsReseller.Infrastructure.Configurations;
 using GoodsReseller.Infrastructure.DataCatalogContext;
 using GoodsReseller.Infrastructure.OrderContext;
+using GoodsReseller.Infrastructure.SupplyContext;
 using GoodsReseller.OrderContext.Domain.Orders;
+using GoodsReseller.SupplyContext.Domain.Supplies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,6 +23,7 @@ namespace GoodsReseller.Infrastructure
             serviceCollection.AddScoped<IProductsRepository, ProductsRepository>();
             serviceCollection.AddScoped<IUsersRepository, UsersRepository>();
             serviceCollection.AddScoped<IOrdersRepository, OrdersRepository>();
+            serviceCollection.AddScoped<ISuppliesRepository, SuppliesRepository>();
         }
     }
 }

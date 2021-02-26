@@ -11,7 +11,7 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
     {
         private readonly List<SupplyItem> _supplyItems;
         public IReadOnlyCollection<SupplyItem> SupplyItems => _supplyItems.Where(x => !x.IsRemoved).ToList();
-        public SupplierInfo SupplierInfo { get; }
+        public SupplierInfo SupplierInfo { get; private set; }
         public Money TotalCost { get; private set; }
         
 
@@ -31,6 +31,50 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
         private Supply(Guid id) : base(id)
         {
             _supplyItems = new List<SupplyItem>();
+        }
+
+        public void Update(SupplyInfo supplyInfo)
+        {
+            if (IsRemoved)
+            {
+                throw new InvalidOperationException($"Supply with id = {Id} has already been removed");
+            }
+            
+            if (supplyInfo == null)
+            {
+                throw new ArgumentNullException(nameof(supplyInfo));
+            }
+
+            SupplierInfo = supplyInfo.SupplierInfo.Copy();
+
+            var existingSupplyItemIds = SupplyItems.Select(x => x.Id).ToArray();
+            var incomingSupplyItemIds = supplyInfo.SupplyItems.Select(x => x.Id).ToArray();
+
+            var toCreateIds = incomingSupplyItemIds.Where(id => !existingSupplyItemIds.Contains(id));
+            var newSupplyItems = supplyInfo.SupplyItems.Where(x => toCreateIds.Contains(x.Id));
+            foreach (var newSupplyItem in newSupplyItems)
+            {
+                _supplyItems.Add(newSupplyItem);
+            }
+
+            var toUpdateIds = existingSupplyItemIds.Where(id => incomingSupplyItemIds.Contains(id));
+            foreach (var id in toUpdateIds)
+            {
+                var existing = _supplyItems.First(x => x.Id == id);
+                var incoming = supplyInfo.SupplyItems.First(x => x.Id == id);
+                existing.Update(incoming);
+            }
+
+            var toDeleteIds = existingSupplyItemIds.Where(id => !incomingSupplyItemIds.Contains(id));
+            foreach (var id in toDeleteIds)
+            {
+                var existing = _supplyItems.First(x => x.Id == id);
+                existing.Remove();
+            }
+            
+            RecalculateTotalCost();
+            
+            LastUpdateDate = new DateValueObject();
         }
         
         private void RecalculateTotalCost()
