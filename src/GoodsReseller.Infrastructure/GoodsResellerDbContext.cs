@@ -2,6 +2,7 @@ using GoodsReseller.AuthContext.Domain.Users.Entities;
 using GoodsReseller.DataCatalogContext.Models.Products;
 using GoodsReseller.Infrastructure.EntityTypeConfigurations;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
+using GoodsReseller.SupplyContext.Domain.Supplies.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoodsReseller.Infrastructure
@@ -12,6 +13,9 @@ namespace GoodsReseller.Infrastructure
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+
+        public DbSet<Supply> Supplies { get; set; }
+        public DbSet<SupplyItem> SupplyItems { get; set; }
         
         public GoodsResellerDbContext(DbContextOptions<GoodsResellerDbContext> options)
             : base(options)
@@ -24,6 +28,8 @@ namespace GoodsReseller.Infrastructure
             modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
             modelBuilder.ApplyConfiguration(new OrderEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new SupplyEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new SupplyItemEntityTypeConfiguration());
         }
     }
 }
