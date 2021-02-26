@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.DataCatalogCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.DataCatalogContext.Models", "src\GoodsReseller.DataCatalogContext.Models\GoodsReseller.DataCatalogContext.Models.csproj", "{CD6B591B-037B-489B-B475-901AB360A8D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.SupplyContext.Contracts", "src\GoodsReseller.SupplyContext.Contracts\GoodsReseller.SupplyContext.Contracts.csproj", "{749EFAA4-FAC8-4261-B2A8-60AE2CBAC6CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -86,6 +88,10 @@ Global
 		{CD6B591B-037B-489B-B475-901AB360A8D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD6B591B-037B-489B-B475-901AB360A8D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD6B591B-037B-489B-B475-901AB360A8D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{749EFAA4-FAC8-4261-B2A8-60AE2CBAC6CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{749EFAA4-FAC8-4261-B2A8-60AE2CBAC6CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{749EFAA4-FAC8-4261-B2A8-60AE2CBAC6CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{749EFAA4-FAC8-4261-B2A8-60AE2CBAC6CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ADA76D08-98DF-4511-B7AA-CD9C1D924476} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
@@ -101,5 +107,6 @@ Global
 		{4F25AD7B-0D34-45B4-8008-1C3BDDD5C19A} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
 		{B8D641DA-AD4D-495E-BB0B-AA859C92FDB0} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
 		{CD6B591B-037B-489B-B475-901AB360A8D4} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
+		{749EFAA4-FAC8-4261-B2A8-60AE2CBAC6CE} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
 	EndGlobalSection
 EndGlobal
