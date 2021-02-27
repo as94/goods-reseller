@@ -16,13 +16,14 @@ import { useHistory } from 'react-router-dom'
 import { useAuth } from '../Hooks/useAuth'
 import { ListItem } from '@material-ui/core'
 import { ListItemIcon } from '@material-ui/core'
-import DashboardIcon from '@material-ui/icons/Dashboard'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import LocalMallIcon from '@material-ui/icons/LocalMall'
 import ProductBlock from './Products/ProductBlock/ProductBlock'
 import OrderBlock from './Orders/OrderBlock/OrderBlock'
 import { ProductListItemContract } from '../Api/Products/contracts'
 import productsApi from '../Api/Products/productsApi'
+import SupplyBlock from './Supplies/SupplyBlock/SupplyBlock'
+import { BarChart, LocalShipping } from '@material-ui/icons'
 
 const drawerWidth = 240
 
@@ -103,8 +104,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const menuItems = {
-	dashboard: 'dashboard',
+	statistic: 'statistic',
 	orders: 'orders',
+	supplies: 'supplies',
 	products: 'products',
 }
 
@@ -137,7 +139,7 @@ const Dashboard = () => {
 		}
 	}, [setProducts, showCreateProduct, selectedProductId])
 
-	const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems.dashboard)
+	const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems.statistic)
 
 	useEffect(() => {
 		getProducts()
@@ -159,7 +161,7 @@ const Dashboard = () => {
 							<MenuIcon />
 						</IconButton>
 						<Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-							Dashboard
+							Statistic
 						</Typography>
 						<Typography component="span" color="inherit" noWrap>
 							{auth.user.email}
@@ -186,13 +188,13 @@ const Dashboard = () => {
 						<div>
 							<ListItem
 								button
-								selected={selectedMenuItem === menuItems.dashboard}
-								onClick={() => setSelectedMenuItem(menuItems.dashboard)}
+								selected={selectedMenuItem === menuItems.statistic}
+								onClick={() => setSelectedMenuItem(menuItems.statistic)}
 							>
 								<ListItemIcon>
-									<DashboardIcon />
+									<BarChart />
 								</ListItemIcon>
-								<ListItemText primary="Dashboard" />
+								<ListItemText primary="Statistic" />
 							</ListItem>
 							<ListItem
 								button
@@ -203,6 +205,16 @@ const Dashboard = () => {
 									<ShoppingCartIcon />
 								</ListItemIcon>
 								<ListItemText primary="Orders" />
+							</ListItem>
+							<ListItem
+								button
+								selected={selectedMenuItem === menuItems.supplies}
+								onClick={() => setSelectedMenuItem(menuItems.supplies)}
+							>
+								<ListItemIcon>
+									<LocalShipping />
+								</ListItemIcon>
+								<ListItemText primary="Supplies" />
 							</ListItem>
 							<ListItem
 								button
@@ -221,13 +233,14 @@ const Dashboard = () => {
 					<div className={classes.appBarSpacer} />
 					<Container maxWidth="lg" className={classes.container}>
 						<Grid container spacing={3}>
-							{selectedMenuItem === menuItems.dashboard && (
+							{selectedMenuItem === menuItems.statistic && (
 								<div>
-									<h1>Dashboard</h1> <p>Not implemented yet</p>
+									<h1>Statistic</h1> <p>Not implemented yet</p>
 								</div>
 							)}
 
 							{selectedMenuItem === menuItems.orders && <OrderBlock products={products} />}
+							{selectedMenuItem === menuItems.supplies && <SupplyBlock products={products} />}
 							{selectedMenuItem === menuItems.products && (
 								<ProductBlock
 									products={products}

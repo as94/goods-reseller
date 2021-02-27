@@ -297,6 +297,10 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 					)}
 					<Box pt={2} pl={2}>
 						<Title color="secondary">Order items</Title>
+						<FormControl fullWidth>
+							<InputLabel htmlFor="totalCost">Total cost</InputLabel>
+							<Input id="totalCost" value={order.totalCost.value} readOnly />
+						</FormControl>
 						{allProducts.length > 0 && (
 							<FormControl fullWidth>
 								<InputLabel htmlFor="products">Products</InputLabel>
