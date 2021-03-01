@@ -1,3 +1,5 @@
+import { MoneyContract } from '../contracts'
+
 export interface OrderListContract {
 	items: OrderListItemContract[]
 }
@@ -83,8 +85,4 @@ export interface OrderItemContract {
 	unitPrice: MoneyContract
 	quantity: number
 	discountPerUnit: number
-}
-
-export interface MoneyContract {
-	value: number
 }

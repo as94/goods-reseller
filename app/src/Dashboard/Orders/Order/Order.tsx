@@ -218,7 +218,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	return (
 		<React.Fragment>
 			<Box pt={2}>
-				<Title color="primary">Create order</Title>
+				<Title color="primary">Edit order</Title>
 			</Box>
 
 			{order && order.id && (
