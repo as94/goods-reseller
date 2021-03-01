@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormHelperText, Grid, Input, InputLabel, TextField } from '@material-ui/core'
+import { Box, Button, FormControl, Grid, Input, InputLabel } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { ProductInfoContract, ProductListItemContract } from '../../../Api/Products/contracts'

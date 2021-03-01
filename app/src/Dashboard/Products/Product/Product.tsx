@@ -9,12 +9,6 @@ import { Alert } from '@material-ui/lab'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
 import MultipleSelect from '../../../MultipleSelect/MultipleSelect'
 
-interface IOwnProps {
-	products: ProductListItemContract[]
-	productId: string | null
-	hide: () => void
-}
-
 const useStyles = makeStyles(theme => ({
 	buttons: {
 		display: 'flex',
@@ -33,6 +27,12 @@ const useStyles = makeStyles(theme => ({
 		},
 	},
 }))
+
+interface IOwnProps {
+	products: ProductListItemContract[]
+	productId: string | null
+	hide: () => void
+}
 
 const Product = ({ products, productId, hide }: IOwnProps) => {
 	if (!productId) {
@@ -101,7 +101,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 
 	const updateProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await productsApi.Update(productId, { ...product, productIds: selectedProductIds })
+			await productsApi.Update(product.id, { ...product, productIds: selectedProductIds })
 			hide()
 		} else {
 			setErrorText('Form is invalid')
