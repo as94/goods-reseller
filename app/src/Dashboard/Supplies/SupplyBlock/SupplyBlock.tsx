@@ -47,7 +47,7 @@ const SupplyBlock = ({ products }: IOwnProps) => {
 			{showCreateSupply && (
 				<Grid item xs={12}>
 					<Paper className={classes.paper}>
-						<CreateSupply hide={createSupplyHideHandler} />
+						<CreateSupply products={products} hide={createSupplyHideHandler} />
 					</Paper>
 				</Grid>
 			)}

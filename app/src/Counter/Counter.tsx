@@ -23,11 +23,11 @@ const Counter = ({ initialValue, addHandler, removeHandler }: IOwnProps) => {
 
 	return (
 		<ButtonGroup size="small" aria-label="small outlined button group">
-			<Button onClick={handleIncrement}>+</Button>
-			<Button disabled>{counter}</Button>
 			<Button onClick={handleDecrement} disabled={counter === 0}>
 				-
 			</Button>
+			<Button disabled>{counter}</Button>
+			<Button onClick={handleIncrement}>+</Button>
 		</ButtonGroup>
 	)
 }

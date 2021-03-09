@@ -42,7 +42,7 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 	const classes = useStyles()
 
 	const [supply, setSupply] = useState(initialSupplyInfo as SupplyContract)
-	const [formValidation, setFormValidation] = useState(initialFormValidation(false) as FormValidation)
+	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false)
