@@ -11,7 +11,7 @@ namespace GoodsReseller.SupplyContext.Handlers.Converters
             {
                 Id = supplyItem.Id,
                 ProductId = supplyItem.ProductId,
-                UnitPrice = supplyItem.UnitPrice.ToContract(),
+                UnitPrice = supplyItem.UnitPrice.Value,
                 Quantity = supplyItem.Quantity.Value,
                 DiscountPerUnit = supplyItem.DiscountPerUnit.Value
             };

@@ -2,12 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, FormControl, Grid, Input, InputLabel } from '@material-ui/core'
 import { ProductListItemContract } from '../../../Api/Products/contracts'
 import { makeStyles } from '@material-ui/core/styles'
-import { SupplyContract } from '../../../Api/Supplies/contracts'
+import { SupplyContract, SupplyItemContract } from '../../../Api/Supplies/contracts'
 import { formIsValid, FormValidation, initialFormValidation, initialSupplyInfo } from '../utils'
 import suppliesApi from '../../../Api/Supplies/suppliesApi'
 import { Alert } from '@material-ui/lab'
 import Title from '../../Title'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
+import SupplyItems from '../SupplyItems/SupplyItems'
 
 const useStyles = makeStyles(theme => ({
 	buttons: {
@@ -42,6 +43,14 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 	const classes = useStyles()
 
 	const [supply, setSupply] = useState(initialSupplyInfo as SupplyContract)
+	const [supplyItems, setSupplyItems] = useState([] as SupplyItemContract[])
+
+	const simpleProducts = products.sort((a, b) => {
+		if (a.isSet && !b.isSet) return -1
+		if (!a.isSet && b.isSet) return 1
+		return 0
+	})
+
 	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
@@ -61,16 +70,17 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 	const getSupply = useCallback(async () => {
 		const response = await suppliesApi.GetSupply(supplyId)
 		setSupply(response)
-	}, [setSupply, supplyId])
+		setSupplyItems(response.supplyItems)
+	}, [setSupply, setSupplyItems, supplyId])
 
 	const updateSupply = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await suppliesApi.Update(supply.id, supply)
+			await suppliesApi.Update(supply.id, { ...supply, supplyItems })
 			hide()
 		} else {
 			setErrorText('Form is invalid')
 		}
-	}, [formIsValid, formValidation, supply, suppliesApi, hide, setErrorText])
+	}, [formIsValid, formValidation, supply, supplyItems, suppliesApi, hide, setErrorText])
 
 	const deleteProduct = useCallback(async () => {
 		await suppliesApi.Delete(supplyId)
@@ -104,6 +114,14 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 						/>
 					</FormControl>
 				</Grid>
+				<Box pt={2} pl={2}>
+					<Title color="secondary">Supply items</Title>
+				</Box>
+				<SupplyItems
+					simpleProducts={simpleProducts}
+					supplyItems={supplyItems}
+					setSupplyItems={setSupplyItems}
+				/>
 
 				{errorText && (
 					<Grid item xs={12} md={12}>

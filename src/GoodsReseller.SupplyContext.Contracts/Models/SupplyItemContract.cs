@@ -10,7 +10,7 @@ namespace GoodsReseller.SupplyContext.Contracts.Models
         public Guid ProductId { get; set; }
         
         [Required]
-        public MoneyContract UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
         
         [Required]
         public int Quantity { get; set; }
