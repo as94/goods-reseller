@@ -18,7 +18,7 @@ export interface SupplierInfoContract {
 export interface SupplyItemContract {
 	id: string
 	productId: string
-	unitPrice: MoneyContract
+	unitPrice: number
 	quantity: number
 	discountPerUnit: number
 }

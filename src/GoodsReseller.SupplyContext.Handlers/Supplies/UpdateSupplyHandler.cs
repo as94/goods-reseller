@@ -32,7 +32,7 @@ namespace GoodsReseller.SupplyContext.Handlers.Supplies
             var supplyItems = request.Supply.SupplyItems.Select(x => new SupplyItem(
                 x.Id,
                 x.ProductId,
-                new Money(x.UnitPrice.Value),
+                new Money(x.UnitPrice),
                 new Quantity(x.Quantity),
                 new Discount(x.DiscountPerUnit)));
             
