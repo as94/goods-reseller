@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.SupplyContext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.SupplyContext.Handlers", "src\GoodsReseller.SupplyContext.Handlers\GoodsReseller.SupplyContext.Handlers.csproj", "{80FFF821-AE8B-45BE-8AA0-4F065503ED82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoodsReseller.Statistics", "src\GoodsReseller.Statistics\GoodsReseller.Statistics.csproj", "{72AB1655-E9A7-4A07-B212-C17FDA5680C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -104,6 +106,10 @@ Global
 		{80FFF821-AE8B-45BE-8AA0-4F065503ED82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80FFF821-AE8B-45BE-8AA0-4F065503ED82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80FFF821-AE8B-45BE-8AA0-4F065503ED82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72AB1655-E9A7-4A07-B212-C17FDA5680C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72AB1655-E9A7-4A07-B212-C17FDA5680C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72AB1655-E9A7-4A07-B212-C17FDA5680C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72AB1655-E9A7-4A07-B212-C17FDA5680C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ADA76D08-98DF-4511-B7AA-CD9C1D924476} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
@@ -122,5 +128,6 @@ Global
 		{749EFAA4-FAC8-4261-B2A8-60AE2CBAC6CE} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
 		{276D95A1-F6A1-42D6-9B34-A047269FEC91} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
 		{80FFF821-AE8B-45BE-8AA0-4F065503ED82} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
+		{72AB1655-E9A7-4A07-B212-C17FDA5680C8} = {96014E1D-D6FA-4A9D-AB4A-834B900FFCA1}
 	EndGlobalSection
 EndGlobal

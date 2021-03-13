@@ -21,6 +21,7 @@
       <ProjectReference Include="..\GoodsReseller.DataCatalogContext.Handlers\GoodsReseller.DataCatalogContext.Handlers.csproj" />
       <ProjectReference Include="..\GoodsReseller.Infrastructure\GoodsReseller.Infrastructure.csproj" />
       <ProjectReference Include="..\GoodsReseller.OrderContext.Handlers\GoodsReseller.OrderContext.Handlers.csproj" />
+      <ProjectReference Include="..\GoodsReseller.Statistics\GoodsReseller.Statistics.csproj" />
       <ProjectReference Include="..\GoodsReseller.SupplyContext.Contracts\GoodsReseller.SupplyContext.Contracts.csproj" />
       <ProjectReference Include="..\GoodsReseller.SupplyContext.Handlers\GoodsReseller.SupplyContext.Handlers.csproj" />
     </ItemGroup>
