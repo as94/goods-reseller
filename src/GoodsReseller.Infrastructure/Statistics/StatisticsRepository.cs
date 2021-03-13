@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.Statistics;
 using GoodsReseller.Statistics.Models;
-using GoodsReseller.Statistics.Models.FinancialMetrics;
 
 namespace GoodsReseller.Infrastructure.Statistics
 {
@@ -16,7 +15,7 @@ namespace GoodsReseller.Infrastructure.Statistics
             _dbContext = dbContext;
         }
         
-        public async Task<FinancialStatistic> GetAsync(StatisticsQuery query, CancellationToken cancellationToken)
+        public async Task<FinancialStatisticContract> GetAsync(StatisticsQueryContract query, CancellationToken cancellationToken)
         {
             if (query == null)
             {
@@ -31,7 +30,7 @@ namespace GoodsReseller.Infrastructure.Statistics
             return await GetAsync(query.Year, cancellationToken);
         }
 
-        private async Task<FinancialStatistic> GetAsync(int year, int month, CancellationToken cancellationToken)
+        private async Task<FinancialStatisticContract> GetAsync(int year, int month, CancellationToken cancellationToken)
         {
             var revenue = await _dbContext.SingleAsync(
                 $@"select SUM(""TotalCostValue"") from orders
@@ -39,7 +38,7 @@ namespace GoodsReseller.Infrastructure.Statistics
                 and ""Status_Id"" = 6
                 and ""CreationDateUtc"" between TO_TIMESTAMP('{year}-{month}-01', 'YYYY-MM-DD')
                     and TO_TIMESTAMP('{year}-{month}-{DateTime.DaysInMonth(year, month)}', 'YYYY-MM-DD')", 
-                reader => new Revenue { Value = reader[0] == DBNull.Value ? 0 : (decimal)reader[0] },
+                reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
             
             var costs = await _dbContext.SingleAsync(
@@ -47,19 +46,19 @@ namespace GoodsReseller.Infrastructure.Statistics
                 where ""IsRemoved"" = false
                 and ""CreationDateUtc"" between TO_TIMESTAMP('{year}-{month}-01', 'YYYY-MM-DD')
                     and TO_TIMESTAMP('{year}-{month}-{DateTime.DaysInMonth(year, month)}', 'YYYY-MM-DD')", 
-                reader => new Costs { Value = reader[0] == DBNull.Value ? 0 : (decimal)reader[0] },
+                reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
             
-            return new FinancialStatistic
+            return new FinancialStatisticContract
             {
                 Revenue = revenue,
                 Costs = costs,
-                GrossProfit = new GrossProfit { Value = revenue.Value - costs.Value },
-                NetProfit = new NetProfit { Value = revenue.Value - costs.Value },
+                GrossProfit = revenue - costs,
+                NetProfit = revenue - costs
             };
         }
 
-        private async Task<FinancialStatistic> GetAsync(int year, CancellationToken cancellationToken)
+        private async Task<FinancialStatisticContract> GetAsync(int year, CancellationToken cancellationToken)
         {
             var revenue = await _dbContext.SingleAsync(
                 $@"select SUM(""TotalCostValue"") from orders
@@ -67,7 +66,7 @@ namespace GoodsReseller.Infrastructure.Statistics
                 and ""Status_Id"" = 6
                 and ""CreationDateUtc"" between TO_TIMESTAMP('{year}-01-01', 'YYYY-MM-DD')
                     and TO_TIMESTAMP('{year + 1}-01-01', 'YYYY-MM-DD')", 
-                reader => new Revenue { Value = reader[0] == DBNull.Value ? 0 : (decimal)reader[0] },
+                reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
             
             var costs = await _dbContext.SingleAsync(
@@ -75,15 +74,15 @@ namespace GoodsReseller.Infrastructure.Statistics
                 where ""IsRemoved"" = false
                 and ""CreationDateUtc"" between TO_TIMESTAMP('{year}-01-01', 'YYYY-MM-DD')
                     and TO_TIMESTAMP('{year + 1}-01-01', 'YYYY-MM-DD')", 
-                reader => new Costs { Value = reader[0] == DBNull.Value ? 0 : (decimal)reader[0] },
+                reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
             
-            return new FinancialStatistic
+            return new FinancialStatisticContract
             {
                 Revenue = revenue,
                 Costs = costs,
-                GrossProfit = new GrossProfit { Value = revenue.Value - costs.Value },
-                NetProfit = new NetProfit { Value = revenue.Value - costs.Value },
+                GrossProfit = revenue - costs,
+                NetProfit = revenue - costs
             };
         }
     }

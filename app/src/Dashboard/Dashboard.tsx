@@ -24,6 +24,7 @@ import { ProductListItemContract } from '../Api/Products/contracts'
 import productsApi from '../Api/Products/productsApi'
 import SupplyBlock from './Supplies/SupplyBlock/SupplyBlock'
 import { BarChart, LocalShipping } from '@material-ui/icons'
+import StatisticBlock from './Statistics/StatisticBlock'
 
 const drawerWidth = 240
 
@@ -235,7 +236,7 @@ const Dashboard = () => {
 						<Grid container spacing={3}>
 							{selectedMenuItem === menuItems.statistic && (
 								<div>
-									<h1>Statistic</h1> <p>Not implemented yet</p>
+									<StatisticBlock />
 								</div>
 							)}
 
