@@ -6,6 +6,6 @@ namespace GoodsReseller.Statistics
 {
     public interface IStatisticsRepository
     {
-        Task<FinancialStatistic> GetAsync(StatisticsQuery query, CancellationToken cancellationToken);
+        Task<FinancialStatisticContract> GetAsync(StatisticsQueryContract query, CancellationToken cancellationToken);
     }
 }

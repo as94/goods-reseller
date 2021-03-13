@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GoodsReseller.Statistics
 {
-    public class StatisticsQuery : IValidatableObject
+    public class StatisticsQueryContract : IValidatableObject
     {
         [Required]
         public int Year { get; set; }

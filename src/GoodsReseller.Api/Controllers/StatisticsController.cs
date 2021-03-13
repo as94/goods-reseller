@@ -20,7 +20,7 @@ namespace GoodsReseller.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync([FromQuery] [Required] StatisticsQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAsync([FromQuery] [Required] StatisticsQueryContract query, CancellationToken cancellationToken)
         {
             var financialStatistic = await _statisticsRepository.GetAsync(query, cancellationToken);
             

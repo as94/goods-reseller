@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Box, Button, FormControl, Grid, Input, InputLabel, MenuItem, Select } from '@material-ui/core'
+import { Box, Button, FormControl, Grid, Input, InputLabel } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { formIsValid, FormValidation, initialFormValidation, initialSupplyInfo } from '../utils'
 import { SupplyInfoContract, SupplyItemContract } from '../../../Api/Supplies/contracts'
