@@ -32,20 +32,18 @@ namespace GoodsReseller.Infrastructure.Statistics
 
         private async Task<FinancialStatisticContract> GetAsync(int year, int month, CancellationToken cancellationToken)
         {
+            var startDate = $"{year}-{month}-01";
+            var endDate = $"{year}-{month}-{DateTime.DaysInMonth(year, month)}";
+            
+            var ordersStatisticQuery = GetOrdersStatisticQuery(startDate, endDate);
             var revenue = await _dbContext.SingleAsync(
-                $@"select SUM(""TotalCostValue"") from orders
-                where ""IsRemoved"" = false
-                and ""Status_Id"" = 6
-                and ""CreationDateUtc"" between TO_TIMESTAMP('{year}-{month}-01', 'YYYY-MM-DD')
-                    and TO_TIMESTAMP('{year}-{month}-{DateTime.DaysInMonth(year, month)}', 'YYYY-MM-DD')", 
+                ordersStatisticQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
-            
+
+            var suppliesStatisticQuery = GetSuppliesStatisticQuery(startDate, endDate);
             var costs = await _dbContext.SingleAsync(
-                $@"select SUM(""TotalCostValue"") from supplies
-                where ""IsRemoved"" = false
-                and ""CreationDateUtc"" between TO_TIMESTAMP('{year}-{month}-01', 'YYYY-MM-DD')
-                    and TO_TIMESTAMP('{year}-{month}-{DateTime.DaysInMonth(year, month)}', 'YYYY-MM-DD')", 
+                suppliesStatisticQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
             
@@ -60,20 +58,18 @@ namespace GoodsReseller.Infrastructure.Statistics
 
         private async Task<FinancialStatisticContract> GetAsync(int year, CancellationToken cancellationToken)
         {
+            var startDate = $"{year}-01-01";
+            var endDate = $"{year + 1}-01-01";
+            
+            var ordersStatisticQuery = GetOrdersStatisticQuery(startDate, endDate);
             var revenue = await _dbContext.SingleAsync(
-                $@"select SUM(""TotalCostValue"") from orders
-                where ""IsRemoved"" = false
-                and ""Status_Id"" = 6
-                and ""CreationDateUtc"" between TO_TIMESTAMP('{year}-01-01', 'YYYY-MM-DD')
-                    and TO_TIMESTAMP('{year + 1}-01-01', 'YYYY-MM-DD')", 
+                ordersStatisticQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
             
+            var suppliesStatisticQuery = GetSuppliesStatisticQuery(startDate, endDate);
             var costs = await _dbContext.SingleAsync(
-                $@"select SUM(""TotalCostValue"") from supplies
-                where ""IsRemoved"" = false
-                and ""CreationDateUtc"" between TO_TIMESTAMP('{year}-01-01', 'YYYY-MM-DD')
-                    and TO_TIMESTAMP('{year + 1}-01-01', 'YYYY-MM-DD')", 
+                suppliesStatisticQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
             
@@ -84,6 +80,23 @@ namespace GoodsReseller.Infrastructure.Statistics
                 GrossProfit = revenue - costs,
                 NetProfit = revenue - costs
             };
+        }
+
+        private static string GetOrdersStatisticQuery(string startDate, string endDate)
+        {
+            return $@"select SUM(""TotalCostValue"") from orders
+                where ""IsRemoved"" = false
+                and ""Status_Id"" = 6
+                and ""CreationDateUtc"" between TO_TIMESTAMP('{startDate}', 'YYYY-MM-DD')
+                    and TO_TIMESTAMP('{endDate}', 'YYYY-MM-DD')";
+        }
+
+        private static string GetSuppliesStatisticQuery(string startDate, string endDate)
+        {
+            return $@"select SUM(""TotalCostValue"") from supplies
+                where ""IsRemoved"" = false
+                and ""CreationDateUtc"" between TO_TIMESTAMP('{startDate}', 'YYYY-MM-DD')
+                    and TO_TIMESTAMP('{endDate}', 'YYYY-MM-DD')";
         }
     }
 }
