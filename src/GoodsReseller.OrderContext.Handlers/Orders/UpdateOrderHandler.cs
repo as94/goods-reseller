@@ -30,7 +30,8 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
             var orderInfo = new OrderInfo(
                 request.Status,
                 request.Address?.ToDomain(),
-                request.CustomerInfo?.ToDomain());
+                request.CustomerInfo?.ToDomain(),
+                request.DeliveryCost?.ToDomain());
             
             order.Update(orderInfo);
 

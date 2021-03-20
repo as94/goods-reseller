@@ -9,5 +9,8 @@ namespace GoodsReseller.OrderContext.Contracts.Models
         
         [Required]
         public CustomerInfoContract CustomerInfo { get; set; }
+        
+        [Required]
+        public MoneyContract DeliveryCost { get; set; }
     } 
 }

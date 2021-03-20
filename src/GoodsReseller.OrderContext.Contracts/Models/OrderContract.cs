@@ -11,6 +11,7 @@ namespace GoodsReseller.OrderContext.Contracts.Models
         public AddressContract Address { get; set; }
         public CustomerInfoContract CustomerInfo { get; set; }
         public OrderItemContract[] OrderItems { get; set; } = Array.Empty<OrderItemContract>();
+        public MoneyContract DeliveryCost { get; set; }
         public MoneyContract TotalCost { get; set; }
     }
 }

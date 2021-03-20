@@ -26,8 +26,9 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
 
             var address = request.Address.ToDomain();
             var customerInfo = request.CustomerInfo.ToDomain();
+            var deliveryCost = request.DeliveryCost.ToDomain();
             
-            var order = new Order(orderId, version, OrderStatus.DataReceived.Name, address, customerInfo);
+            var order = new Order(orderId, version, OrderStatus.DataReceived.Name, address, customerInfo, deliveryCost);
             await _ordersRepository.SaveAsync(order, cancellationToken);
             
             return new CreateOrderResponse

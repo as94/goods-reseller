@@ -42,6 +42,13 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
                     x => JsonConvert.DeserializeObject<CustomerInfo>(x, _jsonSerializerSettings));
 
             builder
+                .OwnsOne(o => o.DeliveryCost, x =>
+                {
+                    x.Property(x => x.Value).IsRequired().HasColumnName("DeliveryCostValue").HasDefaultValue(0);
+                    x.WithOwner();
+                });
+            
+            builder
                 .OwnsOne(o => o.TotalCost, x =>
                 {
                     x.Property(x => x.Value).IsRequired().HasColumnName("TotalCostValue");

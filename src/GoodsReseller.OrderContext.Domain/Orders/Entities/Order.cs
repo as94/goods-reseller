@@ -19,9 +19,10 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         
         public Address Address { get; private set; }
         public CustomerInfo CustomerInfo { get; private set; }
+        public Money DeliveryCost { get; private set; }
         public Money TotalCost { get; private set; }
 
-        public Order(Guid id, int version, string status, Address address, CustomerInfo customerInfo)
+        public Order(Guid id, int version, string status, Address address, CustomerInfo customerInfo, Money deliveryCost)
             : this(id, version)
         {
             if (status == null)
@@ -48,6 +49,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Status = parsedStatus;
             Address = address;
             CustomerInfo = customerInfo;
+            DeliveryCost = deliveryCost;
         }
 
         private Order(Guid id, int version) : base(id, version)
@@ -87,6 +89,11 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             if (orderInfo.CustomerInfo != null)
             {
                 CustomerInfo = orderInfo.CustomerInfo.Copy();
+            }
+
+            if (orderInfo.DeliveryCost != null)
+            {
+                DeliveryCost = new Money(orderInfo.DeliveryCost.Value);
             }
             
             IncrementVersion();
@@ -164,6 +171,8 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 
                 totalCost = totalCost.Add(orderItemValue);
             }
+
+            totalCost.Add(DeliveryCost);
 
             TotalCost = totalCost;
         }

@@ -26,12 +26,14 @@ export interface OrderContract {
 	address: AddressContract
 	customerInfo: CustomerInfoContract
 	orderItems: OrderItemContract[]
+	deliveryCost: MoneyContract
 	totalCost: MoneyContract
 }
 
 export interface CreateOrderContract {
 	address: AddressContract
 	customerInfo: CustomerInfoContract
+	deliveryCost: MoneyContract
 }
 
 export const OrderStatuses = [
@@ -50,6 +52,7 @@ export interface OrderInfoContract {
 	status: OrderStatus
 	address: AddressContract
 	customerInfo: CustomerInfoContract
+	deliveryCost: MoneyContract
 }
 
 export enum Operation {
