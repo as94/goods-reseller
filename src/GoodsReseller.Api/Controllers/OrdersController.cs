@@ -63,7 +63,8 @@ namespace GoodsReseller.Api.Controllers
             return Ok(await _mediator.Send(new CreateOrderRequest
             {
                 Address = createOrder.Address,
-                CustomerInfo = createOrder.CustomerInfo
+                CustomerInfo = createOrder.CustomerInfo,
+                DeliveryCost = createOrder.DeliveryCost
             }, cancellationToken));
         }
 
@@ -78,7 +79,8 @@ namespace GoodsReseller.Api.Controllers
                 OrderId = orderId,
                 Status = orderInfo.Status,
                 Address = orderInfo.Address,
-                CustomerInfo = orderInfo.CustomerInfo
+                CustomerInfo = orderInfo.CustomerInfo,
+                DeliveryCost = orderInfo.DeliveryCost
             }, cancellationToken);
             
             return Ok();

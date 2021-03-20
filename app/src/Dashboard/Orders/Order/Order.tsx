@@ -76,11 +76,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	const getOrder = useCallback(async () => {
 		const response = await ordersApi.Get(orderId)
 		setOrder(response)
-		setOrderInfo({
-			status: response.status,
-			address: response.address,
-			customerInfo: response.customerInfo,
-		} as OrderInfoContract)
+		setOrderInfo({ ...response } as OrderInfoContract)
 	}, [orderId, ordersApi, setOrder, setOrderInfo])
 
 	const orderStatusChangeHandler = useCallback(
@@ -144,6 +140,15 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 			})
 		},
 		[orderInfo, setOrderInfo, formValidation, setFormValidation],
+	)
+
+	const deliveryCostChangeHandler = useCallback(
+		(e: any) => {
+			const deliveryCost = Number(e.target.value)
+			setOrderInfo({ ...orderInfo, deliveryCost: { ...order.deliveryCost, value: deliveryCost } })
+			setFormValidation({ ...formValidation, deliveryCostValid: deliveryCost >= 0 })
+		},
+		[orderInfo, setOrder, formValidation, setFormValidation],
 	)
 
 	const saveOrderInfo = useCallback(async () => {
@@ -288,6 +293,21 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 						<FormControl error={!formValidation.addressValid.zipCodeValid} fullWidth>
 							<InputLabel htmlFor="zipCode">Zip code</InputLabel>
 							<Input id="zipCode" value={orderInfo.address.zipCode} onChange={zipCodeChangeHandler} />
+						</FormControl>
+					</Grid>
+					<Box pt={2} pl={2}>
+						<Title color="secondary">Delivery</Title>
+					</Box>
+					<Grid item xs={12} md={12}>
+						<FormControl error={!formValidation.deliveryCostValid} fullWidth>
+							<InputLabel htmlFor="unitPrice">Delivery cost</InputLabel>
+							<Input
+								required
+								type="number"
+								id="unitPrice"
+								value={orderInfo.deliveryCost.value}
+								onChange={deliveryCostChangeHandler}
+							/>
 						</FormControl>
 					</Grid>
 					{errorText && (

@@ -6,5 +6,7 @@ namespace GoodsReseller.OrderContext.Contracts.Models
         public AddressContract? Address { get; set; }
         
         public CustomerInfoContract? CustomerInfo { get; set; }
+
+        public MoneyContract? DeliveryCost { get; set; }
     }
 }

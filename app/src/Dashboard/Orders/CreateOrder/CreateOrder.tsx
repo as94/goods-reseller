@@ -6,6 +6,7 @@ import { Alert } from '@material-ui/lab'
 import { formIsValid, FormValidation, initialFormValidation, initialOrder } from '../utils'
 import { CreateOrderContract } from '../../../Api/Orders/contracts'
 import ordersApi from '../../../Api/Orders/ordersApi'
+import { MoneyContract } from '../../../Api/contracts'
 
 interface IOwnProps {
 	hide: () => void
@@ -84,6 +85,15 @@ const CreateOrder = ({ hide }: IOwnProps) => {
 		[order, setOrder, formValidation, setFormValidation],
 	)
 
+	const deliveryCostChangeHandler = useCallback(
+		(e: any) => {
+			const deliveryCost = Number(e.target.value)
+			setOrder({ ...order, deliveryCost: { ...order.deliveryCost, value: deliveryCost } })
+			setFormValidation({ ...formValidation, deliveryCostValid: deliveryCost >= 0 })
+		},
+		[order, setOrder, formValidation, setFormValidation],
+	)
+
 	const createOrder = useCallback(async () => {
 		if (formIsValid(formValidation)) {
 			await ordersApi.Create({ ...order })
@@ -144,6 +154,21 @@ const CreateOrder = ({ hide }: IOwnProps) => {
 					<FormControl error={!formValidation.addressValid.zipCodeValid} fullWidth>
 						<InputLabel htmlFor="zipCode">Zip code</InputLabel>
 						<Input id="zipCode" value={order.address.zipCode} onChange={zipCodeChangeHandler} />
+					</FormControl>
+				</Grid>
+				<Box pt={2} pl={2}>
+					<Title color="secondary">Delivery</Title>
+				</Box>
+				<Grid item xs={12} md={12}>
+					<FormControl error={!formValidation.deliveryCostValid} fullWidth>
+						<InputLabel htmlFor="unitPrice">Delivery cost</InputLabel>
+						<Input
+							required
+							type="number"
+							id="unitPrice"
+							value={order.deliveryCost.value}
+							onChange={deliveryCostChangeHandler}
+						/>
 					</FormControl>
 				</Grid>
 				{errorText && (

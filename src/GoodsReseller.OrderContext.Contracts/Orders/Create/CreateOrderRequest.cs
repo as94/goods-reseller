@@ -11,5 +11,8 @@ namespace GoodsReseller.OrderContext.Contracts.Orders.Create
         
         [Required]
         public CustomerInfoContract CustomerInfo { get; set; }
+
+        [Required]
+        public MoneyContract DeliveryCost { get; set; }
     }
 }

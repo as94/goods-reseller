@@ -12,5 +12,10 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
                 Value = money.Value
             };
         }
+
+        public static Money ToDomain(this MoneyContract money)
+        {
+            return new Money(money.Value);
+        }
     }
 }

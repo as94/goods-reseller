@@ -395,6 +395,25 @@ namespace GoodsReseller.Infrastructure.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
+                    b.OwnsOne("GoodsReseller.SeedWork.ValueObjects.Money", "DeliveryCost", b1 =>
+                        {
+                            b1.Property<Guid>("OrderId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<decimal>("Value")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("numeric")
+                                .HasDefaultValue(0m)
+                                .HasColumnName("DeliveryCostValue");
+
+                            b1.HasKey("OrderId");
+
+                            b1.ToTable("orders");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OrderId");
+                        });
+
                     b.OwnsOne("GoodsReseller.SeedWork.ValueObjects.Money", "TotalCost", b1 =>
                         {
                             b1.Property<Guid>("OrderId")
@@ -413,6 +432,8 @@ namespace GoodsReseller.Infrastructure.Migrations
                         });
 
                     b.Navigation("CreationDate");
+
+                    b.Navigation("DeliveryCost");
 
                     b.Navigation("LastUpdateDate");
 
