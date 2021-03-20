@@ -42,6 +42,7 @@ namespace GoodsReseller.Infrastructure.Statistics
                 cancellationToken);
 
             var suppliesStatisticQuery = GetSuppliesStatisticQuery(startDate, endDate);
+            // TODO: add delivery cost to costs
             var costs = await _dbContext.SingleAsync(
                 suppliesStatisticQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
@@ -68,6 +69,7 @@ namespace GoodsReseller.Infrastructure.Statistics
                 cancellationToken);
             
             var suppliesStatisticQuery = GetSuppliesStatisticQuery(startDate, endDate);
+            // TODO: add delivery cost to costs
             var costs = await _dbContext.SingleAsync(
                 suppliesStatisticQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
