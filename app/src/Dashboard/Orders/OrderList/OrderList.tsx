@@ -6,6 +6,7 @@ import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import './OrderList.css'
 import ordersApi from '../../../Api/Orders/ordersApi'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -16,17 +17,6 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const columns = [
-	{ field: 'date', headerName: 'Date', width: 200 },
-	{ field: 'status', type: 'string', headerName: 'Status', width: 150 },
-	{ field: 'customerPhoneNumber', headerName: 'Phone', width: 200 },
-	{ field: 'customerName', headerName: 'Name', width: 150 },
-	{ field: 'addressCity', headerName: 'City', width: 150 },
-	{ field: 'addressStreet', headerName: 'Street', width: 150 },
-	{ field: 'addressZipCode', headerName: 'Zip Code', width: 150 },
-	{ field: 'totalCost', type: 'number', headerName: 'Total Cost', width: 150 },
-]
-
 interface IOwnProps {
 	orders: OrderListItemContract[]
 	setOrders: (orders: OrderListItemContract[]) => void
@@ -35,7 +25,17 @@ interface IOwnProps {
 }
 
 const OrderList = ({ orders, setOrders, setSelectedOrderId, showCreateOrder }: IOwnProps) => {
+	const { t } = useTranslation()
 	const classes = useStyles()
+
+	const columns = [
+		{ field: 'date', headerName: t('Date'), width: 200 },
+		{ field: 'status', type: 'string', headerName: t('Status'), width: 150 },
+		{ field: 'customerPhoneNumber', headerName: t('Phone'), width: 200 },
+		{ field: 'customerName', headerName: t('Name'), width: 150 },
+		{ field: 'addressZipCode', headerName: t('ZipCode'), width: 200 },
+		{ field: 'totalCost', type: 'number', headerName: t('TotalCost'), width: 150 },
+	]
 
 	const getOrders = useCallback(async () => {
 		const response = await ordersApi.GetOrderList()
@@ -60,15 +60,19 @@ const OrderList = ({ orders, setOrders, setSelectedOrderId, showCreateOrder }: I
 	return (
 		<React.Fragment>
 			<div className={classes.header}>
-				<Title color="primary">Orders</Title>
+				<Title color="primary">{t('Orders')}</Title>
 				<Button variant="contained" color="primary" onClick={showCreateOrderHandler}>
-					Create
+					{t('Create')}
 				</Button>
 			</div>
 			<div style={{ height: 650, width: '100%' }}>
 				<DataGrid
 					disableColumnMenu={true}
-					rows={orders.map(x => ({ ...x, date: new Date(x.date).toLocaleString() }))}
+					rows={orders.map(x => ({
+						...x,
+						date: new Date(x.date).toLocaleString(),
+						status: t(`${x.status}OrderStatus`),
+					}))}
 					columns={columns}
 					pageSize={10}
 					onRowClick={orderClickHandler}

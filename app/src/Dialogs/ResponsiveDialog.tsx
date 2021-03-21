@@ -11,11 +11,13 @@ import { useTheme } from '@material-ui/core/styles'
 interface IOwnProps {
 	title: string
 	content: string
+	cancelText: string
+	okText: string
 	cancel: () => void
 	confirm: () => void
 }
 
-const ResponsiveDialog = ({ title, content, cancel, confirm }: IOwnProps) => {
+const ResponsiveDialog = ({ title, content, cancelText, okText, cancel, confirm }: IOwnProps) => {
 	const [open, setOpen] = useState(true)
 	const theme = useTheme()
 	const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
@@ -39,10 +41,10 @@ const ResponsiveDialog = ({ title, content, cancel, confirm }: IOwnProps) => {
 				</DialogContent>
 				<DialogActions>
 					<Button autoFocus onClick={handleClose} color="primary">
-						Cancel
+						{cancelText}
 					</Button>
 					<Button onClick={handleConfirm} color="primary" autoFocus>
-						Ok
+						{okText}
 					</Button>
 				</DialogActions>
 			</Dialog>

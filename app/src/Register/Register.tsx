@@ -10,6 +10,7 @@ import Container from '@material-ui/core/Container'
 import Copyright from '../Copyright/Copyright'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useAuth } from '../Hooks/useAuth'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -32,6 +33,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Register = () => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const history = useHistory()
@@ -61,7 +63,7 @@ const Register = () => {
 					<LockOpenOutlinedIcon />
 				</Avatar>
 				<Typography component="h1" variant="h5">
-					Sign Up
+					{t('SignUp')}
 				</Typography>
 				<form className={classes.form} noValidate>
 					<TextField
@@ -70,7 +72,7 @@ const Register = () => {
 						required
 						fullWidth
 						id="email"
-						label="Email Address"
+						label={t('EmailAddress')}
 						name="email"
 						autoComplete="email"
 						autoFocus
@@ -83,7 +85,7 @@ const Register = () => {
 						required
 						fullWidth
 						name="password"
-						label="Password"
+						label={t('Password')}
 						type="password"
 						id="password"
 						autoComplete="current-password"
@@ -91,7 +93,7 @@ const Register = () => {
 						onChange={e => setPassword(e.target.value)}
 					/>
 					<Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={signUp}>
-						Sign Up
+						{t('SignUp')}
 					</Button>
 				</form>
 			</div>
