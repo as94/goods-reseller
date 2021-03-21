@@ -1,0 +1,20 @@
+{
+    "translation": {
+        "Create": "Добавить",
+        "Save": "Сохранить",
+        "Back": "Назад",
+        "Remove": "Удалить",
+        "Statistic": "Статистика",
+        "Orders": "Заказы",
+        "Supplies": "Поставки",
+        "Products": "Товары",
+        "Statistics": "Статистика",
+        "Dashboard": "Приборная панель",
+        "MonthStatistic": "Статистика за текущий месяц",
+        "YearStatistic": "Статистика за текущий год",
+        "Revenue": "Выручка",
+        "Costs": "Расходы",
+        "GrossProfit": "Валовой доход",
+        "NetProfit": "Чистая прибыль"
+    }
+}
