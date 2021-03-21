@@ -8,6 +8,7 @@ import { formIsValid, FormValidation, initialFormValidation, initialProduct } fr
 import { Alert } from '@material-ui/lab'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
 import MultipleSelect from '../../../MultipleSelect/MultipleSelect'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
 	buttons: {
@@ -39,6 +40,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 		return null
 	}
 
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const [simpleProducts] = useState(products.filter(p => !p.isSet && p.id !== productId))
@@ -209,6 +211,8 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 					title={`'${product.name}' will be removed. Continue?`}
 					content={'This change cannot be undone'}
 					cancel={() => setShowDeleteDialog(false)}
+					cancelText={t('Cancel')}
+					okText={t('Ok')}
 					confirm={deleteProduct}
 				/>
 			)}

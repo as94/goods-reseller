@@ -9,6 +9,7 @@ import { Alert } from '@material-ui/lab'
 import Title from '../../Title'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
 import SupplyItems from '../SupplyItems/SupplyItems'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
 	buttons: {
@@ -40,6 +41,7 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 		return null
 	}
 
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const [supply, setSupply] = useState(initialSupplyInfo as SupplyContract)
@@ -145,6 +147,8 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 					title={`Supply from '${supply.supplierInfo.name}' will be removed. Continue?`}
 					content={'This change cannot be undone'}
 					cancel={() => setShowDeleteDialog(false)}
+					cancelText={t('Cancel')}
+					okText={t('Ok')}
 					confirm={deleteProduct}
 				/>
 			)}
