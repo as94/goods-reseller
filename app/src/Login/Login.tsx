@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container'
 import Copyright from '../Copyright/Copyright'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useAuth } from '../Hooks/useAuth'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Login = () => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const history = useHistory()
@@ -63,7 +65,7 @@ const Login = () => {
 					<LockOutlinedIcon />
 				</Avatar>
 				<Typography component="h1" variant="h5">
-					Sign In
+					{t('SignIn')}
 				</Typography>
 				<form className={classes.form} noValidate>
 					<TextField
@@ -72,7 +74,7 @@ const Login = () => {
 						required
 						fullWidth
 						id="email"
-						label="Email Address"
+						label={t('EmailAddress')}
 						name="email"
 						autoComplete="email"
 						autoFocus
@@ -85,7 +87,7 @@ const Login = () => {
 						required
 						fullWidth
 						name="password"
-						label="Password"
+						label={t('Password')}
 						type="password"
 						id="password"
 						autoComplete="current-password"
@@ -93,10 +95,10 @@ const Login = () => {
 						onChange={e => setPassword(e.target.value)}
 					/>
 					<Button fullWidth variant="contained" color="primary" className={classes.submit} onClick={signIn}>
-						Sign In
+						{t('SignIn')}
 					</Button>
 					<MaterialLink variant="body2" component={Link} to="/admin/register">
-						{"Don't have an account? Sign Up"}
+						{t('SignUpQuestion')}
 					</MaterialLink>
 				</form>
 			</div>

@@ -21,6 +21,7 @@ import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
 import Counter from '../../../Counter/Counter'
 import { formIsValid, FormValidation, initialFormValidation, initialOrder } from '../utils'
 import { Alert } from '@material-ui/lab'
+import { useTranslation } from 'react-i18next'
 
 interface IOwnProps {
 	orderId: string
@@ -54,6 +55,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Order = ({ orderId, products, hide }: IOwnProps) => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const [orderInfo, setOrderInfo] = useState(initialOrder as OrderInfoContract)
@@ -156,9 +158,9 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 			await ordersApi.Update(order.id, orderInfo)
 			hide()
 		} else {
-			setErrorText('Form is invalid')
+			setErrorText(t('FormIsInvalid'))
 		}
-	}, [formIsValid, formValidation, order, orderInfo, ordersApi, hide, setErrorText])
+	}, [formIsValid, formValidation, order, orderInfo, ordersApi, hide, setErrorText, t])
 
 	const deleteOrder = useCallback(async () => {
 		await ordersApi.Delete(orderId)
@@ -223,20 +225,20 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	return (
 		<React.Fragment>
 			<Box pt={2}>
-				<Title color="primary">Edit order</Title>
+				<Title color="primary">{t('EditOrder')}</Title>
 			</Box>
 
 			{order && order.id && (
 				<Grid container spacing={3}>
 					<Grid item xs={12} md={12}>
 						<FormControl fullWidth>
-							<InputLabel htmlFor="date">Date</InputLabel>
+							<InputLabel htmlFor="date">{t('Date')}</InputLabel>
 							<Input id="date" value={new Date(order.date).toLocaleString()} readOnly />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl fullWidth>
-							<InputLabel htmlFor="status">Order status</InputLabel>
+							<InputLabel htmlFor="status">{t('Status')}</InputLabel>
 							<Select
 								labelId="status"
 								id="status-select"
@@ -245,18 +247,18 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 							>
 								{OrderStatuses.map(x => (
 									<MenuItem key={x} value={x}>
-										{x}
+										{t(`${x}OrderStatus`)}
 									</MenuItem>
 								))}
 							</Select>
 						</FormControl>
 					</Grid>
 					<Box pt={2} pl={2}>
-						<Title color="secondary">Customer Info</Title>
+						<Title color="secondary">{t('CustomerInfo')}</Title>
 					</Box>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.customerInfoValid.phoneNumberValid} fullWidth>
-							<InputLabel htmlFor="phoneNumber">Phone number</InputLabel>
+							<InputLabel htmlFor="phoneNumber">{t('PhoneNumber')}</InputLabel>
 							<Input
 								id="phoneNumber"
 								value={orderInfo.customerInfo.phoneNumber}
@@ -266,7 +268,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl fullWidth>
-							<InputLabel htmlFor="customerName">Customer name (optional)</InputLabel>
+							<InputLabel htmlFor="customerName">{t('CustomerName')}</InputLabel>
 							<Input
 								id="customerName"
 								value={orderInfo.customerInfo.name}
@@ -275,32 +277,29 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 						</FormControl>
 					</Grid>
 					<Box pt={2} pl={2}>
-						<Title color="secondary">Shipping address</Title>
+						<Title color="secondary">{t('ShippingAddress')}</Title>
 					</Box>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.addressValid.cityValid} fullWidth>
-							<InputLabel htmlFor="city">City</InputLabel>
+							<InputLabel htmlFor="city">{t('City')}</InputLabel>
 							<Input id="city" value={orderInfo.address.city} onChange={cityChangeHandler} />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.addressValid.streetValid} fullWidth>
-							<InputLabel htmlFor="street">Street</InputLabel>
+							<InputLabel htmlFor="street">{t('Street')}</InputLabel>
 							<Input id="street" value={orderInfo.address.street} onChange={streetChangeHandler} />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.addressValid.zipCodeValid} fullWidth>
-							<InputLabel htmlFor="zipCode">Zip code</InputLabel>
+							<InputLabel htmlFor="zipCode">{t('ZipCode')}</InputLabel>
 							<Input id="zipCode" value={orderInfo.address.zipCode} onChange={zipCodeChangeHandler} />
 						</FormControl>
 					</Grid>
-					<Box pt={2} pl={2}>
-						<Title color="secondary">Delivery</Title>
-					</Box>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.deliveryCostValid} fullWidth>
-							<InputLabel htmlFor="unitPrice">Delivery cost</InputLabel>
+							<InputLabel htmlFor="unitPrice">{t('DeliveryCost')}</InputLabel>
 							<Input
 								required
 								type="number"
@@ -316,14 +315,14 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 						</Grid>
 					)}
 					<Box pt={2} pl={2}>
-						<Title color="secondary">Order items</Title>
+						<Title color="secondary">{t('OrderItems')}</Title>
 						<FormControl fullWidth>
-							<InputLabel htmlFor="totalCost">Total cost</InputLabel>
+							<InputLabel htmlFor="totalCost">{t('TotalCost')}</InputLabel>
 							<Input id="totalCost" value={order.totalCost.value} readOnly />
 						</FormControl>
 						{allProducts.length > 0 && (
 							<FormControl fullWidth>
-								<InputLabel htmlFor="products">Products</InputLabel>
+								<InputLabel htmlFor="products">{t('Products')}</InputLabel>
 								<Select
 									labelId="products"
 									id="products-select"
@@ -343,7 +342,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 									className={classes.addProductButton}
 									disabled={!selectedProductId}
 								>
-									Add product
+									{t('AddProduct')}
 								</Button>
 							</FormControl>
 						)}
@@ -374,19 +373,23 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 			)}
 			<div className={classes.buttons}>
 				<Button variant="contained" onClick={() => setShowDeleteDialog(true)} className={classes.removeButton}>
-					Remove
+					{t('Remove')}
 				</Button>
 				<Button onClick={backHandler} className={classes.button}>
-					Back
+					{t('Back')}
 				</Button>
 				<Button variant="contained" color="primary" onClick={saveOrderInfo} className={classes.button}>
-					Save
+					{t('Save')}
 				</Button>
 			</div>
 			{showDeleteDialog && (
 				<ResponsiveDialog
-					title={`Order for customer ${order.customerInfo.name} with phone number ${order.customerInfo.phoneNumber} will be removed. Continue?`}
-					content={'This change cannot be undone'}
+					title={t('RemovingOrderConfirmation')
+						.replace('${customerName}', order.customerInfo.name ?? '')
+						.replace('${customerPhoneNumber}', order.customerInfo.phoneNumber)}
+					content={t('ThisChangeCannotBeUndone')}
+					cancelText={t('Cancel')}
+					okText={t('Ok')}
 					cancel={() => setShowDeleteDialog(false)}
 					confirm={deleteOrder}
 				/>
