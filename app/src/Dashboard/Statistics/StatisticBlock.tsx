@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import Title from '../Title'
 import { FinancialStatisticContract } from '../../Api/Statistics/contracts'
 import statisticsApi from '../../Api/Statistics/statisticsApi'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
 	paper: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const StatisticBlock = () => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const [monthStatistic, setMonthStatistic] = useState({} as FinancialStatisticContract)
@@ -50,53 +52,53 @@ const StatisticBlock = () => {
 		<Grid item xs={12} md={12}>
 			<Paper className={classes.paper}>
 				<Box pt={2} pl={2}>
-					<Title color="primary">Statistics</Title>
+					<Title color="primary">{t('Statistics')}</Title>
 				</Box>
 				<Box pt={2} pl={2}>
-					<Title color="secondary">Month statistic</Title>
+					<Title color="secondary">{t('MonthStatistic')}</Title>
 				</Box>
 				<TableContainer component={Paper}>
 					<Table className={classes.table} aria-label="simple table">
 						<TableBody>
 							<TableRow>
-								<TableCell align="left">Revenue</TableCell>
+								<TableCell align="left">{t('Revenue')}</TableCell>
 								<TableCell align="right">{monthStatistic.revenue}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell align="left">Costs</TableCell>
+								<TableCell align="left">{t('Costs')}</TableCell>
 								<TableCell align="right">{monthStatistic.costs}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell align="left">Gross profit</TableCell>
+								<TableCell align="left">{t('GrossProfit')}</TableCell>
 								<TableCell align="right">{monthStatistic.grossProfit}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell align="left">Net profit</TableCell>
+								<TableCell align="left">{t('NetProfit')}</TableCell>
 								<TableCell align="right">{monthStatistic.netProfit}</TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>
 				</TableContainer>
 				<Box pt={2} pl={2}>
-					<Title color="secondary">Year statistic</Title>
+					<Title color="secondary">{t('YearStatistic')}</Title>
 				</Box>
 				<TableContainer component={Paper}>
 					<Table className={classes.table} aria-label="simple table">
 						<TableBody>
 							<TableRow>
-								<TableCell align="left">Revenue</TableCell>
+								<TableCell align="left">{t('Revenue')}</TableCell>
 								<TableCell align="right">{yearStatistic.revenue}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell align="left">Costs</TableCell>
+								<TableCell align="left">{t('Costs')}</TableCell>
 								<TableCell align="right">{yearStatistic.costs}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell align="left">Gross profit</TableCell>
+								<TableCell align="left">{t('GrossProfit')}</TableCell>
 								<TableCell align="right">{yearStatistic.grossProfit}</TableCell>
 							</TableRow>
 							<TableRow>
-								<TableCell align="left">Net profit</TableCell>
+								<TableCell align="left">{t('NetProfit')}</TableCell>
 								<TableCell align="right">{yearStatistic.netProfit}</TableCell>
 							</TableRow>
 						</TableBody>

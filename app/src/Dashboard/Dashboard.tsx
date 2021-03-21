@@ -25,6 +25,7 @@ import productsApi from '../Api/Products/productsApi'
 import SupplyBlock from './Supplies/SupplyBlock/SupplyBlock'
 import { BarChart, LocalShipping } from '@material-ui/icons'
 import StatisticBlock from './Statistics/StatisticBlock'
+import { useTranslation } from 'react-i18next'
 
 const drawerWidth = 240
 
@@ -112,6 +113,7 @@ const menuItems = {
 }
 
 const Dashboard = () => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 	const [open, setOpen] = React.useState(true)
 	const handleDrawerOpen = () => {
@@ -162,7 +164,7 @@ const Dashboard = () => {
 							<MenuIcon />
 						</IconButton>
 						<Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-							Statistic
+							{t('Dashboard')}
 						</Typography>
 						<Typography component="span" color="inherit" noWrap>
 							{auth.user.email}
@@ -195,7 +197,7 @@ const Dashboard = () => {
 								<ListItemIcon>
 									<BarChart />
 								</ListItemIcon>
-								<ListItemText primary="Statistic" />
+								<ListItemText primary={t('Statistic')} />
 							</ListItem>
 							<ListItem
 								button
@@ -205,7 +207,7 @@ const Dashboard = () => {
 								<ListItemIcon>
 									<ShoppingCartIcon />
 								</ListItemIcon>
-								<ListItemText primary="Orders" />
+								<ListItemText primary={t('Orders')} />
 							</ListItem>
 							<ListItem
 								button
@@ -215,7 +217,7 @@ const Dashboard = () => {
 								<ListItemIcon>
 									<LocalShipping />
 								</ListItemIcon>
-								<ListItemText primary="Supplies" />
+								<ListItemText primary={t('Supplies')} />
 							</ListItem>
 							<ListItem
 								button
@@ -225,7 +227,7 @@ const Dashboard = () => {
 								<ListItemIcon>
 									<LocalMallIcon />
 								</ListItemIcon>
-								<ListItemText primary="Products" />
+								<ListItemText primary={t('Products')} />
 							</ListItem>
 						</div>
 					</List>

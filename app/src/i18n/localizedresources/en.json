@@ -1,0 +1,20 @@
+{
+    "translation": {
+        "Create": "Create",
+        "Save": "Save",
+        "Back": "Back",
+        "Remove": "Remove",
+        "Statistic": "Statistic",
+        "Orders": "Orders",
+        "Supplies": "Supplies",
+        "Products": "Products",
+        "Statistics": "Statistics",
+        "Dashboard": "Dashboard",
+        "MonthStatistic": "Month statistic",
+        "YearStatistic": "Year statistic",
+        "Revenue": "Revenue",
+        "Costs": "Costs",
+        "GrossProfit": "Gross profit",
+        "NetProfit": "Net profit"
+    }
+}

@@ -35,18 +35,25 @@ namespace GoodsReseller.Infrastructure.Statistics
             var startDate = $"{year}-{month}-01";
             var endDate = $"{year}-{month}-{DateTime.DaysInMonth(year, month)}";
             
-            var ordersStatisticQuery = GetOrdersStatisticQuery(startDate, endDate);
+            var ordersTotalCostQuery = GetOrdersTotalCostQuery(startDate, endDate);
             var revenue = await _dbContext.SingleAsync(
-                ordersStatisticQuery, 
+                ordersTotalCostQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
 
-            var suppliesStatisticQuery = GetSuppliesStatisticQuery(startDate, endDate);
-            // TODO: add delivery cost to costs
+            var suppliesTotalCostQuery = GetSuppliesTotalCostQuery(startDate, endDate);
             var costs = await _dbContext.SingleAsync(
-                suppliesStatisticQuery, 
+                suppliesTotalCostQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
+            
+            var ordersDeliveryCostQuery = GetOrdersDeliveryCostQuery(startDate, endDate);
+            var deliveryCosts = await _dbContext.SingleAsync(
+                ordersDeliveryCostQuery, 
+                reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
+                cancellationToken);
+
+            costs += deliveryCosts;
             
             return new FinancialStatisticContract
             {
@@ -62,18 +69,25 @@ namespace GoodsReseller.Infrastructure.Statistics
             var startDate = $"{year}-01-01";
             var endDate = $"{year + 1}-01-01";
             
-            var ordersStatisticQuery = GetOrdersStatisticQuery(startDate, endDate);
+            var ordersTotalCostQuery = GetOrdersTotalCostQuery(startDate, endDate);
             var revenue = await _dbContext.SingleAsync(
-                ordersStatisticQuery, 
+                ordersTotalCostQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
             
-            var suppliesStatisticQuery = GetSuppliesStatisticQuery(startDate, endDate);
-            // TODO: add delivery cost to costs
+            var suppliesTotalCostQuery = GetSuppliesTotalCostQuery(startDate, endDate);
             var costs = await _dbContext.SingleAsync(
-                suppliesStatisticQuery, 
+                suppliesTotalCostQuery, 
                 reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
                 cancellationToken);
+            
+            var ordersDeliveryCostQuery = GetOrdersDeliveryCostQuery(startDate, endDate);
+            var deliveryCosts = await _dbContext.SingleAsync(
+                ordersDeliveryCostQuery, 
+                reader => reader[0] == DBNull.Value ? 0 : (decimal)reader[0],
+                cancellationToken);
+
+            costs += deliveryCosts;
             
             return new FinancialStatisticContract
             {
@@ -84,7 +98,7 @@ namespace GoodsReseller.Infrastructure.Statistics
             };
         }
 
-        private static string GetOrdersStatisticQuery(string startDate, string endDate)
+        private static string GetOrdersTotalCostQuery(string startDate, string endDate)
         {
             return $@"select SUM(""TotalCostValue"") from orders
                 where ""IsRemoved"" = false
@@ -93,10 +107,19 @@ namespace GoodsReseller.Infrastructure.Statistics
                     and TO_TIMESTAMP('{endDate}', 'YYYY-MM-DD')";
         }
 
-        private static string GetSuppliesStatisticQuery(string startDate, string endDate)
+        private static string GetSuppliesTotalCostQuery(string startDate, string endDate)
         {
             return $@"select SUM(""TotalCostValue"") from supplies
                 where ""IsRemoved"" = false
+                and ""CreationDateUtc"" between TO_TIMESTAMP('{startDate}', 'YYYY-MM-DD')
+                    and TO_TIMESTAMP('{endDate}', 'YYYY-MM-DD')";
+        }
+        
+        private static string GetOrdersDeliveryCostQuery(string startDate, string endDate)
+        {
+            return $@"select SUM(""DeliveryCostValue"") from orders
+                where ""IsRemoved"" = false
+                and ""Status_Id"" = 6
                 and ""CreationDateUtc"" between TO_TIMESTAMP('{startDate}', 'YYYY-MM-DD')
                     and TO_TIMESTAMP('{endDate}', 'YYYY-MM-DD')";
         }
