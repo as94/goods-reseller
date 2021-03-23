@@ -7,6 +7,7 @@ import Title from '../../Title'
 import { Alert } from '@material-ui/lab'
 import { formIsValid, FormValidation, initialFormValidation, initialProduct } from '../utils'
 import MultipleSelect from '../../../MultipleSelect/MultipleSelect'
+import { useTranslation } from 'react-i18next'
 
 interface IOwnProps {
 	products: ProductListItemContract[]
@@ -25,6 +26,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const CreateProduct = ({ products, hide }: IOwnProps) => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const [simpleProducts] = useState(products.filter(p => !p.isSet))
@@ -83,7 +85,7 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 			await productsApi.Create({ ...product, productIds: selectedProductIds })
 			hide()
 		} else {
-			setErrorText('Form is invalid')
+			setErrorText(t('FormIsInvalid'))
 		}
 	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, hide, setErrorText])
 
@@ -96,31 +98,31 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 	return (
 		<React.Fragment>
 			<Box pt={2}>
-				<Title color="primary">Create product</Title>
+				<Title color="primary">{t('CreateProduct')}</Title>
 			</Box>
 
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={12}>
 					<FormControl error={!formValidation.nameValid} fullWidth>
-						<InputLabel htmlFor="name">Name</InputLabel>
+						<InputLabel htmlFor="name">{t('ProductName')}</InputLabel>
 						<Input id="name" value={product.name} onChange={nameChangeHandler} />
 					</FormControl>
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<FormControl error={!formValidation.labelValid} fullWidth>
-						<InputLabel htmlFor="label">Label</InputLabel>
+						<InputLabel htmlFor="label">{t('Label')}</InputLabel>
 						<Input id="label" value={product.label} onChange={labelChangeHandler} />
 					</FormControl>
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<FormControl fullWidth>
-						<InputLabel htmlFor="description">Description</InputLabel>
+						<InputLabel htmlFor="description">{t('Description')}</InputLabel>
 						<Input id="description" value={product.description} onChange={descriptionChangeHandler} />
 					</FormControl>
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<FormControl error={!formValidation.unitPriceValid} fullWidth>
-						<InputLabel htmlFor="unitPrice">Unit Price</InputLabel>
+						<InputLabel htmlFor="unitPrice">{t('UnitPrice')}</InputLabel>
 						<Input
 							required
 							type="number"
@@ -132,7 +134,7 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<FormControl error={!formValidation.discountPerUnitValid} fullWidth>
-						<InputLabel htmlFor="discountPerUnit">Discount Per Unit</InputLabel>
+						<InputLabel htmlFor="discountPerUnit">{t('DiscountPerUnit')}</InputLabel>
 						<Input
 							required
 							type="number"
@@ -144,7 +146,7 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<MultipleSelect
-						title={'Products'}
+						title={t('Products')}
 						items={simpleProducts}
 						selectedIds={selectedProductIds}
 						setSelectedIds={setSelectedProductIds}
@@ -158,10 +160,10 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 			</Grid>
 			<div className={classes.buttons}>
 				<Button onClick={backHandler} className={classes.button}>
-					Back
+					{t('Back')}
 				</Button>
 				<Button variant="contained" color="primary" onClick={createProduct} className={classes.button}>
-					Save
+					{t('Save')}
 				</Button>
 			</div>
 		</React.Fragment>

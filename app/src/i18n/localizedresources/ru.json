@@ -43,12 +43,23 @@
         "EditOrder": "Редактирование заказа",
         "CustomerInfo": "Информация о клиенте",
         "PhoneNumber": "Номер телефона",
-        "CustomerName": "Имя (не обязательно)",
+        "CustomerName": "Имя клиента",
         "ShippingAddress": "Адрес доставки",
         "DeliveryCost": "Стоимость доставки",
         "OrderItems": "Состав заказа",
         "AddProduct": "Добавить товар",
-        "RemovingOrderConfirmation": "Заказ для клиента ${customerName} с номером ${customerPhoneNumber} будет удалён. Продолжить?",
-        "ThisChangeCannotBeUndone": "Это изменение невозможно будет откатить"
+        "RemovingOrderConfirmation": "Заказ для клиента '${customerName}' с номером '${customerPhoneNumber}' будет удалён. Продолжить?",
+        "ThisChangeCannotBeUndone": "Это изменение невозможно будет откатить",
+        "ProductName": "Название продукта",
+        "Label": "Метка",
+        "UnitPrice": "Цена за 1 ед.",
+        "DiscountPerUnit": "Скидка за 1 ед. %",
+        "IsSet": "Набор",
+        "true": "да",
+        "false": "нет",
+        "CreateProduct": "Добавление товара",
+        "EditProduct": "Редактирование товара",
+        "Description": "Описание",
+        "RemovingProductConfirmation": "Товар '${productName}' будет удалён. Продолжить?"
     }
 }

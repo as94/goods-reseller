@@ -106,7 +106,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 			await productsApi.Update(product.id, { ...product, productIds: selectedProductIds })
 			hide()
 		} else {
-			setErrorText('Form is invalid')
+			setErrorText(t('FormIsInvalid'))
 		}
 	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, hide, setErrorText])
 
@@ -128,37 +128,37 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 	return (
 		<React.Fragment>
 			<Box pt={2}>
-				<Title color="primary">Edit product</Title>
+				<Title color="primary">{t('EditProduct')}</Title>
 			</Box>
 			{product && product.id && (
 				<Grid container spacing={3}>
 					<Grid item xs={12} md={12}>
 						<FormControl fullWidth>
-							<InputLabel htmlFor="date">Date</InputLabel>
+							<InputLabel htmlFor="date">{t('Date')}</InputLabel>
 							<Input id="date" value={new Date(product.date).toLocaleString()} readOnly />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.nameValid} fullWidth>
-							<InputLabel htmlFor="name">Name</InputLabel>
+							<InputLabel htmlFor="name">{t('ProductName')}</InputLabel>
 							<Input id="name" value={product.name} onChange={nameChangeHandler} />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.labelValid} fullWidth>
-							<InputLabel htmlFor="label">Label</InputLabel>
+							<InputLabel htmlFor="label">{t('Label')}</InputLabel>
 							<Input id="label" value={product.label} onChange={labelChangeHandler} />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl fullWidth>
-							<InputLabel htmlFor="description">Description</InputLabel>
+							<InputLabel htmlFor="description">{t('Description')}</InputLabel>
 							<Input id="description" value={product.description} onChange={descriptionChangeHandler} />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.unitPriceValid} fullWidth>
-							<InputLabel htmlFor="unitPrice">Unit Price</InputLabel>
+							<InputLabel htmlFor="unitPrice">{t('UnitPrice')}</InputLabel>
 							<Input
 								required
 								type="number"
@@ -170,7 +170,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<FormControl error={!formValidation.discountPerUnitValid} fullWidth>
-							<InputLabel htmlFor="discountPerUnit">Discount Per Unit</InputLabel>
+							<InputLabel htmlFor="discountPerUnit">{t('DiscountPerUnit')}</InputLabel>
 							<Input
 								required
 								type="number"
@@ -182,7 +182,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<MultipleSelect
-							title={'Products'}
+							title={t('Products')}
 							items={simpleProducts}
 							selectedIds={product.productIds}
 							setSelectedIds={setSelectedProductIds}
@@ -197,19 +197,19 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 			)}
 			<div className={classes.buttons}>
 				<Button variant="contained" onClick={() => setShowDeleteDialog(true)} className={classes.removeButton}>
-					Remove
+					{t('Remove')}
 				</Button>
 				<Button onClick={backHandler} className={classes.button}>
-					Back
+					{t('Back')}
 				</Button>
 				<Button variant="contained" color="primary" onClick={updateProduct} className={classes.button}>
-					Save
+					{t('Save')}
 				</Button>
 			</div>
 			{showDeleteDialog && (
 				<ResponsiveDialog
-					title={`'${product.name}' will be removed. Continue?`}
-					content={'This change cannot be undone'}
+					title={t('RemovingProductConfirmation').replace('${productName}', product.name)}
+					content={t('ThisChangeCannotBeUndone')}
 					cancel={() => setShowDeleteDialog(false)}
 					cancelText={t('Cancel')}
 					okText={t('Ok')}
