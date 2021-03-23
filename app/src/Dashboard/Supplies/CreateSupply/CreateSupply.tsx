@@ -8,6 +8,7 @@ import { Alert } from '@material-ui/lab'
 import Title from '../../Title'
 import { ProductListItemContract } from '../../../Api/Products/contracts'
 import SupplyItems from '../SupplyItems/SupplyItems'
+import { useTranslation } from 'react-i18next'
 
 interface IOwnProps {
 	products: ProductListItemContract[]
@@ -26,6 +27,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const CreateSupply = ({ products, hide }: IOwnProps) => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const [supply, setSupply] = useState(initialSupplyInfo as SupplyInfoContract)
@@ -56,7 +58,7 @@ const CreateSupply = ({ products, hide }: IOwnProps) => {
 			await suppliesApi.Create({ ...supply, supplyItems })
 			hide()
 		} else {
-			setErrorText('Form is invalid')
+			setErrorText(t('FormIsInvalid'))
 		}
 	}, [formIsValid, formValidation, supply, supplyItems, suppliesApi, hide, setErrorText])
 
@@ -69,13 +71,13 @@ const CreateSupply = ({ products, hide }: IOwnProps) => {
 	return (
 		<React.Fragment>
 			<Box pt={2}>
-				<Title color="primary">Create supply</Title>
+				<Title color="primary">{t('CreateSupply')}</Title>
 			</Box>
 
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={12}>
 					<FormControl error={!formValidation.supplierNameValid} fullWidth>
-						<InputLabel htmlFor="supplierName">Supplier name</InputLabel>
+						<InputLabel htmlFor="supplierName">{t('SupplierName')}</InputLabel>
 						<Input
 							id="supplierName"
 							value={supply.supplierInfo.name}
@@ -83,9 +85,6 @@ const CreateSupply = ({ products, hide }: IOwnProps) => {
 						/>
 					</FormControl>
 				</Grid>
-				<Box pt={2} pl={2}>
-					<Title color="secondary">Supply items</Title>
-				</Box>
 				<SupplyItems
 					simpleProducts={simpleProducts}
 					supplyItems={supplyItems}
@@ -100,10 +99,10 @@ const CreateSupply = ({ products, hide }: IOwnProps) => {
 			</Grid>
 			<div className={classes.buttons}>
 				<Button onClick={backHandler} className={classes.button}>
-					Back
+					{t('Back')}
 				</Button>
 				<Button variant="contained" color="primary" onClick={createSupply} className={classes.button}>
-					Save
+					{t('Save')}
 				</Button>
 			</div>
 		</React.Fragment>

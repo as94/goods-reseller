@@ -6,6 +6,7 @@ import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import './SupplyList.css'
 import suppliesApi from '../../../Api/Supplies/suppliesApi'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -16,12 +17,6 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const columns = [
-	{ field: 'date', headerName: 'Date', width: 300 },
-	{ field: 'supplierName', type: 'string', headerName: 'Supplier name', width: 300 },
-	{ field: 'totalCost', type: 'number', headerName: 'Total Cost', width: 300 },
-]
-
 interface IOwnProps {
 	supplies: SupplyListItemContract[]
 	setSupplies: (supplies: SupplyListItemContract[]) => void
@@ -30,7 +25,14 @@ interface IOwnProps {
 }
 
 const SupplyList = ({ supplies, setSupplies, setSelectedSupplyId, showCreateSupply }: IOwnProps) => {
+	const { t } = useTranslation()
 	const classes = useStyles()
+
+	const columns = [
+		{ field: 'date', headerName: t('Date'), width: 300 },
+		{ field: 'supplierName', type: 'string', headerName: t('SupplierName'), width: 300 },
+		{ field: 'totalCost', type: 'number', headerName: t('SupplyTotalCost'), width: 300 },
+	]
 
 	const getSupplies = useCallback(async () => {
 		const response = await suppliesApi.GetSupplyList()
@@ -55,9 +57,9 @@ const SupplyList = ({ supplies, setSupplies, setSelectedSupplyId, showCreateSupp
 	return (
 		<React.Fragment>
 			<div className={classes.header}>
-				<Title color="primary">Supplies</Title>
+				<Title color="primary">{t('Supplies')}</Title>
 				<Button variant="contained" color="primary" onClick={showCreateSupplyHandler}>
-					Create
+					{t('Create')}
 				</Button>
 			</div>
 			<div style={{ height: 650, width: '100%' }}>

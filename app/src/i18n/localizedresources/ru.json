@@ -16,6 +16,7 @@
         "Orders": "Заказы",
         "Supplies": "Поставки",
         "Products": "Товары",
+        "Product": "Товар",
         "Statistics": "Статистика",
         "Dashboard": "Приборная панель",
         "MonthStatistic": "Статистика за текущий месяц",
@@ -60,6 +61,14 @@
         "CreateProduct": "Добавление товара",
         "EditProduct": "Редактирование товара",
         "Description": "Описание",
-        "RemovingProductConfirmation": "Товар '${productName}' будет удалён. Продолжить?"
+        "RemovingProductConfirmation": "Товар '${productName}' будет удалён. Продолжить?",
+        "SupplierName": "Название поставщика",
+        "SupplyTotalCost": "Сумма поставки",
+        "CreateSupply": "Добавление поставки",
+        "EditSupply": "Редактирование поставки",
+        "RemovingSupplyConfirmation": "Поставка от '${supplierInfoName}' будет удалёна. Продолжить?",
+        "SupplyItems": "Состав поставки",
+        "Quantity": "Количество",
+        "AddSupplyItem": "Добавить товар"
     }
 }

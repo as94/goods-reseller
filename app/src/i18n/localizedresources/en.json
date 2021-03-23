@@ -16,6 +16,7 @@
         "Orders": "Orders",
         "Supplies": "Supplies",
         "Products": "Products",
+        "Product": "Product",
         "Statistics": "Statistics",
         "Dashboard": "Dashboard",
         "MonthStatistic": "Month statistic",
@@ -29,8 +30,8 @@
         "Phone": "Phone",
         "City": "City",
         "Street": "Street",
-        "ZipCode": "Zip Code",
-        "TotalCost": "Total Cost",
+        "ZipCode": "Zip code",
+        "OrderTotalCost": "Total cost",
         "DataReceivedOrderStatus": "Data received",
         "AcceptedOrderStatus": "Accepted",
         "CollectedOrderStatus": "Collected",
@@ -60,6 +61,14 @@
         "CreateProduct": "Create product",
         "EditProduct": "Edit product",
         "Description": "Description",
-        "RemovingProductConfirmation": "The product '${productName}' will be removed. Continue?"
+        "RemovingProductConfirmation": "The product '${productName}' will be removed. Continue?",
+        "SupplierName": "Supplier name",
+        "SupplyTotalCost": "Total cost",
+        "CreateSupply": "Create supply",
+        "EditSupply": "Edit supply",
+        "RemovingSupplyConfirmation": "Supply from '${supplierInfoName}' will be removed. Continue?",
+        "SupplyItems": "Supply items",
+        "Quantity": "Quantity",
+        "AddSupplyItem": "Add supply item"
     }
 }

@@ -80,7 +80,7 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 			await suppliesApi.Update(supply.id, { ...supply, supplyItems })
 			hide()
 		} else {
-			setErrorText('Form is invalid')
+			setErrorText(t('FormIsInvalid'))
 		}
 	}, [formIsValid, formValidation, supply, supplyItems, suppliesApi, hide, setErrorText])
 
@@ -102,13 +102,13 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 	return (
 		<React.Fragment>
 			<Box pt={2}>
-				<Title color="primary">Edit supply</Title>
+				<Title color="primary">{t('EditSupply')}</Title>
 			</Box>
 
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={12}>
 					<FormControl error={!formValidation.supplierNameValid} fullWidth>
-						<InputLabel htmlFor="supplierName">Supplier name</InputLabel>
+						<InputLabel htmlFor="supplierName">{t('SupplierName')}</InputLabel>
 						<Input
 							id="supplierName"
 							value={supply.supplierInfo.name}
@@ -116,9 +116,6 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 						/>
 					</FormControl>
 				</Grid>
-				<Box pt={2} pl={2}>
-					<Title color="secondary">Supply items</Title>
-				</Box>
 				<SupplyItems
 					simpleProducts={simpleProducts}
 					supplyItems={supplyItems}
@@ -133,19 +130,19 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 			</Grid>
 			<div className={classes.buttons}>
 				<Button variant="contained" onClick={() => setShowDeleteDialog(true)} className={classes.removeButton}>
-					Remove
+					{t('Remove')}
 				</Button>
 				<Button onClick={backHandler} className={classes.button}>
-					Back
+					{t('Back')}
 				</Button>
 				<Button variant="contained" color="primary" onClick={updateSupply} className={classes.button}>
-					Save
+					{t('Save')}
 				</Button>
 			</div>
 			{showDeleteDialog && (
 				<ResponsiveDialog
-					title={`Supply from '${supply.supplierInfo.name}' will be removed. Continue?`}
-					content={'This change cannot be undone'}
+					title={t('RemovingSupplyConfirmation').replace('${supplierInfoName}', supply.supplierInfo.name)}
+					content={t('ThisChangeCannotBeUndone')}
 					cancel={() => setShowDeleteDialog(false)}
 					cancelText={t('Cancel')}
 					okText={t('Ok')}

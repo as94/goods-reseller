@@ -10,8 +10,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import SupplyItem from './SupplyItem/SupplyItem'
 import { ProductListItemContract } from '../../../Api/Products/contracts'
 import { SupplyItemContract } from '../../../Api/Supplies/contracts'
-import { Grid } from '@material-ui/core'
+import { Box, Grid } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
+import Title from '../../Title'
+import { useTranslation } from 'react-i18next'
 
 export interface IOwnProps {
 	simpleProducts: ProductListItemContract[]
@@ -29,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SupplyItems = ({ simpleProducts, supplyItems, setSupplyItems }: IOwnProps) => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const addSupplyItem = useCallback(
@@ -47,21 +50,20 @@ const SupplyItems = ({ simpleProducts, supplyItems, setSupplyItems }: IOwnProps)
 
 	return (
 		<>
-			<SupplyItem
-				simpleProducts={simpleProducts}
-				addSupplyItem={addSupplyItem}
-				removeSupplyItem={removeSupplyItem}
-			/>
+			<Box pt={2} pl={2}>
+				<Title color="secondary">{t('SupplyItems')}</Title>
+			</Box>
+			<SupplyItem simpleProducts={simpleProducts} addSupplyItem={addSupplyItem} />
 			{supplyItems.length > 0 && (
 				<Grid item xs={12} md={12}>
 					<TableContainer component={Paper}>
 						<Table className={classes.table} aria-label="simple table">
 							<TableHead>
 								<TableRow>
-									<TableCell align="right">Product name</TableCell>
-									<TableCell align="right">Unit price</TableCell>
-									<TableCell align="right">Discount per unit</TableCell>
-									<TableCell align="right">Quantity</TableCell>
+									<TableCell align="right">{t('ProductName')}</TableCell>
+									<TableCell align="right">{t('UnitPrice')}</TableCell>
+									<TableCell align="right">{t('DiscountPerUnit')}</TableCell>
+									<TableCell align="right">{t('Quantity')}</TableCell>
 									<TableCell></TableCell>
 								</TableRow>
 							</TableHead>
