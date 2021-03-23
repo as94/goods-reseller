@@ -5,11 +5,11 @@ import Counter from '../../../../Counter/Counter'
 import { ProductListItemContract } from '../../../../Api/Products/contracts'
 import { SupplyItemContract } from '../../../../Api/Supplies/contracts'
 import { v4 as uuid } from 'uuid'
+import { useTranslation } from 'react-i18next'
 
 export interface IOwnProps {
 	simpleProducts: ProductListItemContract[]
 	addSupplyItem: (supplyItem: SupplyItemContract) => void
-	removeSupplyItem: (supplyItemId: string) => void
 }
 
 const useStyles = makeStyles(theme => ({
@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const SupplyItem = ({ simpleProducts, addSupplyItem, removeSupplyItem }: IOwnProps) => {
+const SupplyItem = ({ simpleProducts, addSupplyItem }: IOwnProps) => {
+	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const [selectedProductId, setSelectedProductId] = useState('')
@@ -82,7 +83,7 @@ const SupplyItem = ({ simpleProducts, addSupplyItem, removeSupplyItem }: IOwnPro
 			<Grid container spacing={3}>
 				<Grid item xs={3}>
 					<FormControl fullWidth>
-						<InputLabel htmlFor="productId">Product</InputLabel>
+						<InputLabel htmlFor="productId">{t('Product')}</InputLabel>
 						<Select
 							labelId="productId"
 							id="product-id-select"
@@ -100,7 +101,7 @@ const SupplyItem = ({ simpleProducts, addSupplyItem, removeSupplyItem }: IOwnPro
 				</Grid>
 				<Grid item xs={3}>
 					<FormControl fullWidth>
-						<InputLabel htmlFor="unitPrice">Unit Price</InputLabel>
+						<InputLabel htmlFor="unitPrice">{t('UnitPrice')}</InputLabel>
 						<Input
 							required
 							type="number"
@@ -112,7 +113,7 @@ const SupplyItem = ({ simpleProducts, addSupplyItem, removeSupplyItem }: IOwnPro
 				</Grid>
 				<Grid item xs={3}>
 					<FormControl fullWidth>
-						<InputLabel htmlFor="discountPerUnit">Discount Per Unit</InputLabel>
+						<InputLabel htmlFor="discountPerUnit">{t('DiscountPerUnit')}</InputLabel>
 						<Input
 							required
 							type="number"
@@ -138,7 +139,7 @@ const SupplyItem = ({ simpleProducts, addSupplyItem, removeSupplyItem }: IOwnPro
 				className={classes.addSupplyItemButton}
 				disabled={!selectedProductId}
 			>
-				Add supply item
+				{t('AddSupplyItem')}
 			</Button>
 		</Grid>
 	)
