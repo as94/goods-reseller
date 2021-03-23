@@ -5,6 +5,7 @@ import { ProductListItemContract } from '../../../Api/Products/contracts'
 import { Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import './ProductList.css'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles(theme => ({
 	header: {
@@ -15,15 +16,6 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const columns = [
-	{ field: 'date', headerName: 'Date', width: 200 },
-	{ field: 'name', headerName: 'Name', width: 200 },
-	{ field: 'label', headerName: 'Label', width: 200 },
-	{ field: 'unitPrice', type: 'number', headerName: 'Unit Price', width: 200 },
-	{ field: 'discountPerUnit', type: 'number', headerName: 'Discount Per Unit %', width: 200 },
-	{ field: 'isSet', type: 'boolean', headerName: 'Is Set', width: 200 },
-]
-
 interface IOwnProps {
 	products: ProductListItemContract[]
 	setSelectedProductId: (selectedProductId: string) => void
@@ -31,7 +23,17 @@ interface IOwnProps {
 }
 
 const ProductList = ({ products, setSelectedProductId, showCreateProduct }: IOwnProps) => {
+	const { t } = useTranslation()
 	const classes = useStyles()
+
+	const columns = [
+		{ field: 'date', headerName: t('Date'), width: 200 },
+		{ field: 'name', headerName: t('ProductName'), width: 200 },
+		{ field: 'label', headerName: t('Label'), width: 200 },
+		{ field: 'unitPrice', type: 'number', headerName: t('UnitPrice'), width: 200 },
+		{ field: 'discountPerUnit', type: 'number', headerName: t('DiscountPerUnit'), width: 200 },
+		{ field: 'isSet', type: 'string', headerName: t('IsSet'), width: 200 },
+	]
 
 	const productClickHandler = useCallback(
 		(param: RowParams) => {
@@ -45,9 +47,9 @@ const ProductList = ({ products, setSelectedProductId, showCreateProduct }: IOwn
 	return (
 		<React.Fragment>
 			<div className={classes.header}>
-				<Title color="primary">Products</Title>
+				<Title color="primary">{t('Products')}</Title>
 				<Button variant="contained" color="primary" onClick={showCreateProductHandler}>
-					Create
+					{t('Create')}
 				</Button>
 			</div>
 			<div style={{ height: 650, width: '100%' }}>
@@ -57,6 +59,7 @@ const ProductList = ({ products, setSelectedProductId, showCreateProduct }: IOwn
 						...x,
 						discountPerUnit: x.discountPerUnit * 100,
 						date: new Date(x.date).toLocaleString(),
+						isSet: x.isSet ? t('true') : t('false'),
 					}))}
 					columns={columns}
 					pageSize={10}

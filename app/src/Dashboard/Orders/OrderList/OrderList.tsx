@@ -32,7 +32,7 @@ const OrderList = ({ orders, setOrders, setSelectedOrderId, showCreateOrder }: I
 		{ field: 'date', headerName: t('Date'), width: 200 },
 		{ field: 'status', type: 'string', headerName: t('Status'), width: 150 },
 		{ field: 'customerPhoneNumber', headerName: t('Phone'), width: 200 },
-		{ field: 'customerName', headerName: t('Name'), width: 150 },
+		{ field: 'customerName', headerName: t('CustomerName'), width: 200 },
 		{ field: 'addressZipCode', headerName: t('ZipCode'), width: 200 },
 		{ field: 'totalCost', type: 'number', headerName: t('TotalCost'), width: 150 },
 	]
