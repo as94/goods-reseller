@@ -33,10 +33,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot" />
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Yoga\Index.cshtml" />
     </ItemGroup>
 
