@@ -1,0 +1,39 @@
+version: "3.9"
+
+volumes:
+  pg_volume:
+
+services:
+  web:
+    container_name: web
+    build: .
+    restart: always
+    ports:
+      - 5000:80
+    environment:
+      DatabaseOptions__ConnectionString: "Host=database;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123"
+  
+  database:
+    container_name: database
+    image: postgres:13.2
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qwe123
+      POSTGRES_DB: goodsreseller
+    ports:
+      - 5432:5432
+    volumes:
+      - $HOME/Desktop/PostgreSql-Snippets/infile:/infile
+      - pg_volume:/var/lib/postgresql/data/
+
+  migrator:
+    container_name: migrator
+    build:
+      context: ./
+      dockerfile: migrator.dockerfile
+    depends_on:
+      - database
+    restart: on-failure
+    environment:
+      DatabaseOptions__ConnectionString: "Host=database;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123"
