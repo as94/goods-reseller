@@ -58,11 +58,16 @@ namespace GoodsReseller.Api
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
             services.RegisterSupplyContextHandlers();
-            
-            services.AddCors(options => options.AddPolicy("LandingCorsPolicy", builder =>
-            {
-                builder.WithOrigins("http://localhost:8080").AllowAnyMethod().AllowAnyHeader();
-            }));
+
+            services.AddCors(
+                options => options.AddPolicy("BackofficeCorsPolicy", builder =>
+                {
+                    builder.WithOrigins(
+                            "http://77.223.99.12",
+                            "http://happyboxy.ru")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                }));
             
             services.AddControllers();
             services.AddMvc();
@@ -100,7 +105,7 @@ namespace GoodsReseller.Api
             
             app.UseRouting();
             
-            app.UseCors("LandingCorsPolicy");
+            app.UseCors("BackofficeCorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();
