@@ -6,13 +6,6 @@ namespace GoodsReseller.OrderContext.Contracts.Orders.Create
 {
     public class CreateOrderRequest : IRequest<CreateOrderResponse>
     {
-        [Required]
-        public AddressContract Address { get; set; }
-        
-        [Required]
-        public CustomerInfoContract CustomerInfo { get; set; }
-
-        [Required]
-        public MoneyContract DeliveryCost { get; set; }
+        public OrderInfoContract OrderInfo { get; set; }
     }
 }

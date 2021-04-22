@@ -22,7 +22,14 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Money DeliveryCost { get; private set; }
         public Money TotalCost { get; private set; }
 
-        public Order(Guid id, int version, string status, Address address, CustomerInfo customerInfo, Money deliveryCost)
+        public Order(
+            Guid id,
+            int version,
+            string status,
+            Address address,
+            CustomerInfo customerInfo,
+            Money deliveryCost,
+            IEnumerable<OrderItem> orderItems)
             : this(id, version)
         {
             if (status == null)
@@ -50,6 +57,9 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Address = address;
             CustomerInfo = customerInfo;
             DeliveryCost = deliveryCost;
+            
+            _orderItems = new List<OrderItem>(orderItems);
+            RecalculateTotalCost();
         }
 
         private Order(Guid id, int version) : base(id, version)
@@ -70,92 +80,47 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(orderInfo));
             }
 
-            if (orderInfo.Status != null)
+            if (!Enumeration.TryParse<OrderStatus>(orderInfo.Status, out var parsedStatus))
             {
-                if (!Enumeration.TryParse<OrderStatus>(orderInfo.Status, out var parsedStatus))
-                {
-                    // TODO: business rule, add translations
-                    throw new ArgumentException($"Status '{orderInfo.Status}' is invalid");
-                }
+                // TODO: business rule, add translations
+                throw new ArgumentException($"Status '{orderInfo.Status}' is invalid");
+            }
                 
-                Status = parsedStatus;
+            Status = parsedStatus;
+
+            Address = orderInfo.Address.Copy();
+            CustomerInfo = orderInfo.CustomerInfo.Copy();
+            DeliveryCost = new Money(orderInfo.DeliveryCost.Value);
+            
+            var existingOrderItemIds = OrderItems.Select(x => x.Id).ToArray();
+            var incomingOrderItemIds = orderInfo.OrderItems.Select(x => x.Id).ToArray();
+            
+            var toCreateIds = incomingOrderItemIds.Where(id => !existingOrderItemIds.Contains(id));
+            var newItems = orderInfo.OrderItems.Where(x => toCreateIds.Contains(x.Id));
+            foreach (var newItem in newItems)
+            {
+                _orderItems.Add(newItem);
             }
 
-            if (orderInfo.Address != null)
+            var toUpdateIds = existingOrderItemIds.Where(id => incomingOrderItemIds.Contains(id));
+            foreach (var id in toUpdateIds)
             {
-                Address = orderInfo.Address.Copy();
+                var existing = _orderItems.First(x => x.Id == id);
+                var incoming = orderInfo.OrderItems.First(x => x.Id == id);
+                existing.Update(incoming);
             }
 
-            if (orderInfo.CustomerInfo != null)
+            var toDeleteIds = existingOrderItemIds.Where(id => !incomingOrderItemIds.Contains(id));
+            foreach (var id in toDeleteIds)
             {
-                CustomerInfo = orderInfo.CustomerInfo.Copy();
-            }
-
-            if (orderInfo.DeliveryCost != null)
-            {
-                DeliveryCost = new Money(orderInfo.DeliveryCost.Value);
+                var existing = _orderItems.First(x => x.Id == id);
+                existing.Remove();
             }
             
+            RecalculateTotalCost();
+
             IncrementVersion();
             LastUpdateDate = new DateValueObject();
-        }
-
-        public void AddOrderItem(Guid productId, Money unitPrice, Discount discountPerUnit, DateValueObject lastUpdateDate)
-        {
-            if (unitPrice == null)
-            {
-                throw new ArgumentNullException(nameof(unitPrice));
-            }
-            
-            if (discountPerUnit == null)
-            {
-                throw new ArgumentNullException(nameof(discountPerUnit));
-            }
-
-            if (lastUpdateDate == null)
-            {
-                throw new ArgumentNullException(nameof(lastUpdateDate));
-            }
-
-            var existingOrderItem = OrderItems.FirstOrDefault(x => x.ProductId == productId);
-            if (existingOrderItem != null)
-            {
-                existingOrderItem.IncrementQuantity(lastUpdateDate);
-            }
-            else
-            {
-                var newOrderItem = new OrderItem(Guid.NewGuid(), productId, unitPrice, new Quantity(1), discountPerUnit);
-                _orderItems.Add(newOrderItem);
-            }
-
-            RecalculateTotalCost();
-            IncrementVersion();
-            LastUpdateDate = lastUpdateDate;
-        }
-        
-        public void RemoveOrderItem(Guid productId, DateValueObject lastUpdateDate)
-        {
-            if (lastUpdateDate == null)
-            {
-                throw new ArgumentNullException(nameof(lastUpdateDate));
-            }
-            
-            var existingOrderItem = OrderItems.FirstOrDefault(x => x.ProductId == productId);
-            if (existingOrderItem != null)
-            {
-                if (existingOrderItem.Quantity.Value > 1)
-                {
-                    existingOrderItem.DecrementQuantity(lastUpdateDate);
-                }
-                else
-                {
-                    existingOrderItem.Remove();
-                }
-
-                RecalculateTotalCost();
-                IncrementVersion();
-                LastUpdateDate = lastUpdateDate;
-            }
         }
 
         private void RecalculateTotalCost()
@@ -172,9 +137,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 totalCost = totalCost.Add(orderItemValue);
             }
 
-            totalCost.Add(DeliveryCost);
-
-            TotalCost = totalCost;
+            TotalCost = totalCost.Add(DeliveryCost);
         }
     }
 }

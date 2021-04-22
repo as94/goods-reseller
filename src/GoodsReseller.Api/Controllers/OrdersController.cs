@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Contracts.Models;
-using GoodsReseller.OrderContext.Contracts.OrderItems.PatchOrderItem;
 using GoodsReseller.OrderContext.Contracts.Orders.BatchByQuery;
 using GoodsReseller.OrderContext.Contracts.Orders.Create;
 using GoodsReseller.OrderContext.Contracts.Orders.DeleteById;
@@ -44,7 +43,7 @@ namespace GoodsReseller.Api.Controllers
             return Ok(response.Order);
         }
         
-        [HttpGet("list")]
+        [HttpGet]
         public async Task<IActionResult> GetOrderListAsync([FromQuery] BatchOrdersQuery query, CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(new BatchOrdersByQueryRequest
@@ -57,19 +56,17 @@ namespace GoodsReseller.Api.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateOrderAsync(
-            [FromBody] [Required] CreateOrderContract createOrder,
+            [FromBody] [Required] OrderInfoContract orderInfo,
             CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(new CreateOrderRequest
             {
-                Address = createOrder.Address,
-                CustomerInfo = createOrder.CustomerInfo,
-                DeliveryCost = createOrder.DeliveryCost
+                OrderInfo = orderInfo
             }, cancellationToken));
         }
 
-        [HttpPatch("{orderId}/orderInfo")]
-        public async Task<IActionResult> PatchOrderInfoAsync(
+        [HttpPut("{orderId}")]
+        public async Task<IActionResult> UpdateOrderAsync(
             [FromRoute] [Required] Guid orderId,
             [FromBody] [Required] OrderInfoContract orderInfo,
             CancellationToken cancellationToken)
@@ -77,31 +74,12 @@ namespace GoodsReseller.Api.Controllers
             await _mediator.Send(new UpdateOrderRequest
             {
                 OrderId = orderId,
-                Status = orderInfo.Status,
-                Address = orderInfo.Address,
-                CustomerInfo = orderInfo.CustomerInfo,
-                DeliveryCost = orderInfo.DeliveryCost
+                OrderInfo = orderInfo
             }, cancellationToken);
             
             return Ok();
         }
 
-        [HttpPatch("{orderId}/orderItems")]
-        public async Task<IActionResult> PatchOrderItemAsync(
-            [FromRoute] [Required] Guid orderId,
-            [FromBody] [Required] PatchOrderItemContract patchOrderItem,
-            CancellationToken cancellationToken)
-        {
-            await _mediator.Send(new PatchOrderItemRequest
-            {
-                OrderId = orderId,
-                Op = patchOrderItem.Op,
-                ProductId = patchOrderItem.ProductId
-            }, cancellationToken);
-            
-            return Ok();
-        }
-        
         [HttpDelete("{orderId}")]
         public async Task<IActionResult> DeleteOrderAsync(
             [FromRoute] [Required] Guid orderId,

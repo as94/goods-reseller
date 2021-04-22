@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace GoodsReseller.OrderContext.Contracts.Models
 {
@@ -8,8 +9,13 @@ namespace GoodsReseller.OrderContext.Contracts.Models
         
         public Guid ProductId { get; set; }
         
-        public MoneyContract UnitPrice { get; set; }
+        [Required]
+        public decimal UnitPrice { get; set; }
+        
+        [Required]
         public int Quantity { get; set; }
+        
+        [Required]
         public decimal DiscountPerUnit { get; set; }
     }
 }

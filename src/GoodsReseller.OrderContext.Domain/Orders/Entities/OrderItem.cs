@@ -7,10 +7,10 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
 {
     public sealed class OrderItem : Entity
     {
-        public Guid ProductId { get; }
-        public Money UnitPrice { get; }
+        public Guid ProductId { get; private set; }
+        public Money UnitPrice { get; private set; }
         public Quantity Quantity { get; private set; }
-        public Discount DiscountPerUnit { get; }
+        public Discount DiscountPerUnit { get; private set; }
 
         public OrderItem(Guid id, Guid productId, Money unitPrice, Quantity quantity, Discount discountPerUnit)
             : this(id, productId)
@@ -39,17 +39,18 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         {
             ProductId = productId;
         }
-
-        public void IncrementQuantity(DateValueObject lastUpdateDate)
+        
+        public void Update(OrderItem orderItem)
         {
-            Quantity = new Quantity(Quantity.Value + 1);
-            LastUpdateDate = lastUpdateDate;
-        }
+            if (orderItem == null)
+            {
+                throw new ArgumentNullException(nameof(orderItem));
+            }
 
-        public void DecrementQuantity(DateValueObject lastUpdateDate)
-        {
-            Quantity = new Quantity(Quantity.Value - 1);
-            LastUpdateDate = lastUpdateDate;
+            ProductId = orderItem.ProductId;
+            UnitPrice = orderItem.UnitPrice;
+            Quantity = orderItem.Quantity;
+            DiscountPerUnit = orderItem.DiscountPerUnit;
         }
     }
 }

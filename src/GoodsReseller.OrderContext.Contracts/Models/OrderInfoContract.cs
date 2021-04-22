@@ -1,12 +1,23 @@
+using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace GoodsReseller.OrderContext.Contracts.Models
 {
     public class OrderInfoContract
     {
-        public string? Status { get; set; }
-        public AddressContract? Address { get; set; }
+        [Required]
+        public string Status { get; set; }
         
-        public CustomerInfoContract? CustomerInfo { get; set; }
-
-        public MoneyContract? DeliveryCost { get; set; }
-    }
+        [Required]
+        public AddressContract Address { get; set; }
+        
+        [Required]
+        public CustomerInfoContract CustomerInfo { get; set; }
+        
+        [Required]
+        public MoneyContract DeliveryCost { get; set; }
+        
+        [Required]
+        public OrderItemContract[] OrderItems { get; set; } = Array.Empty<OrderItemContract>();
+    } 
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Contracts.Orders.Update;
@@ -28,10 +29,11 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
             }
 
             var orderInfo = new OrderInfo(
-                request.Status,
-                request.Address?.ToDomain(),
-                request.CustomerInfo?.ToDomain(),
-                request.DeliveryCost?.ToDomain());
+                request.OrderInfo.Status,
+                request.OrderInfo.Address.ToDomain(),
+                request.OrderInfo.CustomerInfo.ToDomain(),
+                request.OrderInfo.DeliveryCost.ToDomain(),
+                request.OrderInfo.OrderItems.Select(x => x.ToDomain()));
             
             order.Update(orderInfo);
 

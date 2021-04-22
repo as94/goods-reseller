@@ -51,10 +51,10 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
             var incomingSupplyItemIds = supplyInfo.SupplyItems.Select(x => x.Id).ToArray();
 
             var toCreateIds = incomingSupplyItemIds.Where(id => !existingSupplyItemIds.Contains(id));
-            var newSupplyItems = supplyInfo.SupplyItems.Where(x => toCreateIds.Contains(x.Id));
-            foreach (var newSupplyItem in newSupplyItems)
+            var newItems = supplyInfo.SupplyItems.Where(x => toCreateIds.Contains(x.Id));
+            foreach (var newItem in newItems)
             {
-                _supplyItems.Add(newSupplyItem);
+                _supplyItems.Add(newItem);
             }
 
             var toUpdateIds = existingSupplyItemIds.Where(id => incomingSupplyItemIds.Contains(id));
