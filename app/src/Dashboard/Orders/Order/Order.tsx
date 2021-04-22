@@ -14,7 +14,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Title from '../../Title'
-import { Operation, OrderContract, OrderInfoContract, OrderStatuses } from '../../../Api/Orders/contracts'
+import { OrderContract, OrderInfoContract, OrderStatuses } from '../../../Api/Orders/contracts'
 import ordersApi from '../../../Api/Orders/ordersApi'
 import { ProductListItemContract } from '../../../Api/Products/contracts'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
@@ -167,36 +167,9 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 		hide()
 	}, [ordersApi, orderId])
 
-	const addOrderItem = useCallback(
-		async (productId: string) => {
-			if (productId) {
-				await ordersApi.PatchOrderItem(order.id, {
-					productId,
-					op: Operation.Add,
-				})
-				await getOrder()
-			}
-		},
-		[order, ordersApi, getOrder],
-	)
-
-	const removeOrderItem = useCallback(
-		async (productId: string) => {
-			if (productId) {
-				await ordersApi.PatchOrderItem(order.id, {
-					productId,
-					op: Operation.Remove,
-				})
-				await getOrder()
-			}
-		},
-		[order, ordersApi, getOrder],
-	)
-
 	const addSelectedProduct = useCallback(() => {
-		addOrderItem(selectedProductId)
 		setSelectedProductId('')
-	}, [addOrderItem, selectedProductId, setSelectedProductId])
+	}, [selectedProductId, setSelectedProductId])
 
 	const changeSelectedProductId = useCallback(
 		(event: any) => {
@@ -353,15 +326,15 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 									return product ? (
 										<ListItem key={x.productId}>
 											<ListItemText
-												primary={`${idx + 1}. ${product.name} - ${x.unitPrice.value} (${
+												primary={`${idx + 1}. ${product.name} - ${x.unitPrice} (${
 													x.discountPerUnit * 100
 												} %)`}
 												className={classes.productItem}
 											/>
 											<Counter
 												initialValue={x.quantity}
-												addHandler={() => addOrderItem(x.productId)}
-												removeHandler={() => removeOrderItem(x.productId)}
+												addHandler={() => null}
+												removeHandler={() => null}
 											/>
 										</ListItem>
 									) : null

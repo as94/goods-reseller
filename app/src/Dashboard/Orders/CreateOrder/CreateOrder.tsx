@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Title from '../../Title'
 import { Alert } from '@material-ui/lab'
 import { formIsValid, FormValidation, initialFormValidation, initialOrder } from '../utils'
-import { CreateOrderContract } from '../../../Api/Orders/contracts'
+import { OrderInfoContract } from '../../../Api/Orders/contracts'
 import ordersApi from '../../../Api/Orders/ordersApi'
 import { useTranslation } from 'react-i18next'
 
@@ -27,7 +27,7 @@ const CreateOrder = ({ hide }: IOwnProps) => {
 	const { t } = useTranslation()
 	const classes = useStyles()
 
-	const [order, setOrder] = useState(initialOrder as CreateOrderContract)
+	const [order, setOrder] = useState(initialOrder as OrderInfoContract)
 	const [formValidation, setFormValidation] = useState(initialFormValidation(false) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 

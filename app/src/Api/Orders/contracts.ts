@@ -20,7 +20,7 @@ export interface OrderListItemContract {
 
 export interface OrderContract {
 	id: string
-	version: string
+	version: number
 	status: string
 	date: string
 	address: AddressContract
@@ -30,10 +30,13 @@ export interface OrderContract {
 	totalCost: MoneyContract
 }
 
-export interface CreateOrderContract {
+export interface OrderInfoContract {
+	version: number
+	status: string
 	address: AddressContract
 	customerInfo: CustomerInfoContract
 	deliveryCost: MoneyContract
+	orderItems: OrderItemContract[]
 }
 
 export const OrderStatuses = [
@@ -47,23 +50,6 @@ export const OrderStatuses = [
 ] as const
 type OrderStatusTuple = typeof OrderStatuses
 export type OrderStatus = OrderStatusTuple[number]
-
-export interface OrderInfoContract {
-	status: OrderStatus
-	address: AddressContract
-	customerInfo: CustomerInfoContract
-	deliveryCost: MoneyContract
-}
-
-export enum Operation {
-	Add = 'add',
-	Remove = 'remove',
-}
-
-export interface PatchOrderItem {
-	op: Operation
-	productId: string
-}
 
 export interface AddressContract {
 	city: string
@@ -85,7 +71,7 @@ export interface CustomerInfoContract {
 export interface OrderItemContract {
 	id: string
 	productId: string
-	unitPrice: MoneyContract
+	unitPrice: number
 	quantity: number
 	discountPerUnit: number
 }

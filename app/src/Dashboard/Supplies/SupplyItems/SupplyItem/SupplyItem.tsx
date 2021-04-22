@@ -126,8 +126,8 @@ const SupplyItem = ({ simpleProducts, addSupplyItem }: IOwnProps) => {
 				<Grid item xs={3} style={{ marginTop: '10px' }}>
 					<Counter
 						initialValue={count}
-						addHandler={() => Promise.resolve(setCount(prev => prev + 1))}
-						removeHandler={() => Promise.resolve(setCount(prev => prev - 1))}
+						addHandler={() => setCount(prev => prev + 1)}
+						removeHandler={() => setCount(prev => prev - 1)}
 						isReset={count === 0}
 					/>
 				</Grid>
