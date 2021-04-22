@@ -47,9 +47,21 @@ namespace GoodsReseller.Infrastructure.OrderContext
             if (existing == null)
             {
                 await _dbContext.Orders.AddAsync(order, cancellationToken);
+                // await _dbContext.SaveChangesAsync(cancellationToken);
+                // return;
             }
-
+            
             await _dbContext.SaveChangesAsync(cancellationToken);
+
+            // TODO: add
+            // if (existing.Version == order.Version - 1)
+            // {
+            //     await _dbContext.SaveChangesAsync(cancellationToken);
+            // }
+            // else if (existing.Version <= order.Version)
+            // {
+            //     // throw new ConcurrencyException();
+            // }
         }
     }
 }

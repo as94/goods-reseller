@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GoodsReseller.OrderContext.Contracts.Orders.Create;
@@ -23,12 +24,16 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
         {
             var orderId = Guid.NewGuid();
             var version = 1;
-
-            var address = request.Address.ToDomain();
-            var customerInfo = request.CustomerInfo.ToDomain();
-            var deliveryCost = request.DeliveryCost.ToDomain();
             
-            var order = new Order(orderId, version, OrderStatus.DataReceived.Name, address, customerInfo, deliveryCost);
+            var order = new Order(
+                orderId,
+                version,
+                OrderStatus.DataReceived.Name,
+                request.OrderInfo.Address.ToDomain(),
+                request.OrderInfo.CustomerInfo.ToDomain(),
+                request.OrderInfo.DeliveryCost.ToDomain(),
+                request.OrderInfo.OrderItems.Select(x => x.ToDomain()));
+            
             await _ordersRepository.SaveAsync(order, cancellationToken);
             
             return new CreateOrderResponse
