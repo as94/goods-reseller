@@ -4,7 +4,7 @@ namespace GoodsReseller.SeedWork
 {
     public abstract class VersionedEntity : Entity
     {
-        public int Version { get; private set; }
+        public int Version { get; protected set; }
 
         protected VersionedEntity(Guid id, int version) : base(id)
         {

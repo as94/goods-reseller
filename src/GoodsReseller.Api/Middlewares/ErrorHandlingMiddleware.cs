@@ -5,6 +5,7 @@ using System.Security;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using GoodsReseller.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
@@ -48,6 +49,13 @@ namespace GoodsReseller.Api.Middlewares
 				var httpStatusCode = HttpStatusCode.Forbidden;
 				LogException(ex, httpStatusCode, context.Request);
 				WriteTextResponse(context, httpStatusCode);
+			}
+			catch (ConcurrencyException ex)
+			{
+				// ошибки конкурентности, повторять без изменений не нужно, 409
+				var httpStatusCode = HttpStatusCode.Conflict;
+				LogException(ex, httpStatusCode, context.Request);
+				WriteTextResponse(context, httpStatusCode, ex.Message);
 			}
 			catch (Exception ex)
 			{

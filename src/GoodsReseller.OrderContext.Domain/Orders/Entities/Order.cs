@@ -68,7 +68,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             TotalCost = Money.Zero;
         }
 
-        public void Update(OrderInfo orderInfo)
+        public void Update(OrderInfo orderInfo, int version)
         {
             if (IsRemoved)
             {
@@ -119,7 +119,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             
             RecalculateTotalCost();
 
-            IncrementVersion();
+            Version = version;
             LastUpdateDate = new DateValueObject();
         }
 

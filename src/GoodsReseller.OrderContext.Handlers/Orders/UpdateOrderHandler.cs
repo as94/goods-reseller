@@ -35,7 +35,7 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
                 request.OrderInfo.DeliveryCost.ToDomain(),
                 request.OrderInfo.OrderItems.Select(x => x.ToDomain()));
             
-            order.Update(orderInfo);
+            order.Update(orderInfo, request.OrderInfo.Version);
 
             await _ordersRepository.SaveAsync(order, cancellationToken);
             
