@@ -1,4 +1,4 @@
-import { CreateOrderContract } from '../../Api/Orders/contracts'
+import { OrderInfoContract } from '../../Api/Orders/contracts'
 
 export interface AddressValid {
 	cityValid: boolean
@@ -54,4 +54,4 @@ export const initialOrder = {
 	deliveryCost: {
 		value: 0,
 	},
-} as CreateOrderContract
+} as OrderInfoContract

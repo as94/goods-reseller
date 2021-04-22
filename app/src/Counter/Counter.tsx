@@ -4,8 +4,8 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 
 export interface IOwnProps {
 	initialValue: number
-	addHandler: () => Promise<void>
-	removeHandler: () => Promise<void>
+	addHandler: () => void
+	removeHandler: () => void
 	isReset?: boolean
 }
 
@@ -13,12 +13,12 @@ const Counter = ({ initialValue, addHandler, removeHandler, isReset }: IOwnProps
 	const [counter, setCounter] = useState(initialValue)
 
 	const handleIncrement = useCallback(async () => {
-		await addHandler()
+		addHandler()
 		setCounter(prev => prev + 1)
 	}, [setCounter, addHandler])
 
 	const handleDecrement = useCallback(async () => {
-		await removeHandler()
+		removeHandler()
 		setCounter(prev => prev - 1)
 	}, [setCounter, removeHandler])
 
