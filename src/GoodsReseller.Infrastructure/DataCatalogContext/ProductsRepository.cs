@@ -44,6 +44,8 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
 
         public async Task SaveAsync(Product product, CancellationToken cancellationToken)
         {
+            // TODO: add handling concurrency (like OrdersRepository)
+            
             var existing = await _dbContext.Products.FirstOrDefaultAsync(
                 x => x.Id == product.Id,
                 cancellationToken);

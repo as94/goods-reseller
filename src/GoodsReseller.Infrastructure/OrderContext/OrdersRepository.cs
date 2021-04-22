@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GoodsReseller.Infrastructure.Exceptions;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -40,28 +41,32 @@ namespace GoodsReseller.Infrastructure.OrderContext
 
         public async Task SaveAsync(Order order, CancellationToken cancellationToken)
         {
-            var existing = await _dbContext.Orders.FirstOrDefaultAsync(
-                x => x.Id == order.Id,
-                cancellationToken);
-            
+            var existing = await GetAsync(order.Id, cancellationToken);
             if (existing == null)
             {
                 await _dbContext.Orders.AddAsync(order, cancellationToken);
-                // await _dbContext.SaveChangesAsync(cancellationToken);
-                // return;
+                await _dbContext.SaveChangesAsync(cancellationToken);
+                return;
             }
-            
-            await _dbContext.SaveChangesAsync(cancellationToken);
 
-            // TODO: add
-            // if (existing.Version == order.Version - 1)
-            // {
-            //     await _dbContext.SaveChangesAsync(cancellationToken);
-            // }
-            // else if (existing.Version <= order.Version)
-            // {
-            //     // throw new ConcurrencyException();
-            // }
+            var existingVersion = await GetVersionAsync(order.Id, cancellationToken);
+
+            if (existingVersion == order.Version - 1)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            else if (existingVersion <= order.Version)
+            {
+                throw new ConcurrencyException();
+            }
+        }
+
+        private async Task<int> GetVersionAsync(Guid orderId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.SingleAsync(
+                $@"select ""Version"" from orders where ""Id"" = '{orderId}'", 
+                reader => reader[0] == DBNull.Value ? 0 : (int)reader[0],
+                cancellationToken);
         }
     }
 }
