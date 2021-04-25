@@ -14,7 +14,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Title from '../../Title'
-import { OrderContract, OrderInfoContract, OrderStatuses } from '../../../Api/Orders/contracts'
+import { OrderContract, OrderInfoContract, OrderItemContract, OrderStatuses } from '../../../Api/Orders/contracts'
 import ordersApi from '../../../Api/Orders/ordersApi'
 import { ProductListItemContract } from '../../../Api/Products/contracts'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
@@ -22,6 +22,7 @@ import Counter from '../../../Counter/Counter'
 import { formIsValid, FormValidation, initialFormValidation, initialOrder } from '../utils'
 import { Alert } from '@material-ui/lab'
 import { useTranslation } from 'react-i18next'
+import OrderItems from '../OrderItems/OrderItems'
 
 interface IOwnProps {
 	orderId: string
@@ -58,28 +59,28 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	const { t } = useTranslation()
 	const classes = useStyles()
 
-	const [orderInfo, setOrderInfo] = useState(initialOrder as OrderInfoContract)
 	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
-	const [allProducts, setAllProducts] = useState(
-		products.sort((a, b) => {
-			if (a.isSet && !b.isSet) return -1
-			if (!a.isSet && b.isSet) return 1
-			return 0
-		}),
-	)
-	const [selectedProductId, setSelectedProductId] = useState('')
-	const [order, setOrder] = useState({ status: OrderStatuses[0] } as OrderContract)
+	const simpleProducts = products.sort((a, b) => {
+		if (a.isSet && !b.isSet) return -1
+		if (!a.isSet && b.isSet) return 1
+		return 0
+	})
+
+	const [orderInfo, setOrderInfo] = useState(initialOrder as OrderInfoContract)
+	const [orderItems, setOrderItems] = useState([] as OrderItemContract[])
+	const [orderDate, setOrderDate] = useState(null as Date | null)
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
 	const backHandler = useCallback(() => hide(), [hide])
 
 	const getOrder = useCallback(async () => {
 		const response = await ordersApi.Get(orderId)
-		setOrder(response)
 		setOrderInfo({ ...response } as OrderInfoContract)
-	}, [orderId, ordersApi, setOrder, setOrderInfo])
+		setOrderItems(response.orderItems)
+		setOrderDate(new Date(response.date))
+	}, [orderId, ordersApi, setOrderItems, setOrderInfo])
 
 	const orderStatusChangeHandler = useCallback(
 		(e: any) => {
@@ -147,47 +148,29 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	const deliveryCostChangeHandler = useCallback(
 		(e: any) => {
 			const deliveryCost = Number(e.target.value)
-			setOrderInfo({ ...orderInfo, deliveryCost: { ...order.deliveryCost, value: deliveryCost } })
+			setOrderInfo({ ...orderInfo, deliveryCost: { ...orderInfo.deliveryCost, value: deliveryCost } })
 			setFormValidation({ ...formValidation, deliveryCostValid: deliveryCost >= 0 })
 		},
-		[orderInfo, setOrder, formValidation, setFormValidation],
+		[orderInfo, formValidation, setFormValidation],
 	)
 
 	const saveOrderInfo = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await ordersApi.Update(order.id, orderInfo)
+			await ordersApi.Update(orderId, { ...orderInfo, orderItems, version: orderInfo.version + 1 })
 			hide()
 		} else {
 			setErrorText(t('FormIsInvalid'))
 		}
-	}, [formIsValid, formValidation, order, orderInfo, ordersApi, hide, setErrorText, t])
+	}, [formIsValid, formValidation, orderId, orderInfo, orderItems, ordersApi, hide, setErrorText, t])
 
 	const deleteOrder = useCallback(async () => {
 		await ordersApi.Delete(orderId)
 		hide()
 	}, [ordersApi, orderId])
 
-	const addSelectedProduct = useCallback(() => {
-		setSelectedProductId('')
-	}, [selectedProductId, setSelectedProductId])
-
-	const changeSelectedProductId = useCallback(
-		(event: any) => {
-			const id = event.target.value
-			setSelectedProductId(id)
-		},
-		[setSelectedProductId],
-	)
-
 	useEffect(() => {
 		getOrder()
 	}, [getOrder])
-
-	useEffect(() => {
-		if (order && order.orderItems) {
-			setAllProducts(products.filter(x => !order.orderItems.map(y => y.productId).includes(x.id)))
-		}
-	}, [order, products, setAllProducts])
 
 	useEffect(() => {
 		if (formIsValid(formValidation)) {
@@ -201,12 +184,12 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 				<Title color="primary">{t('EditOrder')}</Title>
 			</Box>
 
-			{order && order.id && (
+			{orderInfo && orderDate && (
 				<Grid container spacing={3}>
 					<Grid item xs={12} md={12}>
 						<FormControl fullWidth>
 							<InputLabel htmlFor="date">{t('Date')}</InputLabel>
-							<Input id="date" value={new Date(order.date).toLocaleString()} readOnly />
+							<Input id="date" value={orderDate.toLocaleString()} readOnly />
 						</FormControl>
 					</Grid>
 					<Grid item xs={12} md={12}>
@@ -282,66 +265,12 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 							/>
 						</FormControl>
 					</Grid>
+					<OrderItems simpleProducts={simpleProducts} orderItems={orderItems} setOrderItems={setOrderItems} />
 					{errorText && (
 						<Grid item xs={12} md={12}>
 							<Alert severity="error">{errorText}</Alert>
 						</Grid>
 					)}
-					<Box pt={2} pl={2}>
-						<Title color="secondary">{t('OrderItems')}</Title>
-						<FormControl fullWidth>
-							<InputLabel htmlFor="totalCost">{t('OrderTotalCost')}</InputLabel>
-							<Input id="totalCost" value={order.totalCost.value} readOnly />
-						</FormControl>
-						{allProducts.length > 0 && (
-							<FormControl fullWidth>
-								<InputLabel htmlFor="products">{t('Products')}</InputLabel>
-								<Select
-									labelId="products"
-									id="products-select"
-									value={selectedProductId}
-									onChange={changeSelectedProductId}
-								>
-									{allProducts.map(x => (
-										<MenuItem key={x.id} value={x.id}>
-											{x.name} - {x.unitPrice} ({x.discountPerUnit * 100} %)
-										</MenuItem>
-									))}
-								</Select>
-								<Button
-									variant="contained"
-									color="primary"
-									onClick={addSelectedProduct}
-									className={classes.addProductButton}
-									disabled={!selectedProductId}
-								>
-									{t('AddProduct')}
-								</Button>
-							</FormControl>
-						)}
-						{order && order.orderItems && (
-							<List>
-								{order.orderItems.map((x, idx) => {
-									const product = products.find(p => p.id === x.productId)
-									return product ? (
-										<ListItem key={x.productId}>
-											<ListItemText
-												primary={`${idx + 1}. ${product.name} - ${x.unitPrice} (${
-													x.discountPerUnit * 100
-												} %)`}
-												className={classes.productItem}
-											/>
-											<Counter
-												initialValue={x.quantity}
-												addHandler={() => null}
-												removeHandler={() => null}
-											/>
-										</ListItem>
-									) : null
-								})}
-							</List>
-						)}
-					</Box>
 				</Grid>
 			)}
 			<div className={classes.buttons}>
@@ -358,8 +287,8 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 			{showDeleteDialog && (
 				<ResponsiveDialog
 					title={t('RemovingOrderConfirmation')
-						.replace('${customerName}', order.customerInfo.name ?? '')
-						.replace('${customerPhoneNumber}', order.customerInfo.phoneNumber)}
+						.replace('${customerName}', orderInfo.customerInfo.name ?? '')
+						.replace('${customerPhoneNumber}', orderInfo.customerInfo.phoneNumber)}
 					content={t('ThisChangeCannotBeUndone')}
 					cancelText={t('Cancel')}
 					okText={t('Ok')}

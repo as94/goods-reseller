@@ -47,7 +47,7 @@ const OrderBlock = ({ products }: IOwnProps) => {
 			{showCreateOrder && (
 				<Grid item xs={12}>
 					<Paper className={classes.paper}>
-						<CreateOrder hide={createOrderHideHandler} />
+						<CreateOrder products={products} hide={createOrderHideHandler} />
 					</Paper>
 				</Grid>
 			)}

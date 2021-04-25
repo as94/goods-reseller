@@ -4,11 +4,14 @@ import { makeStyles } from '@material-ui/core/styles'
 import Title from '../../Title'
 import { Alert } from '@material-ui/lab'
 import { formIsValid, FormValidation, initialFormValidation, initialOrder } from '../utils'
-import { OrderInfoContract } from '../../../Api/Orders/contracts'
+import { OrderInfoContract, OrderItemContract, OrderStatuses } from '../../../Api/Orders/contracts'
 import ordersApi from '../../../Api/Orders/ordersApi'
 import { useTranslation } from 'react-i18next'
+import { ProductListItemContract } from '../../../Api/Products/contracts'
+import OrderItems from '../OrderItems/OrderItems'
 
 interface IOwnProps {
+	products: ProductListItemContract[]
 	hide: () => void
 }
 
@@ -21,13 +24,26 @@ const useStyles = makeStyles(theme => ({
 		marginTop: theme.spacing(3),
 		marginLeft: theme.spacing(1),
 	},
+	addProductButton: {
+		marginTop: theme.spacing(1),
+	},
+	productItem: {
+		paddingRight: theme.spacing(3),
+	},
 }))
 
-const CreateOrder = ({ hide }: IOwnProps) => {
+const CreateOrder = ({ products, hide }: IOwnProps) => {
 	const { t } = useTranslation()
 	const classes = useStyles()
 
+	const simpleProducts = products.sort((a, b) => {
+		if (a.isSet && !b.isSet) return -1
+		if (!a.isSet && b.isSet) return 1
+		return 0
+	})
+
 	const [order, setOrder] = useState(initialOrder as OrderInfoContract)
+	const [orderItems, setOrderItems] = useState([] as OrderItemContract[])
 	const [formValidation, setFormValidation] = useState(initialFormValidation(false) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
@@ -97,12 +113,12 @@ const CreateOrder = ({ hide }: IOwnProps) => {
 
 	const createOrder = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await ordersApi.Create({ ...order })
+			await ordersApi.Create({ ...order, orderItems, status: OrderStatuses[0], version: 1 })
 			hide()
 		} else {
 			setErrorText(t('FormIsInvalid'))
 		}
-	}, [formIsValid, formValidation, order, ordersApi, hide, setErrorText, t])
+	}, [formIsValid, formValidation, order, orderItems, ordersApi, hide, setErrorText, t])
 
 	useEffect(() => {
 		if (formIsValid(formValidation)) {
@@ -169,6 +185,9 @@ const CreateOrder = ({ hide }: IOwnProps) => {
 						/>
 					</FormControl>
 				</Grid>
+
+				<OrderItems simpleProducts={simpleProducts} orderItems={orderItems} setOrderItems={setOrderItems} />
+
 				{errorText && (
 					<Grid item xs={12} md={12}>
 						<Alert severity="error">{errorText}</Alert>
