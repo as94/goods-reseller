@@ -69,6 +69,7 @@
         "RemovingSupplyConfirmation": "Supply from '${supplierInfoName}' will be removed. Continue?",
         "SupplyItems": "Supply items",
         "Quantity": "Quantity",
-        "AddSupplyItem": "Add supply item"
+        "AddSupplyItem": "Add supply item",
+        "AddOrderItem": "Add order item"
     }
 }

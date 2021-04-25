@@ -69,6 +69,7 @@
         "RemovingSupplyConfirmation": "Поставка от '${supplierInfoName}' будет удалёна. Продолжить?",
         "SupplyItems": "Состав поставки",
         "Quantity": "Количество",
-        "AddSupplyItem": "Добавить товар"
+        "AddSupplyItem": "Добавить товар",
+        "AddOrderItem": "Добавить товар"
     }
 }
