@@ -19,6 +19,7 @@ export interface ProductListItemContract {
 	unitPrice: number
 	discountPerUnit: number
 	isSet: boolean
+	productIds: string[]
 }
 
 export interface ProductListContract {

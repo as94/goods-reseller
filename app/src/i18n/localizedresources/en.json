@@ -70,6 +70,8 @@
         "SupplyItems": "Supply items",
         "Quantity": "Quantity",
         "AddSupplyItem": "Add supply item",
-        "AddOrderItem": "Add order item"
+        "AddOrderItem": "Add order item",
+        "Set": "Set",
+        "AddSet": "Add set"
     }
 }

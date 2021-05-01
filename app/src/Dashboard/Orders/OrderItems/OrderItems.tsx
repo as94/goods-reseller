@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -16,6 +16,7 @@ import { OrderItemContract } from '../../../Api/Orders/contracts'
 import OrderItem from './OrderItem/OrderItem'
 
 export interface IOwnProps {
+	setProducts: ProductListItemContract[]
 	simpleProducts: ProductListItemContract[]
 	orderItems: OrderItemContract[]
 	setOrderItems: (orderItems: OrderItemContract[]) => void
@@ -30,13 +31,20 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const OrderItems = ({ simpleProducts, orderItems, setOrderItems }: IOwnProps) => {
+const OrderItems = ({ setProducts, simpleProducts, orderItems, setOrderItems }: IOwnProps) => {
 	const { t } = useTranslation()
 	const classes = useStyles()
 
 	const addOrderItem = useCallback(
 		(orderItem: OrderItemContract) => {
 			setOrderItems([...orderItems, orderItem])
+		},
+		[orderItems, setOrderItems],
+	)
+
+	const addOrderItems = useCallback(
+		(newOrderItems: OrderItemContract[]) => {
+			setOrderItems([...orderItems, ...newOrderItems])
 		},
 		[orderItems, setOrderItems],
 	)
@@ -53,7 +61,12 @@ const OrderItems = ({ simpleProducts, orderItems, setOrderItems }: IOwnProps) =>
 			<Box pt={2} pl={2}>
 				<Title color="secondary">{t('OrderItems')}</Title>
 			</Box>
-			<OrderItem simpleProducts={simpleProducts} addOrderItem={addOrderItem} />
+			<OrderItem
+				setProducts={setProducts}
+				simpleProducts={simpleProducts}
+				addOrderItem={addOrderItem}
+				addOrderItems={addOrderItems}
+			/>
 			{orderItems.length > 0 && (
 				<Grid item xs={12} md={12}>
 					<TableContainer component={Paper}>

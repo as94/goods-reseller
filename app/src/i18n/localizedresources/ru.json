@@ -70,6 +70,8 @@
         "SupplyItems": "Состав поставки",
         "Quantity": "Количество",
         "AddSupplyItem": "Добавить товар",
-        "AddOrderItem": "Добавить товар"
+        "AddOrderItem": "Добавить товар",
+        "Set": "Набор",
+        "AddSet": "Добавить набор"
     }
 }

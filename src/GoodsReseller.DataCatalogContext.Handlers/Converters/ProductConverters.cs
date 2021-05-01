@@ -36,7 +36,8 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
                 Name = product.Name,
                 UnitPrice = product.UnitPrice.Value,
                 DiscountPerUnit = product.DiscountPerUnit.Value,
-                IsSet = isSet
+                IsSet = isSet,
+                ProductIds = product.ProductIds
             };
         }
     }

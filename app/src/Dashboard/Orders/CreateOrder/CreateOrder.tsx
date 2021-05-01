@@ -36,15 +36,17 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 	const { t } = useTranslation()
 	const classes = useStyles()
 
-	const simpleProducts = products.sort((a, b) => {
-		if (a.isSet && !b.isSet) return -1
-		if (!a.isSet && b.isSet) return 1
-		return 0
-	})
+	const setProducts = products
+		.filter(x => x.isSet)
+		.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+	const simpleProducts = products
+		.filter(x => !x.isSet)
+		.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
 
 	const [order, setOrder] = useState(initialOrder as OrderInfoContract)
 	const [orderItems, setOrderItems] = useState([] as OrderItemContract[])
 	const [formValidation, setFormValidation] = useState(initialFormValidation(false) as FormValidation)
+	const [totalCost, setTotalCost] = useState(0)
 	const [errorText, setErrorText] = useState('')
 
 	const backHandler = useCallback(() => hide(), [hide])
@@ -105,6 +107,9 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 	const deliveryCostChangeHandler = useCallback(
 		(e: any) => {
 			const deliveryCost = Number(e.target.value)
+			if (deliveryCost < 0) {
+				return
+			}
 			setOrder({ ...order, deliveryCost: { ...order.deliveryCost, value: deliveryCost } })
 			setFormValidation({ ...formValidation, deliveryCostValid: deliveryCost >= 0 })
 		},
@@ -119,6 +124,14 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 			setErrorText(t('FormIsInvalid'))
 		}
 	}, [formIsValid, formValidation, order, orderItems, ordersApi, hide, setErrorText, t])
+
+	useEffect(() => {
+		const orderItemsCost = orderItems.reduce(
+			(acc, cur) => (acc += cur.unitPrice * (1 - cur.discountPerUnit) * cur.quantity),
+			0,
+		)
+		setTotalCost(orderItemsCost + order.deliveryCost.value)
+	}, [orderItems, order.deliveryCost])
 
 	useEffect(() => {
 		if (formIsValid(formValidation)) {
@@ -175,19 +188,28 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<FormControl error={!formValidation.deliveryCostValid} fullWidth>
-						<InputLabel htmlFor="unitPrice">{t('DeliveryCost')}</InputLabel>
+						<InputLabel htmlFor="deliveryCost">{t('DeliveryCost')}</InputLabel>
 						<Input
 							required
 							type="number"
-							id="unitPrice"
+							id="deliveryCost"
 							value={order.deliveryCost.value}
 							onChange={deliveryCostChangeHandler}
 						/>
 					</FormControl>
 				</Grid>
-
-				<OrderItems simpleProducts={simpleProducts} orderItems={orderItems} setOrderItems={setOrderItems} />
-
+				<OrderItems
+					setProducts={setProducts}
+					simpleProducts={simpleProducts}
+					orderItems={orderItems}
+					setOrderItems={setOrderItems}
+				/>
+				<Grid item xs={12} md={12}>
+					<FormControl>
+						<InputLabel htmlFor="totalCost">{t('TotalCost')}</InputLabel>
+						<Input type="number" id="totalCost" value={totalCost} readOnly />
+					</FormControl>
+				</Grid>
 				{errorText && (
 					<Grid item xs={12} md={12}>
 						<Alert severity="error">{errorText}</Alert>
