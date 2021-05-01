@@ -1,16 +1,4 @@
-import {
-	Box,
-	Button,
-	FormControl,
-	Grid,
-	Input,
-	InputLabel,
-	List,
-	ListItem,
-	ListItemText,
-	MenuItem,
-	Select,
-} from '@material-ui/core'
+import { Box, Button, FormControl, Grid, Input, InputLabel, MenuItem, Select } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Title from '../../Title'
@@ -59,19 +47,21 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	const { t } = useTranslation()
 	const classes = useStyles()
 
-	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
-	const [errorText, setErrorText] = useState('')
-
-	const simpleProducts = products.sort((a, b) => {
-		if (a.isSet && !b.isSet) return -1
-		if (!a.isSet && b.isSet) return 1
-		return 0
-	})
+	const setProducts = products
+		.filter(x => x.isSet)
+		.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+	const simpleProducts = products
+		.filter(x => !x.isSet)
+		.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
 
 	const [orderInfo, setOrderInfo] = useState(initialOrder as OrderInfoContract)
 	const [orderItems, setOrderItems] = useState([] as OrderItemContract[])
 	const [orderDate, setOrderDate] = useState(null as Date | null)
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+
+	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
+	const [errorText, setErrorText] = useState('')
+	const [totalCost, setTotalCost] = useState(0)
 
 	const backHandler = useCallback(() => hide(), [hide])
 
@@ -148,6 +138,9 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	const deliveryCostChangeHandler = useCallback(
 		(e: any) => {
 			const deliveryCost = Number(e.target.value)
+			if (deliveryCost < 0) {
+				return
+			}
 			setOrderInfo({ ...orderInfo, deliveryCost: { ...orderInfo.deliveryCost, value: deliveryCost } })
 			setFormValidation({ ...formValidation, deliveryCostValid: deliveryCost >= 0 })
 		},
@@ -171,6 +164,14 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 	useEffect(() => {
 		getOrder()
 	}, [getOrder])
+
+	useEffect(() => {
+		const orderItemsCost = orderItems.reduce(
+			(acc, cur) => (acc += cur.unitPrice * (1 - cur.discountPerUnit) * cur.quantity),
+			0,
+		)
+		setTotalCost(orderItemsCost + orderInfo.deliveryCost.value)
+	}, [orderItems, orderInfo.deliveryCost])
 
 	useEffect(() => {
 		if (formIsValid(formValidation)) {
@@ -265,7 +266,24 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 							/>
 						</FormControl>
 					</Grid>
-					<OrderItems simpleProducts={simpleProducts} orderItems={orderItems} setOrderItems={setOrderItems} />
+					<OrderItems
+						setProducts={setProducts}
+						simpleProducts={simpleProducts}
+						orderItems={orderItems}
+						setOrderItems={setOrderItems}
+					/>
+					<Grid item xs={12} md={12}>
+						<FormControl>
+							<InputLabel htmlFor="totalCost">{t('TotalCost')}</InputLabel>
+							<Input type="number" id="totalCost" value={0} readOnly />
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} md={12}>
+						<FormControl>
+							<InputLabel htmlFor="totalCost">{t('TotalCost')}</InputLabel>
+							<Input type="number" id="totalCost" value={totalCost} readOnly />
+						</FormControl>
+					</Grid>
 					{errorText && (
 						<Grid item xs={12} md={12}>
 							<Alert severity="error">{errorText}</Alert>
