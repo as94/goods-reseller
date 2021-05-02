@@ -80,6 +80,15 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 		[product, setProduct, formValidation, setFormValidation],
 	)
 
+	const addedCostChangeHandler = useCallback(
+		(e: any) => {
+			const addedCost = Number(e.target.value)
+			setProduct({ ...product, addedCost })
+			setFormValidation({ ...formValidation, unitPriceValid: addedCost >= 0 })
+		},
+		[product, setProduct, formValidation, setFormValidation],
+	)
+
 	const createProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
 			await productsApi.Create({ ...product, productIds: selectedProductIds })
@@ -141,6 +150,18 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 							id="discountPerUnit"
 							value={product.discountPerUnit}
 							onChange={discountPerUnitChangeHandler}
+						/>
+					</FormControl>
+				</Grid>
+				<Grid item xs={12} md={12}>
+					<FormControl error={!formValidation.addedCostValid} fullWidth>
+						<InputLabel htmlFor="addedCost">{t('AddedCost')}</InputLabel>
+						<Input
+							required
+							type="number"
+							id="addedCost"
+							value={product.addedCost}
+							onChange={addedCostChangeHandler}
 						/>
 					</FormControl>
 				</Grid>

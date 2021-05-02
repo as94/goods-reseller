@@ -14,6 +14,7 @@ export interface FormValidation {
 	addressValid: AddressValid
 	customerInfoValid: CustomerInfoValid
 	deliveryCostValid: boolean
+	addedCostValid: boolean
 }
 
 export const initialFormValidation = (formIsValid: boolean) =>
@@ -21,6 +22,7 @@ export const initialFormValidation = (formIsValid: boolean) =>
 		addressValid: addressIsValid(formIsValid),
 		customerInfoValid: customerInfoIsValid(formIsValid),
 		deliveryCostValid: true,
+		addedCostValid: true,
 	} as FormValidation)
 
 export const formIsValid = (formValidation: FormValidation) =>
@@ -28,7 +30,8 @@ export const formIsValid = (formValidation: FormValidation) =>
 	formValidation.addressValid.streetValid &&
 	formValidation.addressValid.zipCodeValid &&
 	formValidation.customerInfoValid.phoneNumberValid &&
-	formValidation.deliveryCostValid
+	formValidation.deliveryCostValid &&
+	formValidation.addedCostValid
 
 export const addressIsValid = (addressIsValid: boolean) =>
 	({
@@ -54,4 +57,7 @@ export const initialOrder = {
 	deliveryCost: {
 		value: 0,
 	},
+	addedCost: {
+		value: 0
+	}
 } as OrderInfoContract

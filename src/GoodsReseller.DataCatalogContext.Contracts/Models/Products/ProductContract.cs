@@ -14,6 +14,7 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Models.Products
         public string Description { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal DiscountPerUnit { get; set; }
+        public decimal AddedCost { get; set; }
 
         public Guid[] ProductIds { get; set; }
     }

@@ -20,6 +20,7 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
                 CustomerInfo = order.CustomerInfo.ToContract(),
                 OrderItems = order.OrderItems.Select(x => x.ToContract()).ToArray(),
                 DeliveryCost = order.DeliveryCost.ToContract(),
+                AddedCost = order.AddedCost.ToContract(),
                 TotalCost = order.TotalCost.ToContract()
             };
         }

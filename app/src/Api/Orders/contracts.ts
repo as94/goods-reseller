@@ -27,6 +27,7 @@ export interface OrderContract {
 	customerInfo: CustomerInfoContract
 	orderItems: OrderItemContract[]
 	deliveryCost: MoneyContract
+	addedCost: MoneyContract
 	totalCost: MoneyContract
 }
 
@@ -36,6 +37,7 @@ export interface OrderInfoContract {
 	address: AddressContract
 	customerInfo: CustomerInfoContract
 	deliveryCost: MoneyContract
+	addedCost: MoneyContract
 	orderItems: OrderItemContract[]
 }
 

@@ -155,7 +155,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 totalCost = totalCost.Add(orderItemValue);
             }
 
-            TotalCost = totalCost.Add(DeliveryCost);
+            TotalCost = totalCost.Add(DeliveryCost).Add(AddedCost);
         }
     }
 }

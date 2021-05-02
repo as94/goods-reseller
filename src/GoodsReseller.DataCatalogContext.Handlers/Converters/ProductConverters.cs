@@ -19,6 +19,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
                 Description = product.Description,
                 UnitPrice = product.UnitPrice.Value,
                 DiscountPerUnit = product.DiscountPerUnit.Value,
+                AddedCost = product.AddedCost.Value,
                 ProductIds = product.ProductIds
             };
         }
@@ -36,6 +37,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
                 Name = product.Name,
                 UnitPrice = product.UnitPrice.Value,
                 DiscountPerUnit = product.DiscountPerUnit.Value,
+                AddedCost = product.AddedCost.Value,
                 IsSet = isSet,
                 ProductIds = product.ProductIds
             };

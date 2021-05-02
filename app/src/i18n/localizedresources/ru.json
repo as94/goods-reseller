@@ -32,7 +32,7 @@
         "City": "Город",
         "Street": "Улица",
         "ZipCode": "Почтовый индекс",
-        "TotalCost": "Сумма заказа",
+        "OrderTotalCost": "Сумма заказа",
         "DataReceivedOrderStatus": "Сбор данных",
         "AcceptedOrderStatus": "Принят",
         "CollectedOrderStatus": "Собран",
@@ -72,6 +72,9 @@
         "AddSupplyItem": "Добавить товар",
         "AddOrderItem": "Добавить товар",
         "Set": "Набор",
-        "AddSet": "Добавить набор"
+        "AddSet": "Добавить набор",
+        "AdditionalCosts": "Дополнительная стоимость",
+        "AddedCost": "Добавочная стоимость",
+        "TotalCost": "Итоговая стоимость заказа"
     }
 }

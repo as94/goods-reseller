@@ -1,10 +1,10 @@
-import { Box, Button, FormControl, FormHelperText, Grid, Input, InputLabel, TextField } from '@material-ui/core'
+import { Box, Button, FormControl, Grid, Input, InputLabel } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { ProductContract, ProductListItemContract } from '../../../Api/Products/contracts'
 import productsApi from '../../../Api/Products/productsApi'
 import Title from '../../Title'
-import { formIsValid, FormValidation, initialFormValidation, initialProduct } from '../utils'
+import { formIsValid, FormValidation, initialFormValidation } from '../utils'
 import { Alert } from '@material-ui/lab'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
 import MultipleSelect from '../../../MultipleSelect/MultipleSelect'
@@ -96,10 +96,20 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 		[product, setProduct, formValidation, setFormValidation],
 	)
 
+	const addedCostChangeHandler = useCallback(
+		(e: any) => {
+			const addedCost = Number(e.target.value)
+			setProduct({ ...product, addedCost })
+			setFormValidation({ ...formValidation, unitPriceValid: addedCost >= 0 })
+		},
+		[product, setProduct, formValidation, setFormValidation],
+	)
+
 	const getProduct = useCallback(async () => {
 		const response = await productsApi.GetProduct(productId)
 		setProduct(response)
-	}, [setProduct, productId])
+		setSelectedProductIds(response.productIds)
+	}, [setProduct, productId, setSelectedProductIds])
 
 	const updateProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
@@ -177,6 +187,18 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 								id="discountPerUnit"
 								value={product.discountPerUnit}
 								onChange={discountPerUnitChangeHandler}
+							/>
+						</FormControl>
+					</Grid>
+					<Grid item xs={12} md={12}>
+						<FormControl error={!formValidation.addedCostValid} fullWidth>
+							<InputLabel htmlFor="addedCost">{t('AddedCost')}</InputLabel>
+							<Input
+								required
+								type="number"
+								id="addedCost"
+								value={product.addedCost}
+								onChange={addedCostChangeHandler}
 							/>
 						</FormControl>
 					</Grid>

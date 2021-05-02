@@ -5,6 +5,7 @@ export interface FormValidation {
 	nameValid: boolean
 	unitPriceValid: boolean
 	discountPerUnitValid: boolean
+	addedCostValid: boolean
 }
 
 export const initialFormValidation = (formIsValid: boolean) =>
@@ -13,13 +14,15 @@ export const initialFormValidation = (formIsValid: boolean) =>
 		nameValid: formIsValid,
 		unitPriceValid: true,
 		discountPerUnitValid: true,
+		addedCostValid: true,
 	} as FormValidation)
 
 export const formIsValid = (formValidation: FormValidation) =>
 	formValidation.labelValid &&
 	formValidation.nameValid &&
 	formValidation.unitPriceValid &&
-	formValidation.discountPerUnitValid
+	formValidation.discountPerUnitValid &&
+	formValidation.addedCostValid
 
 export const initialProduct = {
 	label: '',
@@ -27,5 +30,6 @@ export const initialProduct = {
 	description: '',
 	unitPrice: 0,
 	discountPerUnit: 0,
+	addedCost: 0,
 	productIds: [],
 } as ProductInfoContract
