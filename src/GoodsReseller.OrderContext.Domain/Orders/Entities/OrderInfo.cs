@@ -12,6 +12,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Address address,
             CustomerInfo customerInfo,
             Money deliveryCost,
+            Money addedCost,
             IEnumerable<OrderItem> orderItems)
         {
             if (status == null)
@@ -34,6 +35,11 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(deliveryCost));
             }
 
+            if (addedCost == null)
+            {
+                throw new ArgumentNullException(nameof(addedCost));
+            }
+
             if (orderItems == null)
             {
                 throw new ArgumentNullException(nameof(orderItems));
@@ -43,6 +49,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Address = address;
             CustomerInfo = customerInfo;
             DeliveryCost = deliveryCost;
+            AddedCost = addedCost;
             OrderItems = orderItems;
         }
 
@@ -50,6 +57,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Address Address { get; }
         public CustomerInfo CustomerInfo { get; }
         public Money DeliveryCost { get; }
+        public Money AddedCost { get; }
         public IEnumerable<OrderItem> OrderItems { get; }
     }
 }

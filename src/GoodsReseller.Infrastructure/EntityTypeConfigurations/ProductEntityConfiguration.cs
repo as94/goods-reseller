@@ -41,6 +41,13 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
                     x.WithOwner();
                 });
             
+            builder
+                .OwnsOne(o => o.AddedCost, x =>
+                {
+                    x.Property(x => x.Value).IsRequired().HasColumnName("AddedCostValue").HasDefaultValue(0);
+                    x.WithOwner();
+                });
+            
             var valueComparer = new ValueComparer<Guid[]>(
                 (c1, c2) => c1.SequenceEqual(c2),
                 c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),

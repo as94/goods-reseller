@@ -20,6 +20,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Address Address { get; private set; }
         public CustomerInfo CustomerInfo { get; private set; }
         public Money DeliveryCost { get; private set; }
+        public Money AddedCost { get; private set; }
         public Money TotalCost { get; private set; }
 
         public Order(
@@ -29,6 +30,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Address address,
             CustomerInfo customerInfo,
             Money deliveryCost,
+            Money addedCost,
             IEnumerable<OrderItem> orderItems)
             : this(id, version)
         {
@@ -47,6 +49,21 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
                 throw new ArgumentNullException(nameof(customerInfo));
             }
             
+            if (deliveryCost == null)
+            {
+                throw new ArgumentNullException(nameof(deliveryCost));
+            }
+
+            if (addedCost == null)
+            {
+                throw new ArgumentNullException(nameof(addedCost));
+            }
+
+            if (orderItems == null)
+            {
+                throw new ArgumentNullException(nameof(orderItems));
+            }
+            
             if (!Enumeration.TryParse<OrderStatus>(status, out var parsedStatus))
             {
                 // TODO: business rule, add translations
@@ -57,6 +74,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Address = address;
             CustomerInfo = customerInfo;
             DeliveryCost = deliveryCost;
+            AddedCost = addedCost;
             
             _orderItems = new List<OrderItem>(orderItems);
             RecalculateTotalCost();

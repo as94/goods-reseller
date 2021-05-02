@@ -3,15 +3,17 @@ using System;
 using GoodsReseller.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GoodsReseller.Infrastructure.Migrations
 {
     [DbContext(typeof(GoodsResellerDbContext))]
-    partial class GoodsResellerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210502082153_AddAddedCost")]
+    partial class AddAddedCost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -305,25 +307,6 @@ namespace GoodsReseller.Infrastructure.Migrations
                                 .HasForeignKey("ProductId");
                         });
 
-                    b.OwnsOne("GoodsReseller.SeedWork.ValueObjects.Money", "AddedCost", b1 =>
-                        {
-                            b1.Property<Guid>("ProductId")
-                                .HasColumnType("uuid");
-
-                            b1.Property<decimal>("Value")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("numeric")
-                                .HasDefaultValue(0m)
-                                .HasColumnName("AddedCostValue");
-
-                            b1.HasKey("ProductId");
-
-                            b1.ToTable("products");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProductId");
-                        });
-
                     b.OwnsOne("GoodsReseller.SeedWork.ValueObjects.Money", "UnitPrice", b1 =>
                         {
                             b1.Property<Guid>("ProductId")
@@ -340,8 +323,6 @@ namespace GoodsReseller.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ProductId");
                         });
-
-                    b.Navigation("AddedCost");
 
                     b.Navigation("CreationDate");
 
