@@ -33,6 +33,7 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
                 request.OrderInfo.Address.ToDomain(),
                 request.OrderInfo.CustomerInfo.ToDomain(),
                 request.OrderInfo.DeliveryCost.ToDomain(),
+                request.OrderInfo.AddedCost.ToDomain(),
                 request.OrderInfo.OrderItems.Select(x => x.ToDomain()));
             
             order.Update(orderInfo, request.OrderInfo.Version);

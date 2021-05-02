@@ -11,6 +11,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public string Description { get; private set; }
         public Money UnitPrice { get; private set; }
         public Discount DiscountPerUnit { get; private set; }
+        public Money AddedCost { get; private set; }
         public Guid[] ProductIds { get; private set; }
         
         public Product(
@@ -21,11 +22,13 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string description,
             Money unitPrice,
             Discount discountPerUnit,
+            Money addedCost = null,
             Guid[] productIds = null)
             : this(id, version, label, name, description, productIds)
         {
             UnitPrice = unitPrice;
             DiscountPerUnit = discountPerUnit;
+            AddedCost = addedCost;
         }
 
         private Product(
@@ -64,6 +67,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string description,
             Money unitPrice,
             Discount discountPerUnit,
+            Money addedCost = null,
             Guid[] productIds = null)
         {
             if (IsRemoved)
@@ -91,6 +95,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Description = description;
             UnitPrice = unitPrice;
             DiscountPerUnit = discountPerUnit;
+            AddedCost = addedCost;
             ProductIds = productIds ?? Array.Empty<Guid>();
             
             IncrementVersion();

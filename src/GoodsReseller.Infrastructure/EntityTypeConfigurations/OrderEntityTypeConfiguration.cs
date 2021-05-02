@@ -47,6 +47,13 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
                     x.Property(x => x.Value).IsRequired().HasColumnName("DeliveryCostValue").HasDefaultValue(0);
                     x.WithOwner();
                 });
+                
+            builder
+                .OwnsOne(o => o.AddedCost, x =>
+                {
+                    x.Property(x => x.Value).IsRequired().HasColumnName("AddedCostValue").HasDefaultValue(0);
+                    x.WithOwner();
+                });
             
             builder
                 .OwnsOne(o => o.TotalCost, x =>
