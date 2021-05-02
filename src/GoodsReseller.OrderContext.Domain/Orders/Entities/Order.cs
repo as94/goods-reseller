@@ -109,6 +109,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             Address = orderInfo.Address.Copy();
             CustomerInfo = orderInfo.CustomerInfo.Copy();
             DeliveryCost = new Money(orderInfo.DeliveryCost.Value);
+            AddedCost = new Money(orderInfo.AddedCost.Value);
             
             var existingOrderItemIds = OrderItems.Select(x => x.Id).ToArray();
             var incomingOrderItemIds = orderInfo.OrderItems.Select(x => x.Id).ToArray();
