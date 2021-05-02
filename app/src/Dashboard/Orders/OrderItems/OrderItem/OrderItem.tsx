@@ -12,6 +12,7 @@ export interface IOwnProps {
 	simpleProducts: ProductListItemContract[]
 	addOrderItem: (orderItem: OrderItemContract) => void
 	addOrderItems: (newOrderItems: OrderItemContract[]) => void
+	setOrderAddedCost: (addedCost: number) => void
 }
 
 const useStyles = makeStyles(theme => ({
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const OrderItem = ({ setProducts, simpleProducts, addOrderItem, addOrderItems }: IOwnProps) => {
+const OrderItem = ({ setProducts, simpleProducts, addOrderItem, addOrderItems, setOrderAddedCost }: IOwnProps) => {
 	const { t } = useTranslation()
 	const classes = useStyles()
 
@@ -87,8 +88,9 @@ const OrderItem = ({ setProducts, simpleProducts, addOrderItem, addOrderItems }:
 				addOrderItems(orderItems)
 				setSelectedSetId('')
 			}
+			setOrderAddedCost(set.addedCost)
 		}
-	}, [selectedSetId, setProducts, simpleProducts, selectedSetId, uuid, addOrderItems, setSelectedSetId])
+	}, [selectedSetId, setProducts, simpleProducts, selectedSetId, uuid, addOrderItems, setSelectedSetId, setOrderAddedCost])
 
 	return (
 		<Grid item xs={12} md={12} className={classes.root}>

@@ -116,6 +116,25 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 		[order, setOrder, formValidation, setFormValidation],
 	)
 
+	const setOrderAddedCost = useCallback(
+		(addedCost: number) => {
+			setOrder({ ...order, addedCost: { ...order.addedCost, value: addedCost } })
+		},
+		[order, setOrder],
+	)
+
+	const addedCostChangeHandler = useCallback(
+		(e: any) => {
+			const addedCost = Number(e.target.value)
+			if (addedCost < 0) {
+				return
+			}
+			setOrderAddedCost(addedCost)
+			setFormValidation({ ...formValidation, addedCostValid: addedCost >= 0 })
+		},
+		[setOrderAddedCost, formValidation, setFormValidation],
+	)
+
 	const createOrder = useCallback(async () => {
 		if (formIsValid(formValidation)) {
 			await ordersApi.Create({ ...order, orderItems, status: OrderStatuses[0], version: 1 })
@@ -130,8 +149,8 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 			(acc, cur) => (acc += cur.unitPrice * (1 - cur.discountPerUnit) * cur.quantity),
 			0,
 		)
-		setTotalCost(orderItemsCost + order.deliveryCost.value)
-	}, [orderItems, order.deliveryCost])
+		setTotalCost(orderItemsCost + order.deliveryCost.value + order.addedCost.value)
+	}, [orderItems, order.deliveryCost, order.addedCost])
 
 	useEffect(() => {
 		if (formIsValid(formValidation)) {
@@ -186,6 +205,9 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 						<Input id="zipCode" value={order.address.zipCode} onChange={zipCodeChangeHandler} />
 					</FormControl>
 				</Grid>
+				<Box pt={2} pl={2}>
+					<Title color="secondary">{t('AdditionalCosts')}</Title>
+				</Box>
 				<Grid item xs={12} md={12}>
 					<FormControl error={!formValidation.deliveryCostValid} fullWidth>
 						<InputLabel htmlFor="deliveryCost">{t('DeliveryCost')}</InputLabel>
@@ -198,14 +220,27 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 						/>
 					</FormControl>
 				</Grid>
+				<Grid item xs={12} md={12}>
+					<FormControl error={!formValidation.addedCostValid} fullWidth>
+						<InputLabel htmlFor="addedCost">{t('AddedCost')}</InputLabel>
+						<Input
+							required
+							type="number"
+							id="addedCost"
+							value={order.addedCost.value}
+							onChange={addedCostChangeHandler}
+						/>
+					</FormControl>
+				</Grid>
 				<OrderItems
 					setProducts={setProducts}
 					simpleProducts={simpleProducts}
 					orderItems={orderItems}
 					setOrderItems={setOrderItems}
+					setOrderAddedCost={setOrderAddedCost}
 				/>
 				<Grid item xs={12} md={12}>
-					<FormControl>
+					<FormControl fullWidth>
 						<InputLabel htmlFor="totalCost">{t('TotalCost')}</InputLabel>
 						<Input type="number" id="totalCost" value={totalCost} readOnly />
 					</FormControl>

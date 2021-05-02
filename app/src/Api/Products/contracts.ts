@@ -7,6 +7,7 @@ export interface ProductContract {
 	description: string
 	unitPrice: number
 	discountPerUnit: number
+	addedCost: number
 	productIds: string[]
 }
 
@@ -18,6 +19,7 @@ export interface ProductListItemContract {
 	name: string
 	unitPrice: number
 	discountPerUnit: number
+	addedCost: number
 	isSet: boolean
 	productIds: string[]
 }
@@ -32,5 +34,6 @@ export interface ProductInfoContract {
 	description: string
 	unitPrice: number
 	discountPerUnit: number
+	addedCost: number
 	productIds: string[]
 }

@@ -72,6 +72,9 @@
         "AddSupplyItem": "Add supply item",
         "AddOrderItem": "Add order item",
         "Set": "Set",
-        "AddSet": "Add set"
+        "AddSet": "Add set",
+        "AdditionalCosts": "Additional costs",
+        "AddedCost": "Added cost",
+        "TotalCost": "Total cost"
     }
 }
