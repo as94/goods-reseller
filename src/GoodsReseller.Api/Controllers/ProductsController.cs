@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GoodsReseller.Api.Controllers
 {
-    [Authorize(Roles = "Admin, Customer")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/products")]
     public class ProductsController : ControllerBase
@@ -28,6 +28,7 @@ namespace GoodsReseller.Api.Controllers
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet("{productId}")]
         public async Task<IActionResult> GetProductAsync(Guid productId, CancellationToken cancellationToken)
         {
@@ -61,6 +62,7 @@ namespace GoodsReseller.Api.Controllers
             return Ok(response.Product);
         }
 
+        [AllowAnonymous]
         [HttpGet("list")]
         public async Task<IActionResult> GetProductListAsync([FromQuery] BatchProductsQuery query, CancellationToken cancellationToken)
         {
