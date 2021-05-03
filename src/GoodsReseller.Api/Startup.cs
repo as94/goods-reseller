@@ -92,12 +92,15 @@ namespace GoodsReseller.Api
                 {
                     appBuilder.UseStatusCodePagesWithReExecute("/");
                 });
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Goods Reseller API V1");
-            });
 
+            if (!env.IsProduction())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Goods Reseller API V1");
+                });
+            }
 
             // app.UseHttpsRedirection();
             app.UseDefaultFiles();

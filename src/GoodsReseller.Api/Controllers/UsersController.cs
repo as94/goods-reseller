@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GoodsReseller.Api.Controllers
 {
-    [Authorize(Roles = "Admin,Customer")]
+    [Authorize(Roles = "Admin, Customer")]
     [ApiController]
     [Route("api/users")]
     public class UsersController : ControllerBase

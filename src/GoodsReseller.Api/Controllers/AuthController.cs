@@ -27,23 +27,6 @@ namespace GoodsReseller.Api.Controllers
             _mediator = mediator;
         }
         
-        // TODO: uncomment after adding first admin
-        // [Authorize(Roles = "Admin")]
-        [HttpPost("registerAdmin")]
-        public async Task RegisterAdminAsync(
-            [FromBody] [Required] RegisterUserContract registerUser,
-            CancellationToken cancellationToken)
-        {
-            var response = await _mediator.Send(new RegisterUserRequest
-            {
-                Email = registerUser.Email,
-                Password = registerUser.Password,
-                Role = Role.Admin.Name
-            }, cancellationToken);
-            
-            await AuthenticateAsync(response.UserId, registerUser.Email, Role.Admin);
-        }
-        
         [HttpPost("register")]
         public async Task RegisterUserAsync(
             [FromBody] [Required] RegisterUserContract registerUser,

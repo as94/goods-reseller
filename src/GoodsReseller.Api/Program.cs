@@ -1,5 +1,8 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
+using GoodsReseller.AuthContext.Domain.Users.Entities;
+using GoodsReseller.AuthContext.Domain.Users.ValueObjects;
 using GoodsReseller.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +16,29 @@ namespace GoodsReseller.Api
         public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            
-            // Environment.GetEnvironmentVariable("TESTABLE_DATABASE_CONNECTION_STRING")
 
             if (args.Contains("--updateDatabase"))
             {
                 var context = host.Services.GetRequiredService<GoodsResellerDbContext>();
                 await context.Database.MigrateAsync();
+
+                if (args.Contains("--createAdmin"))
+                {
+                    var userEmail = "test@test";
+                    var existing = await context.Users.FirstOrDefaultAsync(x => x.Email == userEmail && !x.IsRemoved);
+                    if (existing == null)
+                    {
+                        await context.Users.AddAsync(
+                            new User(
+                                Guid.NewGuid(), 
+                                1,
+                                userEmail,
+                                PasswordHash.Generate("qwe123"),
+                                Role.Admin.ToString()));
+
+                        await context.SaveChangesAsync();
+                    }
+                }
             }
             else
             {
