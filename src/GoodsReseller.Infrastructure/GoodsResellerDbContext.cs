@@ -3,11 +3,12 @@ using GoodsReseller.DataCatalogContext.Models.Products;
 using GoodsReseller.Infrastructure.EntityTypeConfigurations;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.SupplyContext.Domain.Supplies.Entities;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoodsReseller.Infrastructure
 {
-    public sealed class GoodsResellerDbContext : DbContext
+    public sealed class GoodsResellerDbContext : DbContext, IDataProtectionKeyContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -16,6 +17,8 @@ namespace GoodsReseller.Infrastructure
 
         public DbSet<Supply> Supplies { get; set; }
         public DbSet<SupplyItem> SupplyItems { get; set; }
+        
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         
         public GoodsResellerDbContext(DbContextOptions<GoodsResellerDbContext> options)
             : base(options)

@@ -11,6 +11,7 @@ using GoodsReseller.Statistics;
 using GoodsReseller.SupplyContext.Domain.Supplies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace GoodsReseller.Infrastructure
 {
@@ -27,6 +28,9 @@ namespace GoodsReseller.Infrastructure
             serviceCollection.AddScoped<IOrdersRepository, OrdersRepository>();
             serviceCollection.AddScoped<ISuppliesRepository, SuppliesRepository>();
             serviceCollection.AddScoped<IStatisticsRepository, StatisticsRepository>();
+
+            serviceCollection.AddDataProtection()
+                .PersistKeysToDbContext<GoodsResellerDbContext>();
         }
     }
 }
