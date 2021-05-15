@@ -102,7 +102,7 @@ namespace GoodsReseller.Api
                 });
             }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             
