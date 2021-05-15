@@ -8,8 +8,8 @@ services:
     container_name: web
     build: .
     restart: always
-    ports:
-      - 5000:80
+    expose:
+      - "5000"
     environment:
       DatabaseOptions__ConnectionString: "Host=database;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123;Pooling=false;Timeout=300;CommandTimeout=300;"
   
@@ -24,6 +24,18 @@ services:
     volumes:
       - $HOME/Desktop/PostgreSql-Snippets/infile:/infile
       - pg_volume:/var/lib/postgresql/data/
+
+  proxy:
+    build:
+      context: ./
+      dockerfile: nginx.dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/:/etc/letsencrypt/
+    links:
+      - web
 
   migrator:
     container_name: migrator

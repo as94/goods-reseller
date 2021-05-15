@@ -14,5 +14,6 @@ RUN dotnet publish --no-restore --configuration Release --output ./artifacts/bac
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 COPY --from=backend ./artifacts/backend/ .
-EXPOSE 80
+ENV ASPNETCORE_URLS http://+:5000
+EXPOSE 5000
 ENTRYPOINT [ "dotnet", "GoodsReseller.Api.dll" ]
