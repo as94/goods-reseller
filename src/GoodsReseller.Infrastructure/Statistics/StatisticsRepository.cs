@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
 using GoodsReseller.Statistics;
 using GoodsReseller.Statistics.Models;
 
@@ -8,6 +9,8 @@ namespace GoodsReseller.Infrastructure.Statistics
 {
     internal sealed class StatisticsRepository : IStatisticsRepository
     {
+        private static readonly int OrderCompletedStatus = OrderStatus.Shipped.Id;
+        
         private readonly GoodsResellerDbContext _dbContext;
 
         public StatisticsRepository(GoodsResellerDbContext dbContext)
@@ -102,7 +105,7 @@ namespace GoodsReseller.Infrastructure.Statistics
         {
             return $@"select SUM(""TotalCostValue"") from orders
                 where ""IsRemoved"" = false
-                and ""Status_Id"" = 6
+                and ""Status_Id"" = {OrderCompletedStatus}
                 and ""CreationDateUtc"" between TO_TIMESTAMP('{startDate}', 'YYYY-MM-DD')
                     and TO_TIMESTAMP('{endDate}', 'YYYY-MM-DD')";
         }
@@ -119,7 +122,7 @@ namespace GoodsReseller.Infrastructure.Statistics
         {
             return $@"select SUM(""DeliveryCostValue"") from orders
                 where ""IsRemoved"" = false
-                and ""Status_Id"" = 6
+                and ""Status_Id"" = {OrderCompletedStatus}
                 and ""CreationDateUtc"" between TO_TIMESTAMP('{startDate}', 'YYYY-MM-DD')
                     and TO_TIMESTAMP('{endDate}', 'YYYY-MM-DD')";
         }

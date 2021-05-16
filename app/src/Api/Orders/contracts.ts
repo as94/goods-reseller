@@ -42,12 +42,9 @@ export interface OrderInfoContract {
 }
 
 export const OrderStatuses = [
-	'DataReceived',
 	'Accepted',
-	'Collected',
 	'Packed',
 	'Shipped',
-	'Completed',
 	'Canceled',
 ] as const
 type OrderStatusTuple = typeof OrderStatuses

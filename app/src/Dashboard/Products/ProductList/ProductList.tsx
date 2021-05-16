@@ -57,6 +57,7 @@ const ProductList = ({ products, setSelectedProductId, showCreateProduct }: IOwn
 					disableColumnMenu={true}
 					rows={products.map(x => ({
 						...x,
+						unitPrice: x.unitPrice + x.addedCost,
 						discountPerUnit: x.discountPerUnit * 100,
 						date: new Date(x.date).toLocaleString(),
 						isSet: x.isSet ? t('true') : t('false'),
