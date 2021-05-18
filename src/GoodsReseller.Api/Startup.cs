@@ -21,6 +21,7 @@ namespace GoodsReseller.Api
     {
         private readonly IConfiguration _configuration;
         private readonly IHostEnvironment _environment;
+        private static readonly string SiteDNS = "http://happyboxy.ru";
 
         public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
@@ -60,11 +61,9 @@ namespace GoodsReseller.Api
             services.RegisterSupplyContextHandlers();
 
             services.AddCors(
-                options => options.AddPolicy("BackofficeCorsPolicy", builder =>
+                options => options.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.WithOrigins(
-                            "http://77.223.99.12",
-                            "http://happyboxy.ru")
+                    builder.WithOrigins(SiteDNS)
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                 }));
@@ -108,7 +107,7 @@ namespace GoodsReseller.Api
             
             app.UseRouting();
             
-            app.UseCors("BackofficeCorsPolicy");
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();
