@@ -41,7 +41,7 @@ const Login = () => {
 	const location = useLocation()
 	const auth = useAuth()
 
-	const { from } = (location.state as any) || { from: { pathname: '/' } }
+	const { from } = (location.state as any) || { from: { pathname: '/admin' } }
 
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
