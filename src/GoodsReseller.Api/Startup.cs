@@ -21,6 +21,8 @@ namespace GoodsReseller.Api
     {
         private readonly IConfiguration _configuration;
         private readonly IHostEnvironment _environment;
+        
+        // TODO: extract to config
         private static readonly string SiteDNS = "http://happyboxy.ru";
 
         public Startup(IConfiguration configuration, IHostEnvironment environment)

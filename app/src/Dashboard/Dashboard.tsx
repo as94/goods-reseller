@@ -132,7 +132,7 @@ const Dashboard = () => {
 
 	const signOut = useCallback(async () => {
 		await auth.signOut()
-		history.push('/')
+		history.push('/admin')
 	}, [auth.signOut])
 
 	const getProducts = useCallback(async () => {

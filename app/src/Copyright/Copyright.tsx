@@ -6,9 +6,9 @@ const Copyright = () => {
 	return (
 		<Box mt={8}>
 			<Typography variant="body2" color="textSecondary" align="center">
-				{'Copyright © '}
-				<span color="inherit">Goods Reseller</span> {new Date().getFullYear()}
-				{'.'}
+				{'© '}
+				<span color="inherit">Happy Boxy</span> {new Date().getFullYear()}
+				{'. Все права защищены'}
 			</Typography>
 		</Box>
 	)
