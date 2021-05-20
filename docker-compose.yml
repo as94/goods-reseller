@@ -7,6 +7,8 @@ services:
   web:
     container_name: web
     build: .
+    depends_on:
+      - migrator
     restart: always
     expose:
       - "5000"
@@ -29,6 +31,9 @@ services:
     build:
       context: ./
       dockerfile: nginx.dockerfile
+    depends_on:
+      - web
+    restart: always
     ports:
       - "80:80"
       - "443:443"
