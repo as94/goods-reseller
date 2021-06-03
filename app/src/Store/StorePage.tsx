@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import InstagramIcon from '@material-ui/icons/Instagram'
 import Card from '@material-ui/core/Card'
@@ -7,7 +6,6 @@ import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
-import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
@@ -18,6 +16,8 @@ import { CardActions, IconButton, List, ListItem, ListItemText, Popover } from '
 import PhoneIcon from '@material-ui/icons/Phone'
 import { ProductListItemContract } from '../Api/Products/contracts'
 import productsApi from '../Api/Products/productsApi'
+import { useHistory } from 'react-router-dom'
+import StoreHeader from '../StoreHeader/StoreHeader'
 
 const useStyles = makeStyles(theme => ({
 	icon: {
@@ -64,6 +64,7 @@ const useStyles = makeStyles(theme => ({
 
 const StorePage = () => {
 	const classes = useStyles()
+	const history = useHistory()
 	const [products, setProducts] = useState([] as ProductListItemContract[])
 	const [setList, setSetList] = useState([] as ProductListItemContract[])
 	const [anchorEl, setAnchorEl] = useState(null)
@@ -134,14 +135,7 @@ const StorePage = () => {
 	return (
 		<>
 			<CssBaseline />
-			<AppBar position="relative">
-				<Toolbar>
-					<FontAwesomeIcon className={classes.icon} icon={faGift} />
-					<Typography variant="h6" color="inherit" noWrap>
-						Подарки для мужчин
-					</Typography>
-				</Toolbar>
-			</AppBar>
+			<StoreHeader />
 			<main>
 				<div className={classes.heroContent}>
 					<Container maxWidth="sm">
@@ -214,9 +208,14 @@ const StorePage = () => {
 										>
 											{getPopoverContent()}
 										</Popover>
-										{/* <Button size="small" variant="outlined" color="primary">
+										<Button
+											size="small"
+											variant="outlined"
+											color="primary"
+											onClick={() => history.push(`/checkout/${x.id}`)}
+										>
 											Хочу этот
-										</Button> */}
+										</Button>
 									</CardActions>
 								</Card>
 							</Grid>

@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using GoodsReseller.AuthContext.Domain.Users.Entities;
 using GoodsReseller.AuthContext.Domain.Users.ValueObjects;
+using GoodsReseller.DataCatalogContext.Models.Products;
 using GoodsReseller.Infrastructure;
+using GoodsReseller.SeedWork.ValueObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,6 +38,47 @@ namespace GoodsReseller.Api
                                 PasswordHash.Generate("qwe123"),
                                 Role.Admin.ToString()));
 
+                        await context.SaveChangesAsync();
+                    }
+                }
+
+                if (args.Contains("--createProducts"))
+                {
+                    var productSet = "Product set";
+                    var existing = await context.Products.FirstOrDefaultAsync(x => x.Name == productSet);
+                    if (existing == null)
+                    {
+                        var firstProduct = new Product(
+                            Guid.NewGuid(),
+                            1,
+                            "first-product",
+                            "First product",
+                            "",
+                            new Money(100),
+                            new Discount(0));
+                        await context.Products.AddAsync(firstProduct);
+                        
+                        var secondProduct = new Product(
+                            Guid.NewGuid(),
+                            1,
+                            "second-product",
+                            "Second product",
+                            "",
+                            new Money(200),
+                            new Discount(0));
+                        await context.Products.AddAsync(secondProduct);
+                        
+                        var set = new Product(
+                            Guid.NewGuid(),
+                            1,
+                            "set",
+                            productSet,
+                            productSet,
+                            new Money(500),
+                            new Discount(0),
+                            productIds: new[] { firstProduct.Id, secondProduct.Id });
+                        await context.Products.AddAsync(set);
+                        
                         await context.SaveChangesAsync();
                     }
                 }

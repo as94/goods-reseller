@@ -32,14 +32,14 @@ const App = () => (
 					<Route exact path="/admin/register">
 						<Register />
 					</Route>
-					<Route path={['/']}>
-						<StorePage />
-					</Route>
 					{/* <Route path="/sets/:setId">
 						<SetInfo />
 					</Route> */}
 					<Route path="/checkout/:setId">
 						<Checkout />
+					</Route>
+					<Route path={['/']}>
+						<StorePage />
 					</Route>
 				</Switch>
 			</Router>

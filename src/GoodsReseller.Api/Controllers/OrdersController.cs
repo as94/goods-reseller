@@ -55,6 +55,7 @@ namespace GoodsReseller.Api.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateOrderAsync(
             [FromBody] [Required] OrderInfoContract orderInfo,
             CancellationToken cancellationToken)
