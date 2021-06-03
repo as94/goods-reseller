@@ -17,6 +17,7 @@ export interface ProductListItemContract {
 	date: string
 	label: string
 	name: string
+	description: string
 	unitPrice: number
 	discountPerUnit: number
 	addedCost: number

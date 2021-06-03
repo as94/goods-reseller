@@ -8,6 +8,8 @@ import Dashboard from './Dashboard/Dashboard'
 import StorePage from './Store/StorePage'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { orange, yellow } from '@material-ui/core/colors'
+import SetInfo from './SetInfo/SetInfo'
+import Checkout from './Checkout/Checkout'
 
 const theme = createMuiTheme({
 	palette: {
@@ -24,14 +26,20 @@ const App = () => (
 					<PrivateRoute exact path={['/admin']}>
 						<Dashboard />
 					</PrivateRoute>
-					<Route exact path={['/']}>
-						<StorePage />
-					</Route>
-					<Route path="/admin/login">
+					<Route exact path="/admin/login">
 						<Login />
 					</Route>
-					<Route path="/admin/register">
+					<Route exact path="/admin/register">
 						<Register />
+					</Route>
+					<Route path={['/']}>
+						<StorePage />
+					</Route>
+					{/* <Route path="/sets/:setId">
+						<SetInfo />
+					</Route> */}
+					<Route path="/checkout/:setId">
+						<Checkout />
 					</Route>
 				</Switch>
 			</Router>

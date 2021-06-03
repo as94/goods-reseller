@@ -13,9 +13,7 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
                 Id = order.Id,
                 Version = order.Version,
                 Status = order.Status.Name,
-                Date = order.LastUpdateDate != null
-                    ? order.LastUpdateDate.Date 
-                    : order.CreationDate.Date,
+                Date = order.CreationDate.Date,
                 Address = order.Address.ToContract(),
                 CustomerInfo = order.CustomerInfo.ToContract(),
                 OrderItems = order.OrderItems.Select(x => x.ToContract()).ToArray(),
@@ -32,9 +30,7 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
                 Id = order.Id,
                 Version = order.Version,
                 Status = order.Status.Name,
-                Date = order.LastUpdateDate != null
-                    ? order.LastUpdateDate.Date 
-                    : order.CreationDate.Date,
+                Date = order.CreationDate.Date,
                 CustomerPhoneNumber = order.CustomerInfo.PhoneNumber,
                 CustomerName = order.CustomerInfo.Name,
                 AddressCity = order.Address.City,
