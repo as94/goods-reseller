@@ -212,7 +212,7 @@ const StorePage = () => {
 											size="small"
 											variant="outlined"
 											color="primary"
-											onClick={() => history.push(`/checkout/${x.id}`)}
+											onClick={() => history.push(`/store/checkout/${x.id}`)}
 										>
 											Хочу этот
 										</Button>

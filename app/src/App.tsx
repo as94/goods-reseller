@@ -35,10 +35,10 @@ const App = () => (
 					{/* <Route path="/sets/:setId">
 						<SetInfo />
 					</Route> */}
-					<Route path="/checkout/:setId">
+					<Route path="/store/checkout/:setId">
 						<Checkout />
 					</Route>
-					<Route path={['/']}>
+					<Route path={['/', '/store']}>
 						<StorePage />
 					</Route>
 				</Switch>

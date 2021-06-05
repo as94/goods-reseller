@@ -10,7 +10,7 @@ import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import AddressForm from './AddressForm'
-import PaymentForm from './PaymentForm'
+import CustomerInfoForm from './CustomerInfoForm'
 import Review from './Review'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -54,14 +54,14 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const steps = ['Shipping address', 'Payment details', 'Review your order']
+const steps = ['Адрес доставки', 'Контактная информация', 'Просмотр заказа']
 
 function getStepContent(step: number) {
 	switch (step) {
 		case 0:
 			return <AddressForm />
 		case 1:
-			return <PaymentForm />
+			return <CustomerInfoForm />
 		case 2:
 			return <Review />
 		default:
@@ -94,7 +94,7 @@ const Checkout = () => {
 			<main className={classes.layout}>
 				<Paper className={classes.paper}>
 					<Typography component="h1" variant="h4" align="center">
-						Checkout
+						Оформление заказа
 					</Typography>
 					<Stepper activeStep={activeStep} className={classes.stepper}>
 						{steps.map(label => (
@@ -107,11 +107,10 @@ const Checkout = () => {
 						{activeStep === steps.length ? (
 							<>
 								<Typography variant="h5" gutterBottom>
-									Thank you for your order.
+									Спасибо за ваш заказ.
 								</Typography>
 								<Typography variant="subtitle1">
-									Your order number is #2001539. We have emailed your order confirmation, and will
-									send you an update when your order has shipped.
+									Ваш заказ #2001539. Мы свяжимся с вами в ближайшее время для уточнения деталей.
 								</Typography>
 							</>
 						) : (
@@ -120,7 +119,7 @@ const Checkout = () => {
 								<div className={classes.buttons}>
 									{activeStep !== 0 && (
 										<Button onClick={handleBack} className={classes.button}>
-											Back
+											Назад
 										</Button>
 									)}
 									<Button
@@ -129,7 +128,7 @@ const Checkout = () => {
 										onClick={handleNext}
 										className={classes.button}
 									>
-										{activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+										{activeStep === steps.length - 1 ? 'Разместить заказ' : 'Дальше'}
 									</Button>
 								</div>
 							</>
