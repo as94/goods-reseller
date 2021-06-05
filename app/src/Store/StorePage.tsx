@@ -227,7 +227,7 @@ const StorePage = () => {
 				<Container maxWidth="md">
 					<Typography variant="body1" align="left" color="textSecondary" paragraph>
 						Примичание: некоторые товары можно заменить аналогичными. Например: подписку на Play Station 4,
-						из стандартного набора, можно заменить на Xbox One. После оформления заказа, мы расскажем все
+						из стандартного набора, можно заменить на Xbox One. После оформления заказа мы расскажем все
 						подробности.
 					</Typography>
 				</Container>
