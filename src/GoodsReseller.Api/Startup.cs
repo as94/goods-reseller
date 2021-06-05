@@ -88,7 +88,9 @@ namespace GoodsReseller.Api
             }
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            app.UseWhen(context => context.Request.Path.StartsWithSegments("/admin"),
+            app.UseWhen(context =>
+                    context.Request.Path.StartsWithSegments("/admin") ||
+                    context.Request.Path.StartsWithSegments("/store"),
                 appBuilder =>
                 {
                     appBuilder.UseStatusCodePagesWithReExecute("/");

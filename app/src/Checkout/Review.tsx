@@ -7,18 +7,12 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Grid from '@material-ui/core/Grid'
 
 const products = [
-	{ name: 'Product 1', desc: 'A nice thing', price: '$9.99' },
-	{ name: 'Product 2', desc: 'Another thing', price: '$3.45' },
-	{ name: 'Product 3', desc: 'Something else', price: '$6.51' },
-	{ name: 'Product 4', desc: 'Best thing of all', price: '$14.11' },
-	{ name: 'Shipping', desc: '', price: 'Free' },
-]
-const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA']
-const payments = [
-	{ name: 'Card type', detail: 'Visa' },
-	{ name: 'Card holder', detail: 'Mr John Smith' },
-	{ name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-	{ name: 'Expiry date', detail: '04/2024' },
+	{
+		name: 'Мужской набор "Стандартный"',
+		desc: 'Для тех парней, которые любят вспомнить молодость! 🎮',
+		price: '3700 ₽',
+	},
+	{ name: 'Доставка', desc: '', price: '300 ₽' },
 ]
 
 const useStyles = makeStyles(theme => ({
@@ -39,7 +33,7 @@ const Review = () => {
 	return (
 		<>
 			<Typography variant="h6" gutterBottom>
-				Order summary
+				Просмотр заказа
 			</Typography>
 			<List disablePadding>
 				{products.map(product => (
@@ -49,35 +43,31 @@ const Review = () => {
 					</ListItem>
 				))}
 				<ListItem className={classes.listItem}>
-					<ListItemText primary="Total" />
+					<ListItemText primary="Итого" />
 					<Typography variant="subtitle1" className={classes.total}>
-						$34.06
+						4000 ₽
 					</Typography>
 				</ListItem>
 			</List>
 			<Grid container spacing={2}>
 				<Grid item xs={12} sm={6}>
 					<Typography variant="h6" gutterBottom className={classes.title}>
-						Shipping
+						Адрес доставки
 					</Typography>
-					<Typography gutterBottom>John Smith</Typography>
-					<Typography gutterBottom>{addresses.join(', ')}</Typography>
+					<Typography gutterBottom>Красная 94, 23а</Typography>
+					<Typography gutterBottom>119154</Typography>
 				</Grid>
 				<Grid item container direction="column" xs={12} sm={6}>
 					<Typography variant="h6" gutterBottom className={classes.title}>
-						Payment details
+						Контактная информация
 					</Typography>
 					<Grid container>
-						{payments.map(payment => (
-							<>
-								<Grid item xs={6}>
-									<Typography gutterBottom>{payment.name}</Typography>
-								</Grid>
-								<Grid item xs={6}>
-									<Typography gutterBottom>{payment.detail}</Typography>
-								</Grid>
-							</>
-						))}
+						<Grid item xs={6}>
+							<Typography gutterBottom>Василий</Typography>
+						</Grid>
+						<Grid item xs={6}>
+							<Typography gutterBottom>+7 922 111 56 78</Typography>
+						</Grid>
 					</Grid>
 				</Grid>
 			</Grid>
