@@ -95,6 +95,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Description = description;
             UnitPrice = unitPrice;
             DiscountPerUnit = discountPerUnit;
+            
+            // TODO: didn't work setting 0 value
             AddedCost = addedCost;
             ProductIds = productIds ?? Array.Empty<Guid>();
             
