@@ -1,11 +1,38 @@
-import React, { useState } from 'react'
+import React, { useCallback } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import { InputLabel, MenuItem, Select } from '@material-ui/core'
+import { AddressContract } from '../Api/Orders/contracts'
 
-const AddressForm = () => {
-	const [deliveryType, setDeliveryType] = useState(0)
+interface IOwnProps {
+	address: AddressContract
+	setAddress: (address: AddressContract) => void
+	deliveryType: number
+	setDeliveryType: (deliveryType: number) => void
+}
+
+const AddressForm = ({ address, setAddress, deliveryType, setDeliveryType }: IOwnProps) => {
+	const streetChangeHandler = useCallback(
+		(e: any) => {
+			setAddress({
+				...address,
+				street: e.target.value,
+			})
+		},
+		[setAddress, address],
+	)
+
+	const zipCodeChangeHandler = useCallback(
+		(e: any) => {
+			setAddress({
+				...address,
+				zipCode: e.target.value,
+			})
+		},
+		[setAddress, address],
+	)
+
 	return (
 		<>
 			<Typography variant="h6" gutterBottom>
@@ -20,7 +47,7 @@ const AddressForm = () => {
 						name="city"
 						label="Город"
 						fullWidth
-						value="Москва"
+						value={address.city}
 						autoComplete="shipping city"
 					/>
 				</Grid>
@@ -42,6 +69,8 @@ const AddressForm = () => {
 						id="street"
 						name="street"
 						label="Улица"
+						value={address.street}
+						onChange={streetChangeHandler}
 						fullWidth
 						autoComplete="shipping address-line1"
 					/>
@@ -55,8 +84,8 @@ const AddressForm = () => {
 						onChange={e => setDeliveryType(Number(e.target.value))}
 					>
 						<MenuItem value={0}>Почта</MenuItem>
-						<MenuItem value={1}>Самовывоз</MenuItem>
-						<MenuItem value={2}>Служба доставки</MenuItem>
+						<MenuItem value={1}>Служба доставки</MenuItem>
+						{/* <MenuItem value={2}>Самовывоз</MenuItem> */}
 					</Select>
 				</Grid>
 				<Grid item xs={12} sm={6}>
@@ -65,6 +94,8 @@ const AddressForm = () => {
 						id="zip"
 						name="zip"
 						label="Почтовый индекс"
+						value={address.zipCode}
+						onChange={zipCodeChangeHandler}
 						fullWidth
 						autoComplete="shipping postal-code"
 					/>

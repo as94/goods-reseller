@@ -1,11 +1,35 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
+import { CustomerInfoContract } from '../Api/Orders/contracts'
 
-const CustomerInfoForm = () => {
+interface IOwnProps {
+	customerInfo: CustomerInfoContract
+	setCustomerInfo: (customerInfo: CustomerInfoContract) => void
+}
+
+const CustomerInfoForm = ({ customerInfo, setCustomerInfo }: IOwnProps) => {
+	const nameChangeHandler = useCallback(
+		(e: any) => {
+			setCustomerInfo({
+				...customerInfo,
+				name: e.target.value,
+			})
+		},
+		[customerInfo, setCustomerInfo],
+	)
+
+	const phoneNumberChangeHandler = useCallback(
+		(e: any) => {
+			setCustomerInfo({
+				...customerInfo,
+				phoneNumber: e.target.value,
+			})
+		},
+		[customerInfo, setCustomerInfo],
+	)
+
 	return (
 		<>
 			<Typography variant="h6" gutterBottom>
@@ -13,13 +37,22 @@ const CustomerInfoForm = () => {
 			</Typography>
 			<Grid container spacing={3}>
 				<Grid item xs={12} md={12}>
-					<TextField id="name" label="Ваше имя" fullWidth autoComplete="name" />
+					<TextField
+						id="name"
+						label="Ваше имя"
+						value={customerInfo.name}
+						onChange={nameChangeHandler}
+						fullWidth
+						autoComplete="name"
+					/>
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<TextField
 						required
 						id="phoneNumber"
 						label="Ваш номер телефона"
+						value={customerInfo.phoneNumber}
+						onChange={phoneNumberChangeHandler}
 						fullWidth
 						autoComplete="phoneNumber"
 					/>
