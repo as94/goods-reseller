@@ -48,6 +48,8 @@ const commonConfig: Configuration = {
 		new CopyPlugin([
 			{ from: 'public/assets', to: __dirname + '/../src/GoodsReseller.Api/wwwroot/assets' },
 			{ from: 'public/favicon.ico', to: __dirname + '/../src/GoodsReseller.Api/wwwroot/favicon.ico' },
+			{ from: 'public/robots.txt', to: __dirname + '/../src/GoodsReseller.Api/wwwroot/robots.txt' },
+			{ from: 'public/sitemap.txt', to: __dirname + '/../src/GoodsReseller.Api/wwwroot/sitemap.txt' },
 		]),
 		new DefinePlugin(
 			Object.keys(env).reduce((prev, next) => {
