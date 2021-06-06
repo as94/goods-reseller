@@ -3,13 +3,17 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import { CustomerInfoContract } from '../Api/Orders/contracts'
+import { errorsList } from './Checkout'
 
 interface IOwnProps {
 	customerInfo: CustomerInfoContract
 	setCustomerInfo: (customerInfo: CustomerInfoContract) => void
+	errors: string[]
 }
 
-const CustomerInfoForm = ({ customerInfo, setCustomerInfo }: IOwnProps) => {
+const CustomerInfoForm = ({ customerInfo, setCustomerInfo, errors }: IOwnProps) => {
+	const phoneNumberIsInvalid = errors.includes(errorsList.phoneNumberIsRequiredError)
+
 	const nameChangeHandler = useCallback(
 		(e: any) => {
 			setCustomerInfo({
@@ -55,6 +59,8 @@ const CustomerInfoForm = ({ customerInfo, setCustomerInfo }: IOwnProps) => {
 						onChange={phoneNumberChangeHandler}
 						fullWidth
 						autoComplete="phoneNumber"
+						error={phoneNumberIsInvalid}
+						helperText={phoneNumberIsInvalid ? errorsList.phoneNumberIsRequiredError : undefined}
 					/>
 				</Grid>
 			</Grid>
