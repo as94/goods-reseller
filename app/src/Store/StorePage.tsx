@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Button from '@material-ui/core/Button'
-import InstagramIcon from '@material-ui/icons/Instagram'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
@@ -9,15 +8,12 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import Copyright from '../Copyright/Copyright'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGift } from '@fortawesome/free-solid-svg-icons'
 import { CardActions, IconButton, List, ListItem, ListItemText, Popover } from '@material-ui/core'
-import PhoneIcon from '@material-ui/icons/Phone'
 import { ProductListItemContract } from '../Api/Products/contracts'
 import productsApi from '../Api/Products/productsApi'
 import { useHistory } from 'react-router-dom'
 import StoreHeader from '../StoreHeader/StoreHeader'
+import StoreFooter from '../StoreFooter/StoreFooter'
 
 const useStyles = makeStyles(theme => ({
 	icon: {
@@ -232,30 +228,7 @@ const StorePage = () => {
 					</Typography>
 				</Container>
 			</div>
-			<footer className={classes.footer}>
-				<Typography variant="h6" align="center" gutterBottom>
-					Наши контакты
-				</Typography>
-				<div className={classes.phoneContacts}>
-					<PhoneIcon />
-					<Typography
-						variant="subtitle1"
-						align="center"
-						color="textSecondary"
-						component="p"
-						className={classes.phoneNumber}
-					>
-						+7 923 123 19 99
-					</Typography>
-				</div>
-				<Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-					<IconButton href="https://www.instagram.com/happyboxy.msk/">
-						<InstagramIcon />
-					</IconButton>
-				</Typography>
-
-				<Copyright />
-			</footer>
+			<StoreFooter />
 		</>
 	)
 }
