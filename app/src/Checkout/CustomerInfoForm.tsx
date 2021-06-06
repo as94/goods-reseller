@@ -52,7 +52,6 @@ const CustomerInfoForm = ({ customerInfo, setCustomerInfo, errors }: IOwnProps) 
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<TextField
-						required
 						id="phoneNumber"
 						label="Ваш номер телефона"
 						value={customerInfo.phoneNumber}
