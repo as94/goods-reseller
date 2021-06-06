@@ -76,6 +76,7 @@ function getStepContent(
 	productSet: ProductListItemContract | null,
 	productsInSet: ProductListItemContract[],
 	orderInfo: OrderInfoContract | null,
+	errors: string[],
 ) {
 	switch (step) {
 		case 0:
@@ -85,10 +86,11 @@ function getStepContent(
 					setAddress={setAddress}
 					deliveryType={deliveryType}
 					setDeliveryType={setDeliveryType}
+					errors={errors}
 				/>
 			)
 		case 1:
-			return <CustomerInfoForm customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} />
+			return <CustomerInfoForm customerInfo={customerInfo} setCustomerInfo={setCustomerInfo} errors={errors} />
 		case 2:
 			return (
 				productSet &&
@@ -97,6 +99,12 @@ function getStepContent(
 		default:
 			throw new Error('Unknown step')
 	}
+}
+
+export const errorsList = {
+	streetIsRequiredError: 'Улица обязательна для заполнения',
+	zipCodeIsRequiredError: 'Почтовый индекс обязателен для заполнения',
+	phoneNumberIsRequiredError: 'Телефон обязателен для заполнения',
 }
 
 const Checkout = () => {
@@ -115,17 +123,49 @@ const Checkout = () => {
 	const [productSet, setProductSet] = useState(null as ProductListItemContract | null)
 	const [productsInSet, setProductsInSet] = useState([] as ProductListItemContract[])
 
-	const handleNext = useCallback(async () => {
+	const [errors, setErrors] = useState([] as string[])
+	const [touched, setTouched] = useState(false)
+
+	const getValidationErrors = useCallback(() => {
+		let currentErrors = [] as string[]
+		if (activeStep === 0) {
+			if (!address.street) {
+				currentErrors = [...currentErrors, errorsList.streetIsRequiredError]
+			}
+			if (!address.zipCode) {
+				currentErrors = [...currentErrors, errorsList.zipCodeIsRequiredError]
+			}
+		}
+		if (activeStep === 1) {
+			if (!customerInfo.phoneNumber) {
+				currentErrors = [...currentErrors, errorsList.phoneNumberIsRequiredError]
+			}
+		}
+		return currentErrors
+	}, [activeStep, address, customerInfo, errorsList])
+
+	const moveToNextStep = useCallback(async () => {
 		setActiveStep(activeStep + 1)
+		setTouched(false)
 
 		if (activeStep === steps.length - 1 && orderInfo) {
 			await ordersApi.Create(orderInfo)
 		}
-	}, [setActiveStep, activeStep, steps])
+	}, [activeStep, setActiveStep, orderInfo])
+
+	const handleNext = useCallback(async () => {
+		const validationErrors = getValidationErrors()
+		if (validationErrors.length === 0) {
+			moveToNextStep()
+		} else {
+			setTouched(true)
+		}
+	}, [setTouched, getValidationErrors, moveToNextStep])
 
 	const handleBack = useCallback(() => {
+		setTouched(true)
 		setActiveStep(activeStep - 1)
-	}, [setActiveStep, activeStep])
+	}, [setActiveStep, activeStep, setTouched])
 
 	const getProducts = useCallback(async () => {
 		const response = await productsApi.GetProductList()
@@ -180,6 +220,13 @@ const Checkout = () => {
 		}
 	}, [productSet, address, deliveryType, customerInfo, orderItems, setOrderInfo])
 
+	useEffect(() => {
+		if (touched) {
+			const validationErrors = getValidationErrors()
+			setErrors(validationErrors)
+		}
+	}, [touched, setErrors, getValidationErrors])
+
 	return (
 		<>
 			<CssBaseline />
@@ -219,6 +266,7 @@ const Checkout = () => {
 									productSet,
 									productsInSet,
 									orderInfo,
+									errors,
 								)}
 								<div className={classes.buttons}>
 									{activeStep !== 0 && (
@@ -231,6 +279,7 @@ const Checkout = () => {
 										color="primary"
 										onClick={handleNext}
 										className={classes.button}
+										disabled={touched && errors.length > 0}
 									>
 										{activeStep === steps.length - 1 ? 'Разместить заказ' : 'Дальше'}
 									</Button>
