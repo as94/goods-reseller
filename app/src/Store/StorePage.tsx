@@ -136,16 +136,13 @@ const StorePage = () => {
 				<div className={classes.heroContent}>
 					<Container maxWidth="sm">
 						<Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-							Мужские подарочные наборы
+							Оригинальный подарок для мужчин
 						</Typography>
 						<Typography variant="h6" align="center" color="textSecondary" paragraph>
-							Если вам самим надоело думать, что подарить своёму знакомому мужчине, тогда...
+							Ищете подарочный набор для друга или парня? Тогда вы на правильном пути!
 						</Typography>
 						<Typography variant="h6" align="center" color="textSecondary" paragraph>
-							Перестаньте думать об этом!
-						</Typography>
-						<Typography variant="h6" align="center" color="textSecondary" paragraph>
-							Мы всё придумали. Осталось выбрать подходящий вариант подарочного набора и сделать заказ.
+							Здесь вы сможете выбрать подходящий вариант подарочного набора и купить подарок мужчине.
 						</Typography>
 						<div className={classes.heroButtons}>
 							<Grid container spacing={2} justify="center">
@@ -154,11 +151,6 @@ const StorePage = () => {
 										К наборам
 									</Button>
 								</Grid>
-								{/* <Grid item>
-									<Button variant="outlined" color="primary">
-										Сделать заказ
-									</Button>
-								</Grid> */}
 							</Grid>
 						</div>
 					</Container>

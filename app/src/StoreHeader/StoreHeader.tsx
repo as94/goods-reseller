@@ -24,7 +24,7 @@ const StoreHeader = () => {
 			<Toolbar>
 				<FontAwesomeIcon className={classes.icon} icon={faGift} />
 				<Typography variant="h6" color="inherit" noWrap>
-					Подарки для мужчин
+					Подарочные наборы
 				</Typography>
 			</Toolbar>
 		</AppBar>
