@@ -25,6 +25,7 @@ import {
 } from '../Api/Orders/contracts'
 import { MoneyContract } from '../Api/contracts'
 import ordersApi from '../Api/Orders/ordersApi'
+import StoreFooter from '../StoreFooter/StoreFooter'
 
 const useStyles = makeStyles(theme => ({
 	appBar: {
@@ -288,8 +289,8 @@ const Checkout = () => {
 						)}
 					</>
 				</Paper>
-				<Copyright />
 			</main>
+			<StoreFooter />
 		</>
 	)
 }
