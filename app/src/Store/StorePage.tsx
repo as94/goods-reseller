@@ -161,6 +161,7 @@ const StorePage = () => {
 									</CardContent>
 									<CardActions>
 										<Button
+											color="primary"
 											size="small"
 											variant="outlined"
 											onClick={e => showSetCompositionHandler(e, x.id)}
@@ -184,6 +185,7 @@ const StorePage = () => {
 											{getPopoverContent()}
 										</Popover>
 										<Button
+											color="primary"
 											size="small"
 											variant="outlined"
 											onClick={() => history.push(`/store/checkout/${x.id}`)}
