@@ -72,6 +72,8 @@
         "AddSet": "Add set",
         "AdditionalCosts": "Additional costs",
         "AddedCost": "Added cost",
-        "TotalCost": "Total cost"
+        "TotalCost": "Total cost",
+        "ChooseProductPhoto": "Choose product photo",
+        "UploadProductPhoto": "Upload product photo"
     }
 }
