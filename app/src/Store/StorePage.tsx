@@ -14,6 +14,7 @@ import productsApi from '../Api/Products/productsApi'
 import { useHistory } from 'react-router-dom'
 import StoreHeader from '../StoreHeader/StoreHeader'
 import StoreFooter from '../StoreFooter/StoreFooter'
+import MainFeaturedPost from './MainFeaturedPost/MainFeaturedPost'
 
 const useStyles = makeStyles(theme => ({
 	icon: {
@@ -57,6 +58,14 @@ const useStyles = makeStyles(theme => ({
 		paddingLeft: '10px',
 	},
 }))
+
+const mainFeaturedPost = {
+	title: 'Оригинальный подарок для мужчин',
+	description:
+		'Ищете подарочный набор для друга или парня? Тогда вы на правильном пути! Здесь вы сможете выбрать подходящий вариант подарочного набора и купить подарок мужчине.',
+	image: 'assets/main-1.jpg',
+	imgText: 'main image description',
+}
 
 const StorePage = () => {
 	const classes = useStyles()
@@ -133,28 +142,7 @@ const StorePage = () => {
 			<CssBaseline />
 			<StoreHeader />
 			<main>
-				<div className={classes.heroContent}>
-					<Container maxWidth="sm">
-						<Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-							Оригинальный подарок для мужчин
-						</Typography>
-						<Typography variant="h6" align="center" color="textSecondary" paragraph>
-							Ищете подарочный набор для друга или парня? Тогда вы на правильном пути!
-						</Typography>
-						<Typography variant="h6" align="center" color="textSecondary" paragraph>
-							Здесь вы сможете выбрать подходящий вариант подарочного набора и купить подарок мужчине.
-						</Typography>
-						<div className={classes.heroButtons}>
-							<Grid container spacing={2} justify="center">
-								<Grid item>
-									<Button variant="contained" color="primary" href="#sets">
-										К наборам
-									</Button>
-								</Grid>
-							</Grid>
-						</div>
-					</Container>
-				</div>
+				<MainFeaturedPost post={mainFeaturedPost} />
 				<Container className={classes.cardGrid} maxWidth="md" id="sets">
 					<Grid container spacing={4}>
 						{setList.map((x, idx) => (
@@ -175,7 +163,6 @@ const StorePage = () => {
 										<Button
 											size="small"
 											variant="outlined"
-											color="primary"
 											onClick={e => showSetCompositionHandler(e, x.id)}
 										>
 											Состав
@@ -199,7 +186,6 @@ const StorePage = () => {
 										<Button
 											size="small"
 											variant="outlined"
-											color="primary"
 											onClick={() => history.push(`/store/checkout/${x.id}`)}
 										>
 											Хочу этот
