@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 		[theme.breakpoints.up('md')]: {
 			padding: theme.spacing(6),
 		},
-		backgroundColor: 'rgba(0,0,0,.6)',
+		backgroundColor: 'rgba(1,87,155 ,.6)',
 		minHeight: '50.0vw',
 	},
 }))

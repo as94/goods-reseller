@@ -9,15 +9,21 @@ import StorePage from './Store/StorePage'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import SetInfo from './SetInfo/SetInfo'
 import Checkout from './Checkout/Checkout'
+import { blue, lightBlue } from '@material-ui/core/colors'
 
 const theme = createMuiTheme({
 	palette: {
-		primary: {
-			main: '#fff',
-		},
-		secondary: {
-			main: '#000',
-		},
+		// type: 'dark',
+		// primary: {
+		// 	main: '#fff',
+		// },
+		// secondary: {
+		// 	main: '#000',
+		// },
+		// contrastThreshold: 3,
+		// tonalOffset: 0.2,
+		primary: lightBlue,
+		secondary: blue,
 	},
 	typography: {
 		fontFamily: [
