@@ -7,14 +7,31 @@ import PrivateRoute from './PrivateRoute'
 import Dashboard from './Dashboard/Dashboard'
 import StorePage from './Store/StorePage'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import { orange, yellow } from '@material-ui/core/colors'
 import SetInfo from './SetInfo/SetInfo'
 import Checkout from './Checkout/Checkout'
 
 const theme = createMuiTheme({
 	palette: {
-		primary: orange,
-		secondary: yellow,
+		primary: {
+			main: '#fff',
+		},
+		secondary: {
+			main: '#000',
+		},
+	},
+	typography: {
+		fontFamily: [
+			'-apple-system',
+			'BlinkMacSystemFont',
+			'"Segoe UI"',
+			'Roboto',
+			'"Helvetica Neue"',
+			'Arial',
+			'sans-serif',
+			'"Apple Color Emoji"',
+			'"Segoe UI Emoji"',
+			'"Segoe UI Symbol"',
+		].join(','),
 	},
 })
 
