@@ -74,6 +74,7 @@
         "AddedCost": "Добавочная стоимость",
         "TotalCost": "Итоговая стоимость заказа",
         "ChooseProductPhoto": "Выбрать фотографию товара",
-        "UploadProductPhoto": "Загрузить фотографию товара"
+        "UploadProductPhoto": "Загрузить фотографию товара",
+        "RemoveProductPhoto": "Удалить фотографию товара"
     }
 }

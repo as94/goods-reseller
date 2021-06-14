@@ -1,7 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using GoodsReseller.Api.Models;
 using GoodsReseller.DataCatalogContext.Contracts.Models.Products;
 using GoodsReseller.DataCatalogContext.Contracts.Products.BatchByQuery;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Create;
@@ -9,9 +11,11 @@ using GoodsReseller.DataCatalogContext.Contracts.Products.Delete;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetById;
 using GoodsReseller.DataCatalogContext.Contracts.Products.GetByLabel;
 using GoodsReseller.DataCatalogContext.Contracts.Products.Update;
+using GoodsReseller.DataCatalogContext.Contracts.Products.UpdateProductPhoto;
 using GoodsReseller.DataCatalogContext.Contracts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodsReseller.Api.Controllers
@@ -22,10 +26,12 @@ namespace GoodsReseller.Api.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        
-        public ProductsController(IMediator mediator)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public ProductsController(IMediator mediator, IWebHostEnvironment webHostEnvironment)
         {
             _mediator = mediator;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [AllowAnonymous]
@@ -64,13 +70,14 @@ namespace GoodsReseller.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("list")]
-        public async Task<IActionResult> GetProductListAsync([FromQuery] BatchProductsQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetProductListAsync([FromQuery] BatchProductsQuery query,
+            CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(new BatchProductsByQueryRequest
             {
                 Query = query
             }, cancellationToken);
-            
+
             return Ok(response.ProductList);
         }
 
@@ -98,7 +105,7 @@ namespace GoodsReseller.Api.Controllers
                 ProductId = productId,
                 ProductInfo = product
             }, cancellationToken);
-            
+
             return Ok();
         }
 
@@ -111,8 +118,62 @@ namespace GoodsReseller.Api.Controllers
             {
                 ProductId = productId
             }, cancellationToken);
-            
+
             return Ok();
+        }
+
+        [HttpPost("{productId}/photos")]
+        public async Task UploadProductPhotoAsync(
+            [Required] [FromRoute] Guid productId,
+            [Required] [FromForm] FileUpload fileUpload,
+            CancellationToken cancellationToken)
+        {
+            var photoPath = Path.Combine(
+                _webHostEnvironment.WebRootPath,
+                "assets",
+                productId.ToString());
+
+            if (!Directory.Exists(photoPath))
+            {
+                Directory.CreateDirectory(photoPath);
+            }
+
+            var fileName = fileUpload.FileName.ToLower();
+            var path = Path.Combine(photoPath, fileName);
+
+            await using var fileStream = System.IO.File.Create(path);
+            await fileUpload.FileContent.CopyToAsync(fileStream, cancellationToken);
+
+            var relativePath = Path.Combine(productId.ToString(), fileName);
+            await _mediator.Send(new UpdateProductPhotoRequest
+                {
+                    ProductId = productId,
+                    PhotoPath = relativePath
+                },
+                cancellationToken);
+        }
+
+        [HttpDelete("{productId}/photos")]
+        public async Task RemoveProductPhotoAsync(
+            [FromRoute] [Required] Guid productId,
+            CancellationToken cancellationToken)
+        {
+            var photoPath = Path.Combine(
+                _webHostEnvironment.WebRootPath,
+                "assets",
+                productId.ToString());
+
+            if (Directory.Exists(photoPath))
+            {
+                Directory.Delete(photoPath, true);
+            }
+            
+            await _mediator.Send(new UpdateProductPhotoRequest
+                {
+                    ProductId = productId,
+                    PhotoPath = string.Empty
+                },
+                cancellationToken);
         }
     }
 }

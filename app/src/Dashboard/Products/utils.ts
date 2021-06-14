@@ -31,5 +31,5 @@ export const initialProduct = {
 	unitPrice: 0,
 	discountPerUnit: 0,
 	addedCost: 0,
-	productIds: [],
+	productIds: []
 } as ProductInfoContract

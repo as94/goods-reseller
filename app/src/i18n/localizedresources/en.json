@@ -74,6 +74,7 @@
         "AddedCost": "Added cost",
         "TotalCost": "Total cost",
         "ChooseProductPhoto": "Choose product photo",
-        "UploadProductPhoto": "Upload product photo"
+        "UploadProductPhoto": "Upload product photo",
+        "RemoveProductPhoto": "Remove product photo"
     }
 }

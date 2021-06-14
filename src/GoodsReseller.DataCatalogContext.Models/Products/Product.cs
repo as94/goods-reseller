@@ -13,6 +13,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         public Discount DiscountPerUnit { get; private set; }
         public Money AddedCost { get; private set; }
         public Guid[] ProductIds { get; private set; }
+        public string PhotoPath { get; private set; }
         
         public Product(
             Guid id,
@@ -37,7 +38,8 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             string label,
             string name,
             string description,
-            Guid[] productIds = null)
+            Guid[] productIds = null,
+            string photoPath = null)
             : base(id, version)
         {
             if (label == null)
@@ -59,6 +61,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             Name = name;
             Description = description;
             ProductIds = productIds ?? Array.Empty<Guid>();
+            PhotoPath = photoPath;
         }
 
         public void Update(
@@ -102,6 +105,17 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             
             IncrementVersion();
             LastUpdateDate = new DateValueObject();
+        }
+
+        public void UpdateProductPhoto(string photoPath)
+        {
+            if (photoPath == null)
+            {
+                throw new ArgumentNullException(nameof(photoPath));
+            }
+
+            PhotoPath = photoPath;
+            IncrementVersion();
         }
     }
 }

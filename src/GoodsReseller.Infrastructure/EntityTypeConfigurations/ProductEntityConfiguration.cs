@@ -61,6 +61,8 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
                 .Metadata
                 .SetValueComparer(valueComparer);
 
+            builder.Property(e => e.PhotoPath).HasColumnType("varchar(2048)");
+
             builder
                 .OwnsOne(o => o.CreationDate, x =>
                 {

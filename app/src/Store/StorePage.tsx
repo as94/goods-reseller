@@ -145,12 +145,12 @@ const StorePage = () => {
 				<MainFeaturedPost post={mainFeaturedPost} />
 				<Container className={classes.cardGrid} maxWidth="md" id="sets">
 					<Grid container spacing={4}>
-						{setList.map((x, idx) => (
+						{setList.map(x => (
 							<Grid item key={x.id} xs={12} sm={6} md={4}>
 								<Card className={classes.card}>
 									<CardMedia
 										className={classes.cardMedia}
-										image={`assets/set-${idx + 1}.jpg`}
+										image={`assets/${x.photoPath}`}
 										title="Image title"
 									/>
 									<CardContent className={classes.cardContent}>
