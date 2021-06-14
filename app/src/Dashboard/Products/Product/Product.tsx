@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, Grid, Input, InputLabel } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { ProductContract, ProductListItemContract } from '../../../Api/Products/contracts'
+import { FileUpload, ProductContract, ProductListItemContract } from '../../../Api/Products/contracts'
 import productsApi from '../../../Api/Products/productsApi'
 import Title from '../../Title'
 import { formIsValid, FormValidation, initialFormValidation } from '../utils'
@@ -27,6 +27,17 @@ const useStyles = makeStyles(theme => ({
 			background: '#d32f2f',
 		},
 	},
+	uploadBlock: {
+		display: 'flex',
+		flexDirection: 'column',
+	},
+	uploadFileName: {
+		padding: '10px',
+		paddingBottom: '0',
+	},
+	uploadImage: {
+		paddingLeft: '10px',
+	},
 }))
 
 interface IOwnProps {
@@ -46,6 +57,8 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 	const [simpleProducts] = useState(products.filter(p => !p.isSet && p.id !== productId))
 	const [product, setProduct] = useState({} as ProductContract)
 	const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
+	const [photoPath, setPhotoPath] = useState('')
+	const [fileUpload, setFileUpload] = useState({ fileName: '' } as FileUpload)
 	const [formValidation, setFormValidation] = useState(initialFormValidation(true) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
@@ -109,16 +122,39 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 		const response = await productsApi.GetProduct(productId)
 		setProduct(response)
 		setSelectedProductIds(response.productIds)
+		setPhotoPath(response.photoPath)
 	}, [setProduct, productId, setSelectedProductIds])
+
+	const productPhotoChangeHandler = useCallback(
+		(e: any) => {
+			setFileUpload({
+				fileName: e.target.files[0].name,
+				fileContent: e.target.files[0],
+			} as FileUpload)
+		},
+		[setFileUpload],
+	)
+
+	const removeProductPhotoHandler = useCallback(async () => {
+		await productsApi.RemoveProductPhoto(product.id)
+		setPhotoPath('')
+	}, [product, setPhotoPath])
 
 	const updateProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await productsApi.Update(product.id, { ...product, productIds: selectedProductIds })
+			let productPhoto = null as any | null
+			if (fileUpload.fileName) {
+				const formData = new FormData()
+				formData.append('fileName', fileUpload.fileName)
+				formData.append('fileContent', fileUpload.fileContent)
+				productPhoto = formData
+			}
+			await productsApi.Update(product.id, { ...product, productIds: selectedProductIds }, productPhoto)
 			hide()
 		} else {
 			setErrorText(t('FormIsInvalid'))
 		}
-	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, hide, setErrorText])
+	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, fileUpload, hide, setErrorText])
 
 	const deleteProduct = useCallback(async () => {
 		await productsApi.Delete(productId)
@@ -201,6 +237,41 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 								onChange={addedCostChangeHandler}
 							/>
 						</FormControl>
+					</Grid>
+					<Grid item xs={6}>
+						<div className={classes.uploadBlock}>
+							<input
+								accept="image/*"
+								style={{ display: 'none' }}
+								id="raised-button-file"
+								multiple
+								type="file"
+								onChange={productPhotoChangeHandler}
+							/>
+							<label htmlFor="raised-button-file">
+								<Button
+									variant="outlined"
+									component="span"
+									className={classes.button}
+									disabled={Boolean(photoPath)}
+								>
+									{t('ChooseProductPhoto')}
+								</Button>
+								{product.photoPath && (
+									<Button
+										variant="outlined"
+										className={classes.button}
+										onClick={removeProductPhotoHandler}
+										disabled={!photoPath}
+									>
+										{t('RemoveProductPhoto')}
+									</Button>
+								)}
+							</label>
+
+							<span className={classes.uploadFileName}>{fileUpload.fileName}</span>
+							{photoPath && <img src={`assets/${photoPath}`} className={classes.uploadImage} />}
+						</div>
 					</Grid>
 					<Grid item xs={12} md={12}>
 						<MultipleSelect

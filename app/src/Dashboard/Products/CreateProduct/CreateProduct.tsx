@@ -1,15 +1,13 @@
 import { Box, Button, FormControl, Grid, Input, InputLabel } from '@material-ui/core'
 import React, { useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { ProductInfoContract, ProductListItemContract } from '../../../Api/Products/contracts'
+import { FileUpload, ProductInfoContract, ProductListItemContract } from '../../../Api/Products/contracts'
 import productsApi from '../../../Api/Products/productsApi'
 import Title from '../../Title'
 import { Alert } from '@material-ui/lab'
 import { formIsValid, FormValidation, initialFormValidation, initialProduct } from '../utils'
 import MultipleSelect from '../../../MultipleSelect/MultipleSelect'
 import { useTranslation } from 'react-i18next'
-import { FileUpload } from '../../../Api/Files/contracts'
-import filesApi from '../../../Api/Files/filesApi'
 
 interface IOwnProps {
 	products: ProductListItemContract[]
@@ -30,7 +28,8 @@ const useStyles = makeStyles(theme => ({
 		flexDirection: 'column',
 	},
 	uploadFileName: {
-		paddingLeft: '10px',
+		padding: '10px',
+		paddingBottom: '0',
 	},
 }))
 
@@ -42,7 +41,6 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 	const [product, setProduct] = useState(initialProduct as ProductInfoContract)
 	const [selectedProductIds, setSelectedProductIds] = useState<string[]>([])
 	const [fileUpload, setFileUpload] = useState({ fileName: '' } as FileUpload)
-	const [isFileUploaded, setIsFileUploaded] = useState(false)
 	const [formValidation, setFormValidation] = useState(initialFormValidation(false) as FormValidation)
 	const [errorText, setErrorText] = useState('')
 
@@ -110,37 +108,27 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 		[setFileUpload],
 	)
 
-	const uploadProductPhoto = useCallback(
-		async (file: FileUpload) => {
-			const formData = new FormData()
-			formData.append('fileName', file.fileName)
-			formData.append('fileContent', file.fileContent)
-			await filesApi.Upload(formData)
-			setIsFileUploaded(true)
-		},
-		[filesApi, setIsFileUploaded],
-	)
-
 	const createProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await productsApi.Create({ ...product, productIds: selectedProductIds })
+			let productPhoto = null as any | null
+			if (fileUpload.fileName) {
+				const formData = new FormData()
+				formData.append('fileName', fileUpload.fileName)
+				formData.append('fileContent', fileUpload.fileContent)
+				productPhoto = formData
+			}
+			await productsApi.Create({ ...product, productIds: selectedProductIds }, productPhoto)
 			hide()
 		} else {
 			setErrorText(t('FormIsInvalid'))
 		}
-	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, hide, setErrorText])
+	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, fileUpload, hide, setErrorText])
 
 	useEffect(() => {
 		if (formIsValid(formValidation)) {
 			setErrorText('')
 		}
 	}, [formValidation, formIsValid, setErrorText])
-
-	useEffect(() => {
-		if (fileUpload.fileName) {
-			uploadProductPhoto(fileUpload)
-		}
-	}, [fileUpload, uploadProductPhoto])
 
 	return (
 		<React.Fragment>
@@ -219,16 +207,6 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 							</Button>
 						</label>
 						<span className={classes.uploadFileName}>{fileUpload.fileName}</span>
-						{isFileUploaded && <img src={`assets/${fileUpload.fileName}`} />}
-						{/* <Button
-							variant="outlined"
-							color="secondary"
-							onClick={uploadProductPhoto}
-							className={classes.button}
-							disabled={!fileUpload.fileName}
-						>
-							{t('UploadProductPhoto')}
-						</Button> */}
 					</div>
 				</Grid>
 				<Grid item xs={12} md={12}>

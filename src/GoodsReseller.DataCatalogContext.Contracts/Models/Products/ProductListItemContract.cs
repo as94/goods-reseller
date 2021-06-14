@@ -15,5 +15,6 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Models.Products
         public decimal AddedCost { get; set; }
         public bool IsSet { get; set; }
         public Guid[] ProductIds { get; set; }
+        public string PhotoPath { get; set; }
     }
 }

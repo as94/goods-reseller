@@ -9,6 +9,7 @@ export interface ProductContract {
 	discountPerUnit: number
 	addedCost: number
 	productIds: string[]
+	photoPath: string
 }
 
 export interface ProductListItemContract {
@@ -23,6 +24,7 @@ export interface ProductListItemContract {
 	addedCost: number
 	isSet: boolean
 	productIds: string[]
+	photoPath: string
 }
 
 export interface ProductListContract {
@@ -37,4 +39,9 @@ export interface ProductInfoContract {
 	discountPerUnit: number
 	addedCost: number
 	productIds: string[]
+}
+
+export interface FileUpload {
+	fileName: string
+	fileContent: any
 }

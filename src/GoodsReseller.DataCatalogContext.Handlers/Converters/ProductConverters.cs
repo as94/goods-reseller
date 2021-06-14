@@ -18,7 +18,8 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
                 UnitPrice = product.UnitPrice.Value,
                 DiscountPerUnit = product.DiscountPerUnit.Value,
                 AddedCost = product.AddedCost.Value,
-                ProductIds = product.ProductIds
+                ProductIds = product.ProductIds,
+                PhotoPath = product.PhotoPath
             };
         }
 
@@ -36,7 +37,8 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Converters
                 DiscountPerUnit = product.DiscountPerUnit.Value,
                 AddedCost = product.AddedCost.Value,
                 IsSet = isSet,
-                ProductIds = product.ProductIds
+                ProductIds = product.ProductIds,
+                PhotoPath = product.PhotoPath
             };
         }
     }
