@@ -1,3 +1,4 @@
+import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import { CheckerPlugin } from 'awesome-typescript-loader'
 import { Configuration, DefinePlugin } from 'webpack'
 import CopyPlugin from 'copy-webpack-plugin'
@@ -13,21 +14,10 @@ const env = dotenv.config({ path: finalPath }).parsed
 
 const commonConfig: Configuration = {
 	entry: ['./src/index.tsx'],
-	output: {
-		filename: 'bundle.js',
-		path: __dirname + '/../src/GoodsReseller.Api/wwwroot',
-		chunkFilename: 'vendor.js',
-	},
-	optimization: {
-		splitChunks: {
-			chunks: 'all',
-		},
-	},
-	devtool: 'eval-source-map',
+	devtool: 'source-map',
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.json'],
 	},
-
 	module: {
 		rules: [
 			{ enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
@@ -43,7 +33,18 @@ const commonConfig: Configuration = {
 			{ test: /\.css$/, use: ['style-loader', 'css-loader'] },
 		],
 	},
+	output: {
+		path: __dirname + '/../src/GoodsReseller.Api/wwwroot',
+		filename: 'bundle.js',
+		chunkFilename: 'vendor.js',
+	},
+	optimization: {
+		splitChunks: {
+			chunks: 'all',
+		},
+	},
 	plugins: [
+		new CleanWebpackPlugin(),
 		new CheckerPlugin(),
 		new CopyPlugin([
 			{ from: 'public/assets', to: __dirname + '/../src/GoodsReseller.Api/wwwroot/assets' },
@@ -56,7 +57,7 @@ const commonConfig: Configuration = {
 				prev[`process.env.${next}`] = JSON.stringify(env[next])
 				return prev
 			}, {}),
-		),
+		)
 	],
 }
 
