@@ -72,6 +72,15 @@ const useStyles = makeStyles(theme => ({
 			cursor: 'pointer',
 		},
 	},
+	chip: {
+		'& > span': {
+			whiteSpace: 'break-spaces',
+		},
+		minHeight: '32px',
+		height: 'auto',
+		paddingTop: '6px',
+		paddingBottom: '6px',
+	},
 }))
 
 const mainFeaturedPost = {
@@ -196,6 +205,7 @@ const StorePage = () => {
 										<div className={classes.setComposition}>
 											{getSetComposition(x.id)?.map(y => (
 												<Chip
+													className={classes.chip}
 													clickable
 													label={y.name}
 													variant="outlined"
