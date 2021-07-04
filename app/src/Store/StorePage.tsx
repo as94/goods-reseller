@@ -93,19 +93,68 @@ const mainFeaturedPost = {
 
 const excludeProducts = ['Наполнитель для коробки', 'Подарочная коробка']
 
+const maxProductImageShowTimeInSec = 3
+
+interface ProductSetImages {
+	[setId: string]: {
+		originalSet: ProductListItemContract
+		firstProduct: ProductListItemContract
+		secondProduct: ProductListItemContract | null
+		timeToBackToOriginalInSec: number | null
+	}
+}
+
 const StorePage = () => {
 	const classes = useStyles()
 	const history = useHistory()
 	const [products, setProducts] = useState([] as ProductListItemContract[])
 	const [setList, setSetList] = useState([] as ProductListItemContract[])
-	const [selectedProductImageForSet, setSelectedProductImageForSet] = useState(
-		null as { setId: string; productImage: string } | null,
-	)
+	const [productSetImages, setProductSetImages] = useState({} as ProductSetImages)
 
 	const getSetListHandler = useCallback(async () => {
 		const result = await productsApi.GetProductList()
 		setProducts(result.items)
 	}, [setProducts, productsApi])
+
+	const getSetComposition = useCallback(
+		(setId: string) => {
+			const set = products.find(x => x.id === setId)
+			if (!set) {
+				return []
+			}
+			return products
+				.filter(x => set.productIds.includes(x.id))
+				.filter(x => !excludeProducts.includes(x.name))
+				.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+		},
+		[products],
+	)
+
+	const changeProductImageHandler = useCallback(
+		(setId: string, product: ProductListItemContract) => {
+			if (productSetImages[setId].firstProduct && productSetImages[setId].secondProduct) {
+				setProductSetImages({
+					...productSetImages,
+					[setId]: {
+						...productSetImages[setId],
+						firstProduct: product,
+						secondProduct: null,
+						timeToBackToOriginalInSec: maxProductImageShowTimeInSec,
+					},
+				})
+			} else {
+				setProductSetImages({
+					...productSetImages,
+					[setId]: {
+						...productSetImages[setId],
+						secondProduct: product,
+						timeToBackToOriginalInSec: maxProductImageShowTimeInSec,
+					},
+				})
+			}
+		},
+		[productSetImages, setProductSetImages, maxProductImageShowTimeInSec],
+	)
 
 	useEffect(() => {
 		setSetList(
@@ -127,19 +176,44 @@ const StorePage = () => {
 		getSetListHandler()
 	}, [getSetListHandler])
 
-	const getSetComposition = useCallback(
-		(setId: string) => {
-			const set = products.find(x => x.id === setId)
-			if (!set) {
-				return null
+	useEffect(() => {
+		if (Object.keys(productSetImages).length === 0) {
+			let items = {}
+			for (let index = 0; index < setList.length; index++) {
+				const set = setList[index]
+				items = {
+					...items,
+					[set.id]: {
+						originalSet: set,
+						firstProduct: set,
+						secondProduct: null,
+						timeToBackToOriginalInSec: null,
+					},
+				}
 			}
-			return products
-				.filter(x => set.productIds.includes(x.id))
-				.filter(x => !excludeProducts.includes(x.name))
-				.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
-		},
-		[products],
-	)
+			setProductSetImages(items)
+		}
+	}, [setList, setProductSetImages, productSetImages])
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			Object.keys(productSetImages).map(key => {
+				const productSetImage = productSetImages[key]
+				if (productSetImage.timeToBackToOriginalInSec !== null) {
+					if (productSetImage.timeToBackToOriginalInSec === 0) {
+						productSetImage.firstProduct = productSetImage.originalSet
+						productSetImage.secondProduct = null
+						productSetImage.timeToBackToOriginalInSec = null
+					} else {
+						productSetImage.timeToBackToOriginalInSec--
+					}
+
+					setProductSetImages({ ...productSetImages, [key]: productSetImage })
+				}
+			})
+		}, 1000)
+		return () => clearInterval(interval)
+	}, [productSetImages, setProductSetImages])
 
 	return (
 		<>
@@ -152,21 +226,20 @@ const StorePage = () => {
 						{setList.map(x => (
 							<Grid item key={x.id} xs={12} sm={6} md={4}>
 								<Card className={classes.card}>
-									{selectedProductImageForSet && selectedProductImageForSet.setId === x.id && (
+									{productSetImages[x.id] && productSetImages[x.id].secondProduct !== null && (
 										<Grow
-											in={
-												selectedProductImageForSet !== null &&
-												selectedProductImageForSet.setId === x.id
-											}
+											in={productSetImages[x.id].secondProduct !== null}
 											style={{ transformOrigin: '0 0 0' }}
-											{...{ timeout: 2000 }}
+											{...{ timeout: 1000 }}
 										>
 											<Paper elevation={4}>
 												<CardMedia
 													className={classes.cardMedia}
 													image={
-														selectedProductImageForSet.productImage
-															? `assets/${selectedProductImageForSet.productImage}`
+														productSetImages[x.id].secondProduct?.photoPath
+															? `assets/${
+																	productSetImages[x.id].secondProduct?.photoPath
+															  }`
 															: 'assets/noImageAvailable.svg'
 													}
 													title={x.description}
@@ -174,46 +247,45 @@ const StorePage = () => {
 											</Paper>
 										</Grow>
 									)}
-									{(!selectedProductImageForSet || selectedProductImageForSet.setId !== x.id) && (
-										<Grow
-											in={
-												!selectedProductImageForSet || selectedProductImageForSet.setId !== x.id
-											}
-											style={{ transformOrigin: '0 0 0' }}
-											{...{ timeout: 2000 }}
-										>
-											<Paper elevation={4}>
-												<CardMedia
-													className={classes.cardMedia}
-													image={
-														x.photoPath
-															? `assets/${x.photoPath}`
-															: 'assets/noImageAvailable.svg'
-													}
-													title={x.description}
-												/>
-											</Paper>
-										</Grow>
-									)}
+									{productSetImages[x.id] &&
+										productSetImages[x.id].firstProduct !== null &&
+										productSetImages[x.id].secondProduct === null && (
+											<Grow
+												in={
+													productSetImages[x.id].firstProduct !== null &&
+													productSetImages[x.id].secondProduct === null
+												}
+												style={{ transformOrigin: '0 0 0' }}
+												{...{ timeout: 1000 }}
+											>
+												<Paper elevation={4}>
+													<CardMedia
+														className={classes.cardMedia}
+														image={
+															productSetImages[x.id].firstProduct.photoPath
+																? `assets/${
+																		productSetImages[x.id].firstProduct.photoPath
+																  }`
+																: 'assets/noImageAvailable.svg'
+														}
+														title={x.description}
+													/>
+												</Paper>
+											</Grow>
+										)}
 									<CardContent className={classes.cardContent}>
 										<Typography gutterBottom variant="h5" component="h2">
 											{x.name}
 										</Typography>
 										<Typography>{x.description}</Typography>
 										<div className={classes.setComposition}>
-											{getSetComposition(x.id)?.map(y => (
+											{getSetComposition(x.id).map(y => (
 												<Chip
 													className={classes.chip}
 													clickable
 													label={y.name}
 													variant="outlined"
-													onMouseEnter={() =>
-														setSelectedProductImageForSet({
-															setId: x.id,
-															productImage: y.photoPath,
-														})
-													}
-													onMouseLeave={() => setSelectedProductImageForSet(null)}
+													onClick={() => changeProductImageHandler(x.id, y)}
 												/>
 											))}
 										</div>
