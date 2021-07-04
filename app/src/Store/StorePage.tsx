@@ -157,7 +157,11 @@ const StorePage = () => {
 											<Paper elevation={4}>
 												<CardMedia
 													className={classes.cardMedia}
-													image={`assets/${selectedProductImageForSet.productImage}`}
+													image={
+														selectedProductImageForSet.productImage
+															? `assets/${selectedProductImageForSet.productImage}`
+															: 'assets/noImageAvailable.svg'
+													}
 													title={x.description}
 												/>
 											</Paper>
