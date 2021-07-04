@@ -141,8 +141,6 @@ const StorePage = () => {
 		[products],
 	)
 
-	console.log('selectedProductImageForSet', selectedProductImageForSet)
-
 	return (
 		<>
 			<CssBaseline />
