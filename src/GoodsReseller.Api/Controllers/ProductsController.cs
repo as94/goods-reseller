@@ -141,8 +141,10 @@ namespace GoodsReseller.Api.Controllers
             var fileName = fileUpload.FileName.ToLower();
             var path = Path.Combine(photoPath, fileName);
 
-            await using var fileStream = System.IO.File.Create(path);
-            await fileUpload.FileContent.CopyToAsync(fileStream, cancellationToken);
+            using (var fileStream = System.IO.File.Create(path))
+            {
+                await fileUpload.FileContent.CopyToAsync(fileStream, cancellationToken);
+            }
 
             var relativePath = Path.Combine(productId.ToString(), fileName);
             await _mediator.Send(new UpdateProductPhotoRequest
