@@ -44,7 +44,9 @@ const commonConfig: Configuration = {
 		},
 	},
 	plugins: [
-		new CleanWebpackPlugin(),
+		new CleanWebpackPlugin({
+			cleanStaleWebpackAssets: false,
+		}),
 		new CheckerPlugin(),
 		new CopyPlugin([
 			{ from: 'public/assets', to: __dirname + '/../src/GoodsReseller.Api/wwwroot/assets' },

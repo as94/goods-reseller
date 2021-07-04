@@ -15,6 +15,9 @@ import { useHistory } from 'react-router-dom'
 import StoreHeader from '../StoreHeader/StoreHeader'
 import StoreFooter from '../StoreFooter/StoreFooter'
 import MainFeaturedPost from './MainFeaturedPost/MainFeaturedPost'
+import Chip from '@material-ui/core/Chip'
+import Paper from '@material-ui/core/Paper'
+import Grow from '@material-ui/core/Grow'
 
 const useStyles = makeStyles(theme => ({
 	icon: {
@@ -41,7 +44,10 @@ const useStyles = makeStyles(theme => ({
 		flexDirection: 'column',
 	},
 	cardMedia: {
-		paddingTop: '56.25%', // 16:9
+		paddingTop: '100%',
+		fill: theme.palette.common.white,
+		stroke: theme.palette.divider,
+		strokeWidth: 1,
 	},
 	cardContent: {
 		flexGrow: 1,
@@ -57,6 +63,15 @@ const useStyles = makeStyles(theme => ({
 	phoneNumber: {
 		paddingLeft: '10px',
 	},
+	setComposition: {
+		display: 'flex',
+		justifyContent: 'left',
+		flexWrap: 'wrap',
+		'& > *': {
+			margin: theme.spacing(0.5),
+			cursor: 'pointer',
+		},
+	},
 }))
 
 const mainFeaturedPost = {
@@ -67,15 +82,16 @@ const mainFeaturedPost = {
 	imgText: 'Подходящие варианты подарочных наборов для мужчины, которые можно купить в Москве',
 }
 
+const excludeProducts = ['Наполнитель для коробки', 'Подарочная коробка']
+
 const StorePage = () => {
 	const classes = useStyles()
 	const history = useHistory()
 	const [products, setProducts] = useState([] as ProductListItemContract[])
 	const [setList, setSetList] = useState([] as ProductListItemContract[])
-	const [anchorEl, setAnchorEl] = useState(null)
-	const [selectedSetId, setSelectedSetId] = useState(null as string | null)
-
-	const open = Boolean(anchorEl)
+	const [selectedProductImageForSet, setSelectedProductImageForSet] = useState(
+		null as { setId: string; productImage: string } | null,
+	)
 
 	const getSetListHandler = useCallback(async () => {
 		const result = await productsApi.GetProductList()
@@ -102,40 +118,21 @@ const StorePage = () => {
 		getSetListHandler()
 	}, [getSetListHandler])
 
-	const showSetCompositionHandler = useCallback(
-		(event: any, setId: string) => {
-			setAnchorEl(event.currentTarget)
-			setSelectedSetId(setId)
+	const getSetComposition = useCallback(
+		(setId: string) => {
+			const set = products.find(x => x.id === setId)
+			if (!set) {
+				return null
+			}
+			return products
+				.filter(x => set.productIds.includes(x.id))
+				.filter(x => !excludeProducts.includes(x.name))
+				.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
 		},
-		[setSelectedSetId],
+		[products],
 	)
 
-	const hideSetCompositionHandler = useCallback(event => {
-		setAnchorEl(null)
-	}, [])
-
-	const getPopoverContent = useCallback(() => {
-		if (!selectedSetId) {
-			return null
-		}
-		const set = products.find(x => x.id === selectedSetId)
-		if (!set) {
-			return null
-		}
-		const setProducts = products
-			.filter(x => set.productIds.includes(x.id))
-			.filter(x => x.name !== 'Наполнитель для коробки' && x.name !== 'Подарочная коробка')
-			.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
-		return (
-			<List dense>
-				{setProducts.map(x => (
-					<ListItem>
-						<ListItemText primary={x.name} />
-					</ListItem>
-				))}
-			</List>
-		)
-	}, [selectedSetId])
+	console.log('selectedProductImageForSet', selectedProductImageForSet)
 
 	return (
 		<>
@@ -148,46 +145,72 @@ const StorePage = () => {
 						{setList.map(x => (
 							<Grid item key={x.id} xs={12} sm={6} md={4}>
 								<Card className={classes.card}>
-									<CardMedia
-										className={classes.cardMedia}
-										image={`assets/${x.photoPath}`}
-										title="Image title"
-									/>
+									{selectedProductImageForSet && selectedProductImageForSet.setId === x.id && (
+										<Grow
+											in={
+												selectedProductImageForSet !== null &&
+												selectedProductImageForSet.setId === x.id
+											}
+											style={{ transformOrigin: '0 0 0' }}
+											{...{ timeout: 2000 }}
+										>
+											<Paper elevation={4}>
+												<CardMedia
+													className={classes.cardMedia}
+													image={`assets/${selectedProductImageForSet.productImage}`}
+													title={x.description}
+												/>
+											</Paper>
+										</Grow>
+									)}
+									{(!selectedProductImageForSet || selectedProductImageForSet.setId !== x.id) && (
+										<Grow
+											in={
+												!selectedProductImageForSet || selectedProductImageForSet.setId !== x.id
+											}
+											style={{ transformOrigin: '0 0 0' }}
+											{...{ timeout: 2000 }}
+										>
+											<Paper elevation={4}>
+												<CardMedia
+													className={classes.cardMedia}
+													image={
+														x.photoPath
+															? `assets/${x.photoPath}`
+															: 'assets/noImageAvailable.svg'
+													}
+													title={x.description}
+												/>
+											</Paper>
+										</Grow>
+									)}
 									<CardContent className={classes.cardContent}>
 										<Typography gutterBottom variant="h5" component="h2">
 											{x.name}
 										</Typography>
 										<Typography>{x.description}</Typography>
+										<div className={classes.setComposition}>
+											{getSetComposition(x.id)?.map(y => (
+												<Chip
+													clickable
+													label={y.name}
+													variant="outlined"
+													onMouseEnter={() =>
+														setSelectedProductImageForSet({
+															setId: x.id,
+															productImage: y.photoPath,
+														})
+													}
+													onMouseLeave={() => setSelectedProductImageForSet(null)}
+												/>
+											))}
+										</div>
 									</CardContent>
 									<CardActions>
 										<Button
 											color="primary"
 											size="small"
-											variant="outlined"
-											onClick={e => showSetCompositionHandler(e, x.id)}
-										>
-											Состав
-										</Button>
-										<Popover
-											id={open ? `${x.id}-popover` : undefined}
-											open={open}
-											anchorEl={anchorEl}
-											onClose={hideSetCompositionHandler}
-											anchorOrigin={{
-												vertical: 'bottom',
-												horizontal: 'center',
-											}}
-											transformOrigin={{
-												vertical: 'top',
-												horizontal: 'left',
-											}}
-										>
-											{getPopoverContent()}
-										</Popover>
-										<Button
-											color="primary"
-											size="small"
-											variant="outlined"
+											variant="contained"
 											onClick={() => history.push(`/store/checkout/${x.id}`)}
 										>
 											Хочу этот

@@ -22,3 +22,5 @@ docker run --rm --link database -e SLEEP_LENGTH=0.5  dadarek/wait-for-dependenci
 
 echo 'Run migrator...'
 docker run --rm --link database -e DatabaseOptions__ConnectionString="Host=database;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123" $MIGRATOR_ID
+
+echo 'Done'
