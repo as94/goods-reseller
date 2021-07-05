@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
+using GoodsReseller.Api.Notifications;
 using GoodsReseller.OrderContext.Contracts.Models;
 using GoodsReseller.OrderContext.Contracts.Orders.BatchByQuery;
 using GoodsReseller.OrderContext.Contracts.Orders.Create;
@@ -11,6 +12,7 @@ using GoodsReseller.OrderContext.Contracts.Orders.Update;
 using GoodsReseller.OrderContext.Contracts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodsReseller.Api.Controllers
@@ -21,10 +23,12 @@ namespace GoodsReseller.Api.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly OrderAcceptedNotificationService _orderAcceptedNotificationService;
 
-        public OrdersController(IMediator mediator)
+        public OrdersController(IMediator mediator, OrderAcceptedNotificationService orderAcceptedNotificationService)
         {
             _mediator = mediator;
+            _orderAcceptedNotificationService = orderAcceptedNotificationService;
         }
 
         [HttpGet("{orderId}")]
@@ -42,17 +46,19 @@ namespace GoodsReseller.Api.Controllers
 
             return Ok(response.Order);
         }
-        
+
         [HttpGet]
-        public async Task<IActionResult> GetOrderListAsync([FromQuery] BatchOrdersQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetOrderListAsync([FromQuery] BatchOrdersQuery query,
+            CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(new BatchOrdersByQueryRequest
             {
                 Query = query
             }, cancellationToken);
-            
+
             return Ok(response.OrderList);
         }
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -60,10 +66,18 @@ namespace GoodsReseller.Api.Controllers
             [FromBody] [Required] OrderInfoContract orderInfo,
             CancellationToken cancellationToken)
         {
-            return Ok(await _mediator.Send(new CreateOrderRequest
+            var response = await _mediator.Send(new CreateOrderRequest
             {
                 OrderInfo = orderInfo
-            }, cancellationToken));
+            }, cancellationToken);
+
+            await _orderAcceptedNotificationService.SendNotificationAsync(
+                new OrderAcceptedTelegramNotification(
+                    orderInfo.CustomerInfo.PhoneNumber,
+                    orderInfo.CustomerInfo.Name),
+                cancellationToken);
+
+            return Ok(response);
         }
 
         [HttpPut("{orderId}")]
@@ -77,7 +91,7 @@ namespace GoodsReseller.Api.Controllers
                 OrderId = orderId,
                 OrderInfo = orderInfo
             }, cancellationToken);
-            
+
             return Ok();
         }
 
@@ -90,7 +104,7 @@ namespace GoodsReseller.Api.Controllers
             {
                 OrderId = orderId
             }, cancellationToken);
-            
+
             return Ok();
         }
     }

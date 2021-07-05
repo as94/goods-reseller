@@ -14,6 +14,7 @@ services:
       - "5000"
     environment:
       DatabaseOptions__ConnectionString: "Host=database;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123;Pooling=false;Timeout=300;CommandTimeout=300;"
+      TelegramApiOptions__ApiKey: ""
     volumes:
       - $HOME/goodsreseller/wwwroot:/wwwroot/assets
   

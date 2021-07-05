@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using GoodsReseller.Api.Middlewares;
+using GoodsReseller.Api.Notifications;
 using GoodsReseller.AuthContext.Handlers;
 using GoodsReseller.DataCatalogContext.Handlers;
 using GoodsReseller.Infrastructure;
@@ -34,6 +35,11 @@ namespace GoodsReseller.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+
+            services
+                .Configure<TelegramApiOptions>(_configuration.GetSection(nameof(TelegramApiOptions)));
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.MinimumSameSitePolicy = SameSiteMode.Strict;
@@ -61,6 +67,7 @@ namespace GoodsReseller.Api
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
             services.RegisterSupplyContextHandlers();
+            services.AddSingleton<OrderAcceptedNotificationService>();
 
             services.AddCors(
                 options => options.AddPolicy("CorsPolicy", builder =>
