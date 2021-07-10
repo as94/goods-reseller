@@ -6,7 +6,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GoodsReseller.AuthContext.Domain\GoodsReseller.AuthContext.Domain.csproj" />
+      <ProjectReference Include="..\GoodsReseller.Configurations\GoodsReseller.Configurations.csproj" />
       <ProjectReference Include="..\GoodsReseller.DataCatalogContext.Models\GoodsReseller.DataCatalogContext.Models.csproj" />
+      <ProjectReference Include="..\GoodsReseller.NotificationContext\GoodsReseller.NotificationContext.csproj" />
       <ProjectReference Include="..\GoodsReseller.OrderContext.Domain\GoodsReseller.OrderContext.Domain.csproj" />
       <ProjectReference Include="..\GoodsReseller.Statistics\GoodsReseller.Statistics.csproj" />
       <ProjectReference Include="..\GoodsReseller.SupplyContext.Domain\GoodsReseller.SupplyContext.Domain.csproj" />

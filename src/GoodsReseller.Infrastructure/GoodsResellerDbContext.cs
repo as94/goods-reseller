@@ -1,6 +1,7 @@
 using GoodsReseller.AuthContext.Domain.Users.Entities;
 using GoodsReseller.DataCatalogContext.Models.Products;
 using GoodsReseller.Infrastructure.EntityTypeConfigurations;
+using GoodsReseller.NotificationContext.Models;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.SupplyContext.Domain.Supplies.Entities;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace GoodsReseller.Infrastructure
         public DbSet<SupplyItem> SupplyItems { get; set; }
         
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+        public DbSet<TelegramChat> TelegramChats { get; set; }
         
         public GoodsResellerDbContext(DbContextOptions<GoodsResellerDbContext> options)
             : base(options)
@@ -33,6 +35,7 @@ namespace GoodsReseller.Infrastructure
             modelBuilder.ApplyConfiguration(new OrderItemEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SupplyEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SupplyItemEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new TelegramChatTypeConfiguration());
         }
     }
 }

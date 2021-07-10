@@ -5,7 +5,9 @@ using GoodsReseller.AuthContext.Domain.Users.Entities;
 using GoodsReseller.AuthContext.Domain.Users.ValueObjects;
 using GoodsReseller.DataCatalogContext.Models.Products;
 using GoodsReseller.Infrastructure;
+using GoodsReseller.NotificationContext.Contracts;
 using GoodsReseller.SeedWork.ValueObjects;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +20,10 @@ namespace GoodsReseller.Api
         public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
+            
+            using var scope = host.Services.CreateScope();
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            await mediator.Send(new SubscribeOnChatsRequest());
 
             if (args.Contains("--updateDatabase"))
             {

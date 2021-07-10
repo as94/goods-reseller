@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using GoodsReseller.Api.Middlewares;
-using GoodsReseller.Api.Notifications;
 using GoodsReseller.AuthContext.Handlers;
+using GoodsReseller.Configurations;
 using GoodsReseller.DataCatalogContext.Handlers;
 using GoodsReseller.Infrastructure;
-using GoodsReseller.Infrastructure.Configurations;
+using GoodsReseller.NotificationContext;
 using GoodsReseller.OrderContext.Handlers;
 using GoodsReseller.SupplyContext.Handlers;
 using Microsoft.AspNetCore.Builder;
@@ -67,7 +67,7 @@ namespace GoodsReseller.Api
             services.RegisterDataCatalogContextHandlers();
             services.RegisterOrderContextHandlers();
             services.RegisterSupplyContextHandlers();
-            services.AddSingleton<OrderAcceptedNotificationService>();
+            services.RegisterNotificationContextHandlers();
 
             services.AddCors(
                 options => options.AddPolicy("CorsPolicy", builder =>
