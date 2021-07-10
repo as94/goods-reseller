@@ -1,11 +1,13 @@
 using GoodsReseller.AuthContext.Domain.Users;
+using GoodsReseller.Configurations;
 using GoodsReseller.DataCatalogContext.Models.Products;
 using GoodsReseller.Infrastructure.AuthContext;
-using GoodsReseller.Infrastructure.Configurations;
 using GoodsReseller.Infrastructure.DataCatalogContext;
+using GoodsReseller.Infrastructure.NotificationContext;
 using GoodsReseller.Infrastructure.OrderContext;
 using GoodsReseller.Infrastructure.Statistics;
 using GoodsReseller.Infrastructure.SupplyContext;
+using GoodsReseller.NotificationContext.Models;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.Statistics;
 using GoodsReseller.SupplyContext.Domain.Supplies;
@@ -28,6 +30,7 @@ namespace GoodsReseller.Infrastructure
             serviceCollection.AddScoped<IOrdersRepository, OrdersRepository>();
             serviceCollection.AddScoped<ISuppliesRepository, SuppliesRepository>();
             serviceCollection.AddScoped<IStatisticsRepository, StatisticsRepository>();
+            serviceCollection.AddScoped<ITelegramChatsRepository, TelegramChatsRepository>();
 
             serviceCollection.AddDataProtection()
                 .PersistKeysToDbContext<GoodsResellerDbContext>();

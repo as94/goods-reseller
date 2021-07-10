@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
-using GoodsReseller.Api.Notifications;
+using GoodsReseller.NotificationContext.Contracts;
 using GoodsReseller.OrderContext.Contracts.Models;
 using GoodsReseller.OrderContext.Contracts.Orders.BatchByQuery;
 using GoodsReseller.OrderContext.Contracts.Orders.Create;
@@ -12,7 +12,6 @@ using GoodsReseller.OrderContext.Contracts.Orders.Update;
 using GoodsReseller.OrderContext.Contracts.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoodsReseller.Api.Controllers
@@ -23,12 +22,10 @@ namespace GoodsReseller.Api.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly OrderAcceptedNotificationService _orderAcceptedNotificationService;
 
-        public OrdersController(IMediator mediator, OrderAcceptedNotificationService orderAcceptedNotificationService)
+        public OrdersController(IMediator mediator)
         {
             _mediator = mediator;
-            _orderAcceptedNotificationService = orderAcceptedNotificationService;
         }
 
         [HttpGet("{orderId}")]
@@ -58,8 +55,7 @@ namespace GoodsReseller.Api.Controllers
 
             return Ok(response.OrderList);
         }
-
-
+        
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> CreateOrderAsync(
@@ -71,11 +67,11 @@ namespace GoodsReseller.Api.Controllers
                 OrderInfo = orderInfo
             }, cancellationToken);
 
-            await _orderAcceptedNotificationService.SendNotificationAsync(
-                new OrderAcceptedTelegramNotification(
-                    orderInfo.CustomerInfo.PhoneNumber,
-                    orderInfo.CustomerInfo.Name),
-                cancellationToken);
+            await _mediator.Send(new OrderAcceptedNotificationRequest
+            {
+                ClientPhoneNumber = orderInfo.CustomerInfo.PhoneNumber,
+                ClientName = orderInfo.CustomerInfo.Name
+            }, cancellationToken);
 
             return Ok(response);
         }
