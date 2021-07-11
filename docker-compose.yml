@@ -30,6 +30,16 @@ services:
     volumes:
       - $HOME/Desktop/PostgreSql-Snippets/infile:/infile
       - pg_volume:/var/lib/postgresql/data/
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=1000"
+      - "-c"
+      - "synchronous_commit=off"
+      - "-c"
+      - "wal_writer_delay=2000ms"
+      - "-c"
+      - "effective_cache_size=128MB"
 
   proxy:
     build:
