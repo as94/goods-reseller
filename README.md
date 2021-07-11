@@ -23,7 +23,7 @@ dotnet ef migrations add InitialCreate -s GoodsReseller.Api/GoodsReseller.Api.cs
 
 dotnet ef database update -s GoodsReseller.Api/GoodsReseller.Api.csproj -p  GoodsReseller.Infrastructure/GoodsReseller.Infrastructure.csproj -c GoodsResellerDbContext
 
-## Nginx
+### Backup / Restore
 
-Docker
-- docker run -it --rm -d -p 8080:80 --name web -v ~/Desktop/pet-projects/GoodsReseller/landings/yoga:/usr/share/nginx/html nginx 
+docker exec -t your-db-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+cat your_dump.sql | docker exec -i your-db-container psql -U postgres
