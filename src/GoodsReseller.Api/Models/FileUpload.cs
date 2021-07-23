@@ -8,7 +8,7 @@ namespace GoodsReseller.Api.Models
 {
     public class FileUpload : IValidatableObject
     {
-        private readonly string[] _availableExtensions = { ".png", ".jpg", ".jpeg" };
+        private readonly string[] _availableExtensions = { ".png", ".jpg", ".jpeg", ".webp" };
         
         [Required]
         public string FileName { get; set; }

@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
 		position: 'relative',
 		backgroundColor: theme.palette.grey[800],
 		color: theme.palette.common.white,
-		backgroundImage: 'url(assets/main-1.jpg)',
+		backgroundImage: 'url(assets/main-1.webp)',
 		backgroundSize: 'cover',
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: 'center',

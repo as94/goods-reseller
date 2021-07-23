@@ -114,7 +114,16 @@ namespace GoodsReseller.Api
 
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ServeUnknownFileTypes = true,
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers.Append(
+                        "Cache-Control",
+                        "public, max-age=31536000"); // 365d
+                }
+            });
             
             app.UseRouting();
             
