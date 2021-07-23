@@ -1,4 +1,6 @@
 @page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, ScriptTagHelper
 @model GoodsReseller.Api.Views.Home.Index
 
 @{
@@ -15,9 +17,10 @@
     Классные идеи, крутой ассортимент! Заходи, не бойся, не упусти момент 🎁
     Удивите друга необычной идеей подарка — Креативные мужские подарочные наборы HAPPYBOXY®"
     />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="preload" as="font" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="preload" as="font" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="icon" href="https://happyboxy.ru/favicon.ico" type="image/x-icon" />
+    <link rel="preload" as="image" href="assets/main-1.webp" />
     <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
     <meta name="google-site-verification" content="ztYw_TS1ckFCyb5NSYGIQCRK8nWjPIee2nN6sGmQFNY" />
     <meta name="yandex-verification" content="5fa1f9d82415dffc" />
@@ -25,7 +28,6 @@
 <body>
 <div id="root" style="height: 100%;"></div>
 
-<script defer src="/vendor.js" asp-append-version="true"></script>
-<script defer src="/bundle.js" asp-append-version="true"></script>
+<script defer asp-src-include="~/*.js"></script>
 </body>
 </html>

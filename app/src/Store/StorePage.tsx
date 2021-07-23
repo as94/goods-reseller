@@ -87,7 +87,7 @@ const mainFeaturedPost = {
 	title: 'Оригинальный подарок для мужчин',
 	description:
 		'Ищете подарочный набор для друга или парня? Тогда вы на правильном пути! Здесь вы сможете выбрать подходящий вариант подарочного набора и купить подарок мужчине.',
-	image: 'assets/main-1.jpg',
+	image: 'assets/main-1.webp',
 	imgText: 'Подходящие варианты подарочных наборов для мужчины, которые можно купить в Москве',
 }
 
@@ -281,6 +281,7 @@ const StorePage = () => {
 										<div className={classes.setComposition}>
 											{getSetComposition(x.id).map(y => (
 												<Chip
+													key={y.id}
 													className={classes.chip}
 													clickable
 													label={y.name}

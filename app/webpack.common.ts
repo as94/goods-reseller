@@ -33,16 +33,6 @@ const commonConfig: Configuration = {
 			{ test: /\.css$/, use: ['style-loader', 'css-loader'] },
 		],
 	},
-	output: {
-		path: __dirname + '/../src/GoodsReseller.Api/wwwroot',
-		filename: 'bundle.js',
-		chunkFilename: 'vendor.js',
-	},
-	optimization: {
-		splitChunks: {
-			chunks: 'all',
-		},
-	},
 	plugins: [
 		new CleanWebpackPlugin({
 			cleanStaleWebpackAssets: false,

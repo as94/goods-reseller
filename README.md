@@ -24,6 +24,8 @@ dotnet ef migrations add InitialCreate -s GoodsReseller.Api/GoodsReseller.Api.cs
 dotnet ef database update -s GoodsReseller.Api/GoodsReseller.Api.csproj -p  GoodsReseller.Infrastructure/GoodsReseller.Infrastructure.csproj -c GoodsResellerDbContext
 
 ### Backup / Restore
-
 docker exec -t your-db-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
 cat your_dump.sql | docker exec -i your-db-container psql -U postgres
+
+### Jmetr
+open /usr/local/bin/jmeter

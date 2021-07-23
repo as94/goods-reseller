@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { createContext, useContext } from 'react'
+import { useLocation } from 'react-router-dom'
 import authApi from '../Api/Auth/authApi'
 import { LoginUserContract } from '../Api/Auth/contracts'
 import usersApi from '../Api/Users/usersApi'
@@ -25,6 +26,7 @@ const defaultContext = {
 export const AuthContext = createContext(defaultContext)
 
 const useAuthProvider = () => {
+	const location = useLocation()
 	const [user, setUser] = useState(null as IUser | null)
 
 	const signIn = useCallback(
@@ -74,8 +76,10 @@ const useAuthProvider = () => {
 	}, [usersApi, setUser])
 
 	useEffect(() => {
-		getMyUserInfo()
-	}, [getMyUserInfo])
+		if (location.pathname.startsWith('/admin')) {
+			getMyUserInfo()
+		}
+	}, [location, getMyUserInfo])
 
 	return { user, signIn, signOut, signUp }
 }
