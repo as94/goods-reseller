@@ -40,7 +40,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\assets" />
+      <Folder Include="wwwroot" />
     </ItemGroup>
 
 </Project>
