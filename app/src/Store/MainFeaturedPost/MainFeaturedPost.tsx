@@ -14,34 +14,32 @@ const useStyles = makeStyles(theme => ({
 		backgroundSize: 'cover',
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: 'center',
-		minHeight: '50.0vw',
+		minHeight: '95.0vh',
 	},
 	mainFeaturedPostContent: {
-		position: 'relative',
 		padding: theme.spacing(3),
 		[theme.breakpoints.up('md')]: {
 			padding: theme.spacing(6),
 		},
 		backgroundColor: 'rgba(1,87,155 ,.6)',
-		minHeight: '50.0vw',
+		minHeight: '95.0vh',
 	},
 }))
 
-const MainFeaturedPost = (props: any) => {
+const MainFeaturedPost = () => {
 	const classes = useStyles()
-	const { post } = props
 
 	return (
-		<Paper square className={classes.mainFeaturedPost} style={{ backgroundImage: `url(${post.image})` }}>
-			{<img style={{ display: 'none' }} src={post.image} alt={post.imageText} />}
+		<Paper className={classes.mainFeaturedPost}>
 			<Grid container>
 				<Grid item md={4}>
 					<div className={classes.mainFeaturedPostContent}>
 						<Typography component="h1" variant="h3" color="inherit" gutterBottom>
-							{post.title}
+							Оригинальный подарок мужчине
 						</Typography>
 						<Typography variant="h5" color="inherit" paragraph>
-							{post.description}
+							Ищешь подарочный набор для друга или парня? Тогда ты на правильном пути! Здесь ты сможешь
+							выбрать подходящий вариант подарочного набора и заказать подарок мужчине.
 						</Typography>
 					</div>
 				</Grid>
