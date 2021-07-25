@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { CardActions, IconButton, List, ListItem, ListItemText, Popover } from '@material-ui/core'
+import { CardActions } from '@material-ui/core'
 import { ProductListItemContract } from '../Api/Products/contracts'
 import productsApi from '../Api/Products/productsApi'
 import { useHistory } from 'react-router-dom'
@@ -81,15 +81,33 @@ const useStyles = makeStyles(theme => ({
 		paddingTop: '6px',
 		paddingBottom: '6px',
 	},
-}))
 
-const mainFeaturedPost = {
-	title: 'Оригинальный подарок для мужчин',
-	description:
-		'Ищете подарочный набор для друга или парня? Тогда вы на правильном пути! Здесь вы сможете выбрать подходящий вариант подарочного набора и купить подарок мужчине.',
-	image: 'assets/main-1.webp',
-	imgText: 'Подходящие варианты подарочных наборов для мужчины, которые можно купить в Москве',
-}
+	mainFeaturedPost: {
+		position: 'relative',
+		backgroundColor: theme.palette.grey[800],
+		color: theme.palette.common.white,
+		marginBottom: theme.spacing(4),
+		backgroundImage: 'url(https://source.unsplash.com/random)',
+		backgroundSize: 'cover',
+		backgroundRepeat: 'no-repeat',
+		backgroundPosition: 'center',
+	},
+	overlay: {
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		right: 0,
+		left: 0,
+		backgroundColor: 'rgba(0,0,0,.3)',
+	},
+	mainFeaturedPostContent: {
+		position: 'relative',
+		padding: theme.spacing(3),
+		[theme.breakpoints.up('md')]: {
+			padding: theme.spacing(6),
+		},
+	},
+}))
 
 const excludeProducts = ['Наполнитель для коробки', 'Подарочная коробка']
 
@@ -220,9 +238,69 @@ const StorePage = () => {
 			<CssBaseline />
 			<StoreHeader />
 			<main>
-				<MainFeaturedPost post={mainFeaturedPost} />
-				<Container className={classes.cardGrid} maxWidth="md" id="sets">
-					<Grid container spacing={4}>
+				<MainFeaturedPost />
+				<Container className={classes.cardGrid} maxWidth="lg" id="sets">
+					<Paper
+						className={classes.mainFeaturedPost}
+						style={{ backgroundImage: `url(https://source.unsplash.com/random)` }}
+					>
+						<div className={classes.overlay} />
+						<Grid container>
+							<Grid item>
+								<div className={classes.mainFeaturedPostContent}>
+									<Typography component="h2" align="center" variant="h3" color="inherit" gutterBottom>
+										Что подарить?
+									</Typography>
+									<Typography variant="h5" align="center" color="inherit" paragraph>
+										Не можешь придумать, что подарить своему знакомому мужчине на его день? Не
+										волнуйся, у нас есть выход! Наш новый проект HAPPYBOXY® решает твою проблему. Мы
+										предлагаем интересные подарочные наборы. Все подарочные наборы составлялись
+										мужчинами для мужчин, мы опрашивали многих парней на предмет желаемого подарка.
+									</Typography>
+								</div>
+							</Grid>
+						</Grid>
+					</Paper>
+					<Paper className={classes.mainFeaturedPost} style={{ backgroundColor: 'white' }}>
+						<div className={classes.overlay} />
+						<Grid container>
+							<Grid item>
+								<div className={classes.mainFeaturedPostContent} style={{ backgroundColor: 'white' }}>
+									<Typography component="h2" align="center" variant="h3" color="primary" gutterBottom>
+										Классный подарок
+									</Typography>
+									<Typography variant="h5" align="center" color="primary" paragraph>
+										С одной стороны, подарок должен быть уместен, полезен и доступен. С другой
+										стороны, подарки должны вызывать эмоции, улыбку, приятное удивление и восторг.
+										Мужчинам нравится, когда девушка обеспокоилась выбором подарка.
+									</Typography>
+								</div>
+							</Grid>
+						</Grid>
+					</Paper>
+					<Paper
+						className={classes.mainFeaturedPost}
+						style={{ backgroundImage: `url(https://source.unsplash.com/random)` }}
+					>
+						<div className={classes.overlay} />
+						<Grid container>
+							<Grid item>
+								<div className={classes.mainFeaturedPostContent}>
+									<Typography component="h2" align="center" variant="h3" color="inherit" gutterBottom>
+										Ему понравится
+									</Typography>
+									<Typography variant="h5" align="center" color="inherit" paragraph>
+										Наши подарки как раз создают атмосферу заботы. Мужчина сразу видит, что подарок
+										составлен с любовью и со вкусом. Поверь, этот набор не оставит его равнодушным.
+									</Typography>
+								</div>
+							</Grid>
+						</Grid>
+					</Paper>
+					<Typography component="h2" align="center" variant="h2" color="inherit" gutterBottom>
+						Мужские подарочные наборы
+					</Typography>
+					<Grid container spacing={10}>
 						{setList.map(x => (
 							<Grid item key={x.id} xs={12} sm={6} md={4}>
 								<Card className={classes.card}>
