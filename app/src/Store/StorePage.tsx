@@ -81,16 +81,31 @@ const useStyles = makeStyles(theme => ({
 		paddingTop: '6px',
 		paddingBottom: '6px',
 	},
-
-	mainFeaturedPost: {
+	firstSaleBlock: {
 		position: 'relative',
 		backgroundColor: theme.palette.grey[800],
 		color: theme.palette.common.white,
 		marginBottom: theme.spacing(4),
-		backgroundImage: 'url(https://source.unsplash.com/random)',
+		backgroundImage: 'url(assets/main-2.webp)',
 		backgroundSize: 'cover',
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: 'center',
+	},
+	secondSaleBlock: {
+		position: 'relative',
+		backgroundColor: theme.palette.grey[800],
+		color: theme.palette.common.white,
+		marginBottom: theme.spacing(4),
+	},
+	thirdSaleBlock: {
+		position: 'relative',
+		backgroundColor: theme.palette.grey[800],
+		color: theme.palette.common.white,
+		marginBottom: theme.spacing(4),
+		backgroundImage: 'url(assets/main-3.webp)',
+		backgroundSize: 'cover',
+		backgroundRepeat: 'no-repeat',
+		backgroundPosition: 'initial',
 	},
 	overlay: {
 		position: 'absolute',
@@ -98,7 +113,6 @@ const useStyles = makeStyles(theme => ({
 		bottom: 0,
 		right: 0,
 		left: 0,
-		backgroundColor: 'rgba(0,0,0,.3)',
 	},
 	mainFeaturedPostContent: {
 		position: 'relative',
@@ -240,10 +254,7 @@ const StorePage = () => {
 			<main>
 				<MainFeaturedPost />
 				<Container className={classes.cardGrid} maxWidth="lg" id="sets">
-					<Paper
-						className={classes.mainFeaturedPost}
-						style={{ backgroundImage: `url(https://source.unsplash.com/random)` }}
-					>
+					<Paper className={classes.firstSaleBlock}>
 						<div className={classes.overlay} />
 						<Grid container>
 							<Grid item>
@@ -251,17 +262,17 @@ const StorePage = () => {
 									<Typography component="h2" align="center" variant="h3" color="inherit" gutterBottom>
 										Что подарить?
 									</Typography>
-									<Typography variant="h5" align="center" color="inherit" paragraph>
-										Не можешь придумать, что подарить своему знакомому мужчине на его день? Не
-										волнуйся, у нас есть выход! Наш новый проект HAPPYBOXY® решает твою проблему. Мы
-										предлагаем интересные подарочные наборы. Все подарочные наборы составлялись
-										мужчинами для мужчин, мы опрашивали многих парней на предмет желаемого подарка.
+									<Typography variant="h6" align="center" color="inherit" paragraph>
+										Иногда сложно придумать, что подарить своему знакомому мужчине на его день. Наш
+										новый проект HAPPYBOXY решает эту проблему. Мы предлагаем интересные подарочные
+										наборы. Все подарочные наборы составлялись мужчинами для мужчин, мы опрашивали
+										многих парней на предмет желаемого подарка.
 									</Typography>
 								</div>
 							</Grid>
 						</Grid>
 					</Paper>
-					<Paper className={classes.mainFeaturedPost} style={{ backgroundColor: 'white' }}>
+					<Paper className={classes.secondSaleBlock} style={{ backgroundColor: 'white' }}>
 						<div className={classes.overlay} />
 						<Grid container>
 							<Grid item>
@@ -269,7 +280,7 @@ const StorePage = () => {
 									<Typography component="h2" align="center" variant="h3" color="primary" gutterBottom>
 										Классный подарок
 									</Typography>
-									<Typography variant="h5" align="center" color="primary" paragraph>
+									<Typography variant="h6" align="center" color="primary" paragraph>
 										С одной стороны, подарок должен быть уместен, полезен и доступен. С другой
 										стороны, подарки должны вызывать эмоции, улыбку, приятное удивление и восторг.
 										Мужчинам нравится, когда девушка обеспокоилась выбором подарка.
@@ -278,10 +289,7 @@ const StorePage = () => {
 							</Grid>
 						</Grid>
 					</Paper>
-					<Paper
-						className={classes.mainFeaturedPost}
-						style={{ backgroundImage: `url(https://source.unsplash.com/random)` }}
-					>
+					<Paper className={classes.thirdSaleBlock}>
 						<div className={classes.overlay} />
 						<Grid container>
 							<Grid item>
@@ -289,7 +297,7 @@ const StorePage = () => {
 									<Typography component="h2" align="center" variant="h3" color="inherit" gutterBottom>
 										Ему понравится
 									</Typography>
-									<Typography variant="h5" align="center" color="inherit" paragraph>
+									<Typography variant="h6" align="center" color="inherit" paragraph>
 										Наши подарки как раз создают атмосферу заботы. Мужчина сразу видит, что подарок
 										составлен с любовью и со вкусом. Поверь, этот набор не оставит его равнодушным.
 									</Typography>
@@ -297,7 +305,7 @@ const StorePage = () => {
 							</Grid>
 						</Grid>
 					</Paper>
-					<Typography component="h2" align="center" variant="h2" color="inherit" gutterBottom>
+					<Typography component="h2" align="center" variant="h3" color="inherit" gutterBottom>
 						Мужские подарочные наборы
 					</Typography>
 					<Grid container spacing={10}>
