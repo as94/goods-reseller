@@ -237,7 +237,7 @@ const Checkout = () => {
 					<Typography component="h1" variant="h4" align="center">
 						Оформление заказа
 					</Typography>
-					<Stepper activeStep={activeStep} className={classes.stepper}>
+					<Stepper activeStep={activeStep} className={classes.stepper} orientation="vertical">
 						{steps.map(label => (
 							<Step key={label}>
 								<StepLabel>{label}</StepLabel>

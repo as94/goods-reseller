@@ -34,7 +34,7 @@ const StoreFooter = () => {
 					color="textSecondary"
 					component="p"
 					className={classes.contact}
-					style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.54)' }}
+					style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.2)' }}
 				>
 					Мы работаем по всей Москве и Московской области
 				</Typography>
@@ -60,7 +60,7 @@ const StoreFooter = () => {
 					component="p"
 					className={classes.contact}
 				>
-					happyboxy.feedback@yandex.ru
+					happyboxy.shop@yandex.ru
 				</Typography>
 			</div>
 			<Typography variant="subtitle1" align="center" color="textSecondary" component="p">
