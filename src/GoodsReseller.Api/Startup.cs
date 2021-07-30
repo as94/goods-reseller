@@ -69,14 +69,17 @@ namespace GoodsReseller.Api
             services.RegisterSupplyContextHandlers();
             services.RegisterNotificationContextHandlers();
 
-            services.AddCors(
-                options => options.AddPolicy("CorsPolicy", builder =>
-                {
-                    builder.WithOrigins(SiteDNS)
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-                }));
-            
+            if (!_environment.IsDevelopment())
+            {
+                services.AddCors(
+                    options => options.AddPolicy("CorsPolicy", builder =>
+                    {
+                        builder.WithOrigins(SiteDNS)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    }));
+            }
+
             services.AddControllers();
             services.AddMvc();
             services.AddSwaggerGen();
@@ -126,8 +129,11 @@ namespace GoodsReseller.Api
             });
             
             app.UseRouting();
-            
-            app.UseCors("CorsPolicy");
+
+            if (!_environment.IsDevelopment())
+            {
+                app.UseCors("CorsPolicy");
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();
