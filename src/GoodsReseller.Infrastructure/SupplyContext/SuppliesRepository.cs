@@ -40,6 +40,10 @@ namespace GoodsReseller.Infrastructure.SupplyContext
 
         public async Task SaveAsync(Supply supply, CancellationToken cancellationToken)
         {
+            if (supply == null)
+            {
+                throw new ArgumentNullException(nameof(supply));
+            }
             // TODO: add handling concurrency (like OrdersRepository)
             
             var existing = await _dbContext.Supplies.FirstOrDefaultAsync(

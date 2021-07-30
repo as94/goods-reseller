@@ -3,6 +3,7 @@ using GoodsReseller.DataCatalogContext.Models.Products;
 using GoodsReseller.Infrastructure.EntityTypeConfigurations;
 using GoodsReseller.NotificationContext.Models;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
+using GoodsReseller.OrderContext.Domain.Orders.Views;
 using GoodsReseller.SupplyContext.Domain.Supplies.Entities;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace GoodsReseller.Infrastructure
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderVersionView> OrderVersions { get; set; }
 
         public DbSet<Supply> Supplies { get; set; }
         public DbSet<SupplyItem> SupplyItems { get; set; }
@@ -36,6 +38,9 @@ namespace GoodsReseller.Infrastructure
             modelBuilder.ApplyConfiguration(new SupplyEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SupplyItemEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TelegramChatTypeConfiguration());
+            
+            
+            modelBuilder.Entity<OrderVersionView>().HasNoKey().ToView(null);
         }
     }
 }
