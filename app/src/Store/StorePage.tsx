@@ -18,6 +18,8 @@ import MainFeaturedPost from './MainFeaturedPost/MainFeaturedPost'
 import Chip from '@material-ui/core/Chip'
 import Paper from '@material-ui/core/Paper'
 import Grow from '@material-ui/core/Grow'
+import { Note } from './Note/Note'
+import { SaleBlock } from './SaleBlock/SaleBlock'
 
 const useStyles = makeStyles(theme => ({
 	icon: {
@@ -83,7 +85,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	firstSaleBlock: {
 		position: 'relative',
-		backgroundColor: theme.palette.grey[800],
 		color: theme.palette.common.white,
 		marginBottom: theme.spacing(4),
 		backgroundImage: 'url(assets/main-2.webp)',
@@ -93,19 +94,21 @@ const useStyles = makeStyles(theme => ({
 	},
 	secondSaleBlock: {
 		position: 'relative',
-		backgroundColor: theme.palette.grey[800],
 		color: theme.palette.common.white,
 		marginBottom: theme.spacing(4),
 	},
 	thirdSaleBlock: {
 		position: 'relative',
-		backgroundColor: theme.palette.grey[800],
 		color: theme.palette.common.white,
 		marginBottom: theme.spacing(4),
 		backgroundImage: 'url(assets/main-3.webp)',
 		backgroundSize: 'cover',
 		backgroundRepeat: 'no-repeat',
 		backgroundPosition: 'initial',
+	},
+	manSets: {
+		marginTop: theme.spacing(4),
+		marginBottom: theme.spacing(4),
 	},
 	overlay: {
 		position: 'absolute',
@@ -247,6 +250,24 @@ const StorePage = () => {
 		return () => clearInterval(interval)
 	}, [productSetImages, setProductSetImages])
 
+	const saleBlocks = [
+		{
+			title: 'Что подарить?',
+			body: 'Иногда сложно придумать, что подарить своему знакомому мужчине на его день. Наш новый проект HAPPYBOXY решает эту проблему. Мы предлагаем интересные подарочные наборы. Все подарочные наборы составлялись мужчинами для мужчин, мы опрашивали многих парней на предмет желаемого подарка.',
+			imagePath: 'url(assets/main-2.webp)',
+		},
+		{
+			title: 'Классный подарок',
+			body: 'С одной стороны, подарок должен быть уместен, полезен и доступен. С другой стороны, подарки должны вызывать эмоции, улыбку, приятное удивление и восторг. Мужчинам нравится, когда девушка обеспокоилась выбором подарка.',
+			imagePath: null,
+		},
+		{
+			title: 'Ему понравится',
+			body: 'Наши подарки как раз создают атмосферу заботы. Мужчина сразу видит, что подарок составлен с любовью и со вкусом. Поверь, этот набор не оставит его равнодушным.',
+			imagePath: 'url(assets/main-3.webp)',
+		},
+	]
+
 	return (
 		<>
 			<CssBaseline />
@@ -254,58 +275,17 @@ const StorePage = () => {
 			<main>
 				<MainFeaturedPost />
 				<Container className={classes.cardGrid} maxWidth="lg" id="sets">
-					<Paper className={classes.firstSaleBlock}>
-						<div className={classes.overlay} />
-						<Grid container>
-							<Grid item>
-								<div className={classes.mainFeaturedPostContent}>
-									<Typography component="h2" align="center" variant="h3" color="inherit" gutterBottom>
-										Что подарить?
-									</Typography>
-									<Typography variant="h6" align="center" color="inherit" paragraph>
-										Иногда сложно придумать, что подарить своему знакомому мужчине на его день. Наш
-										новый проект HAPPYBOXY решает эту проблему. Мы предлагаем интересные подарочные
-										наборы. Все подарочные наборы составлялись мужчинами для мужчин, мы опрашивали
-										многих парней на предмет желаемого подарка.
-									</Typography>
-								</div>
-							</Grid>
-						</Grid>
-					</Paper>
-					<Paper className={classes.secondSaleBlock} style={{ backgroundColor: 'white' }}>
-						<div className={classes.overlay} />
-						<Grid container>
-							<Grid item>
-								<div className={classes.mainFeaturedPostContent} style={{ backgroundColor: 'white' }}>
-									<Typography component="h2" align="center" variant="h3" color="primary" gutterBottom>
-										Классный подарок
-									</Typography>
-									<Typography variant="h6" align="center" color="primary" paragraph>
-										С одной стороны, подарок должен быть уместен, полезен и доступен. С другой
-										стороны, подарки должны вызывать эмоции, улыбку, приятное удивление и восторг.
-										Мужчинам нравится, когда девушка обеспокоилась выбором подарка.
-									</Typography>
-								</div>
-							</Grid>
-						</Grid>
-					</Paper>
-					<Paper className={classes.thirdSaleBlock}>
-						<div className={classes.overlay} />
-						<Grid container>
-							<Grid item>
-								<div className={classes.mainFeaturedPostContent}>
-									<Typography component="h2" align="center" variant="h3" color="inherit" gutterBottom>
-										Ему понравится
-									</Typography>
-									<Typography variant="h6" align="center" color="inherit" paragraph>
-										Наши подарки как раз создают атмосферу заботы. Мужчина сразу видит, что подарок
-										составлен с любовью и со вкусом. Поверь, этот набор не оставит его равнодушным.
-									</Typography>
-								</div>
-							</Grid>
-						</Grid>
-					</Paper>
-					<Typography component="h2" align="center" variant="h3" color="inherit" gutterBottom>
+					{saleBlocks.map(saleBlock => (
+						<SaleBlock {...saleBlock} />
+					))}
+					<Typography
+						className={classes.manSets}
+						component="h2"
+						align="center"
+						variant="h3"
+						color="inherit"
+						gutterBottom
+					>
 						Мужские подарочные наборы
 					</Typography>
 					<Grid container spacing={10}>
@@ -393,15 +373,7 @@ const StorePage = () => {
 					</Grid>
 				</Container>
 			</main>
-			<div className={classes.cardGrid}>
-				<Container maxWidth="md">
-					<Typography variant="body1" align="left" color="textSecondary" paragraph>
-						Примечание: некоторые товары можно заменить аналогичными. Например: подписку на Play Station 4,
-						из стандартного набора, можно заменить на Xbox One. После оформления заказа мы расскажем все
-						подробности.
-					</Typography>
-				</Container>
-			</div>
+			<Note />
 			<StoreFooter />
 		</>
 	)
