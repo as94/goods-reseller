@@ -4,23 +4,17 @@ import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import { InputLabel, MenuItem, Select } from '@material-ui/core'
 import { AddressContract } from '../Api/Orders/contracts'
-import { errorsList } from './Checkout'
+import { DeliveryType, errorsList } from './Checkout'
 
 interface IOwnProps {
 	address: AddressContract
 	setAddress: (address: AddressContract) => void
-	deliveryType: number
-	setDeliveryType: (deliveryType: number) => void
+	deliveryType: DeliveryType
+	setDeliveryType: (deliveryType: DeliveryType) => void
 	errors: string[]
 }
 
-const AddressForm = ({
-	address,
-	setAddress,
-	deliveryType,
-	setDeliveryType,
-	errors,
-}: IOwnProps) => {
+const AddressForm = ({ address, setAddress, deliveryType, setDeliveryType, errors }: IOwnProps) => {
 	const streetIsInvalid = errors.includes(errorsList.streetIsRequiredError)
 	const zipCodeIsInvalid = errors.includes(errorsList.zipCodeIsRequiredError)
 
@@ -93,8 +87,8 @@ const AddressForm = ({
 						value={deliveryType}
 						onChange={e => setDeliveryType(Number(e.target.value))}
 					>
-						<MenuItem value={0}>Почта</MenuItem>
-						<MenuItem value={1}>Служба доставки</MenuItem>
+						<MenuItem value={DeliveryType.Mail}>Почта</MenuItem>
+						<MenuItem value={DeliveryType.Service}>Служба доставки</MenuItem>
 						{/* <MenuItem value={2}>Самовывоз</MenuItem> */}
 					</Select>
 				</Grid>

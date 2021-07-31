@@ -25,17 +25,6 @@ const useStyles = makeStyles(theme => ({
 	icon: {
 		marginRight: theme.spacing(2),
 	},
-	heroContent: {
-		backgroundColor: theme.palette.background.paper,
-		padding: theme.spacing(12, 0, 12),
-	},
-	heroContentNote: {
-		backgroundColor: theme.palette.background.paper,
-		padding: theme.spacing(6, 0, 6),
-	},
-	heroButtons: {
-		marginTop: theme.spacing(4),
-	},
 	cardGrid: {
 		paddingTop: theme.spacing(8),
 		paddingBottom: theme.spacing(8),
@@ -83,46 +72,9 @@ const useStyles = makeStyles(theme => ({
 		paddingTop: '6px',
 		paddingBottom: '6px',
 	},
-	firstSaleBlock: {
-		position: 'relative',
-		color: theme.palette.common.white,
-		marginBottom: theme.spacing(4),
-		backgroundImage: 'url(assets/main-2.webp)',
-		backgroundSize: 'cover',
-		backgroundRepeat: 'no-repeat',
-		backgroundPosition: 'center',
-	},
-	secondSaleBlock: {
-		position: 'relative',
-		color: theme.palette.common.white,
-		marginBottom: theme.spacing(4),
-	},
-	thirdSaleBlock: {
-		position: 'relative',
-		color: theme.palette.common.white,
-		marginBottom: theme.spacing(4),
-		backgroundImage: 'url(assets/main-3.webp)',
-		backgroundSize: 'cover',
-		backgroundRepeat: 'no-repeat',
-		backgroundPosition: 'initial',
-	},
 	manSets: {
 		marginTop: theme.spacing(4),
 		marginBottom: theme.spacing(4),
-	},
-	overlay: {
-		position: 'absolute',
-		top: 0,
-		bottom: 0,
-		right: 0,
-		left: 0,
-	},
-	mainFeaturedPostContent: {
-		position: 'relative',
-		padding: theme.spacing(3),
-		[theme.breakpoints.up('md')]: {
-			padding: theme.spacing(6),
-		},
 	},
 }))
 

@@ -108,6 +108,11 @@ export const errorsList = {
 	phoneNumberIsRequiredError: 'Телефон обязателен для заполнения',
 }
 
+export enum DeliveryType {
+	Mail = 0,
+	Service = 1,
+}
+
 const Checkout = () => {
 	let { setId } = useParams<{ setId: string }>()
 	if (!setId) {
@@ -118,7 +123,7 @@ const Checkout = () => {
 	const [activeStep, setActiveStep] = useState(0)
 	const [orderInfo, setOrderInfo] = useState(null as OrderInfoContract | null)
 	const [address, setAddress] = useState({ city: 'Москва', street: '', zipCode: '' } as AddressContract)
-	const [deliveryType, setDeliveryType] = useState(0)
+	const [deliveryType, setDeliveryType] = useState(DeliveryType.Mail)
 	const [customerInfo, setCustomerInfo] = useState({ name: '', phoneNumber: '' } as CustomerInfoContract)
 	const [orderItems, setOrderItems] = useState([] as OrderItemContract[])
 	const [productSet, setProductSet] = useState(null as ProductListItemContract | null)
@@ -133,7 +138,7 @@ const Checkout = () => {
 			if (!address.street) {
 				currentErrors = [...currentErrors, errorsList.streetIsRequiredError]
 			}
-			if (!address.zipCode) {
+			if (!address.zipCode && deliveryType === DeliveryType.Mail) {
 				currentErrors = [...currentErrors, errorsList.zipCodeIsRequiredError]
 			}
 		}
@@ -143,7 +148,7 @@ const Checkout = () => {
 			}
 		}
 		return currentErrors
-	}, [activeStep, address, customerInfo, errorsList])
+	}, [activeStep, address, customerInfo, errorsList, deliveryType])
 
 	const moveToNextStep = useCallback(async () => {
 		setActiveStep(activeStep + 1)
