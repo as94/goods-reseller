@@ -20,6 +20,7 @@ import Paper from '@material-ui/core/Paper'
 import Grow from '@material-ui/core/Grow'
 import { Note } from './Note/Note'
 import { SaleBlock } from './SaleBlock/SaleBlock'
+import InfoBlock from './InfoBlock/InfoBlock'
 
 const useStyles = makeStyles(theme => ({
 	icon: {
@@ -81,6 +82,54 @@ const useStyles = makeStyles(theme => ({
 const excludeProducts = ['Наполнитель для коробки', 'Подарочная коробка']
 
 const maxProductImageShowTimeInSec = 3
+
+const saleBlocks = [
+	{
+		title: 'Что подарить?',
+		body: 'Иногда сложно придумать, что подарить своему знакомому мужчине на его день. Наш новый проект HAPPYBOXY решает эту проблему. Мы предлагаем интересные подарочные наборы. Все подарочные наборы составлялись мужчинами для мужчин, мы опрашивали многих парней на предмет желаемого подарка.',
+		imagePath: 'url(assets/main-2.webp)',
+	},
+	{
+		title: 'Классный подарок',
+		body: 'С одной стороны, подарок должен быть уместен, полезен и доступен. С другой стороны, подарки должны вызывать эмоции, улыбку, приятное удивление и восторг. Мужчинам нравится, когда девушка обеспокоилась выбором подарка.',
+		imagePath: null,
+	},
+	{
+		title: 'Ему понравится',
+		body: 'Наши подарки как раз создают атмосферу заботы. Мужчина сразу видит, что подарок составлен с любовью и со вкусом. Поверь, этот набор не оставит его равнодушным.',
+		imagePath: 'url(assets/main-3.webp)',
+	},
+]
+
+const infoBlocks = [
+	{
+		title: 'Кому это подойдёт?',
+		body: 'Тем девушкам, которые устали думать о том, каким подарком можно удивить своего парня или мужа, папу или брата, друга или коллегу. Мы полностью уверены в том, что такой подарок устроит любого мужчину.',
+		imagePath: 'url(assets/main-1.webp)',
+		textItems: null,
+	},
+	{
+		title: 'Почему заказывают у нас?',
+		body: null,
+		imagePath: null,
+		textItems: [
+			{ imagePath: '', title: 'Уникальность', text: 'Интересные наборы, которых больше ни у кого нет' },
+			{ imagePath: '', title: 'Кастомизация', text: 'В каждом наборе есть предметы на выбор' },
+			{
+				imagePath: '',
+				title: 'Забота',
+				text: 'Нам не безразлично ваше мнение, поэтому мы сделаем всё возможное, чтобы вы остались довольны подарком',
+			},
+			{ imagePath: '', title: 'Доступность', text: 'Сохраняем баланс качества и стоимости подарочного набора' },
+		],
+	},
+	{
+		title: 'Наши гарантии',
+		body: 'Что делать, если что-то пошло не по плану? Например, тебя не устроило содержимое подарка при получении. В этом случае, мы гарантируем полный возврат денег. Нам важно ваше мнение.',
+		imagePath: 'url(assets/main-1.webp)',
+		textItems: null,
+	},
+]
 
 interface ProductSetImages {
 	[setId: string]: {
@@ -202,24 +251,6 @@ const StorePage = () => {
 		return () => clearInterval(interval)
 	}, [productSetImages, setProductSetImages])
 
-	const saleBlocks = [
-		{
-			title: 'Что подарить?',
-			body: 'Иногда сложно придумать, что подарить своему знакомому мужчине на его день. Наш новый проект HAPPYBOXY решает эту проблему. Мы предлагаем интересные подарочные наборы. Все подарочные наборы составлялись мужчинами для мужчин, мы опрашивали многих парней на предмет желаемого подарка.',
-			imagePath: 'url(assets/main-2.webp)',
-		},
-		{
-			title: 'Классный подарок',
-			body: 'С одной стороны, подарок должен быть уместен, полезен и доступен. С другой стороны, подарки должны вызывать эмоции, улыбку, приятное удивление и восторг. Мужчинам нравится, когда девушка обеспокоилась выбором подарка.',
-			imagePath: null,
-		},
-		{
-			title: 'Ему понравится',
-			body: 'Наши подарки как раз создают атмосферу заботы. Мужчина сразу видит, что подарок составлен с любовью и со вкусом. Поверь, этот набор не оставит его равнодушным.',
-			imagePath: 'url(assets/main-3.webp)',
-		},
-	]
-
 	return (
 		<>
 			<CssBaseline />
@@ -230,6 +261,10 @@ const StorePage = () => {
 					{saleBlocks.map(saleBlock => (
 						<SaleBlock {...saleBlock} />
 					))}
+				</Container>
+
+				<InfoBlock {...infoBlocks[0]} />
+				<Container className={classes.cardGrid} maxWidth="lg" id="sets">
 					<Typography
 						className={classes.manSets}
 						component="h2"
@@ -240,7 +275,7 @@ const StorePage = () => {
 					>
 						Мужские подарочные наборы
 					</Typography>
-					<Grid container spacing={10}>
+					<Grid container spacing={4}>
 						{setList.map(x => (
 							<Grid item key={x.id} xs={12} sm={6} md={4}>
 								<Card className={classes.card}>
@@ -324,6 +359,8 @@ const StorePage = () => {
 						))}
 					</Grid>
 				</Container>
+				<InfoBlock {...infoBlocks[1]} />
+				<InfoBlock {...infoBlocks[2]} />
 			</main>
 			<Note />
 			<StoreFooter />
