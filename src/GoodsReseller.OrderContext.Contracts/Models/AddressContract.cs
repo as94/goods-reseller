@@ -10,7 +10,6 @@ namespace GoodsReseller.OrderContext.Contracts.Models
         [Required]
         public string Street { get; set; }
         
-        [Required]
         public string ZipCode { get; set; }
         
         public string HouseNumber { get; set; }

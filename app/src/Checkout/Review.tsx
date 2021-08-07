@@ -7,11 +7,13 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Grid from '@material-ui/core/Grid'
 import { OrderInfoContract } from '../Api/Orders/contracts'
 import { ProductListItemContract } from '../Api/Products/contracts'
+import { DeliveryType } from './Checkout'
 
 interface IOwnProps {
 	productSet: ProductListItemContract
 	productsInSet: ProductListItemContract[]
 	orderInfo: OrderInfoContract
+	deliveryType: DeliveryType
 }
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 	},
 }))
 
-const Review = ({ productSet, productsInSet, orderInfo }: IOwnProps) => {
+const Review = ({ productSet, productsInSet, orderInfo, deliveryType }: IOwnProps) => {
 	const classes = useStyles()
 
 	const orderItemsCost = orderInfo.orderItems.reduce(
@@ -40,6 +42,13 @@ const Review = ({ productSet, productsInSet, orderInfo }: IOwnProps) => {
 	const setCost = orderItemsCost + orderInfo.addedCost.value
 	const deliveryCost = orderInfo.deliveryCost.value
 	const totalCost = setCost + deliveryCost
+
+	let deliveryInfo = 'Бесплатно'
+	if (deliveryType === DeliveryType.ServiceWithinMoscowRingRoad) {
+		deliveryInfo = `${deliveryCost} ₽`
+	} else if (deliveryType === DeliveryType.ServiceOutsideMoscowRingRoad) {
+		deliveryInfo = 'Обсуждается отдельно'
+	}
 
 	return (
 		<>
@@ -58,7 +67,7 @@ const Review = ({ productSet, productsInSet, orderInfo }: IOwnProps) => {
 				))}
 				<ListItem className={classes.listItem}>
 					<ListItemText primary="Доставка" />
-					<Typography variant="body2">{deliveryCost === 0 ? 'Бесплатно' : `${deliveryCost} ₽`}</Typography>
+					<Typography variant="body2">{deliveryInfo}</Typography>
 				</ListItem>
 				<ListItem className={classes.listItem}>
 					<ListItemText primary="Итого" />
