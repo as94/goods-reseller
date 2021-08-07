@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	infoBlockWithoutImage: {
 		position: 'relative',
-		color: theme.palette.common.black,
+		color: theme.palette.primary.main,
 		marginBottom: theme.spacing(4),
 		backgroundColor: 'white',
 	},

@@ -18,6 +18,16 @@ const AddressForm = ({ address, setAddress, deliveryType, setDeliveryType, error
 	const streetIsInvalid = errors.includes(errorsList.streetIsRequiredError)
 	const zipCodeIsInvalid = errors.includes(errorsList.zipCodeIsRequiredError)
 
+	const cityChangeHandler = useCallback(
+		(e: any) => {
+			setAddress({
+				...address,
+				city: e.target.value,
+			})
+		},
+		[setAddress, address],
+	)
+
 	const streetChangeHandler = useCallback(
 		(e: any) => {
 			setAddress({
@@ -47,23 +57,23 @@ const AddressForm = ({ address, setAddress, deliveryType, setDeliveryType, error
 				<Grid item xs={12} sm={6}>
 					<TextField
 						disabled
-						id="city"
-						name="city"
-						label="Город"
-						fullWidth
-						value={address.city}
-						autoComplete="shipping city"
-					/>
-				</Grid>
-				<Grid item xs={12} sm={6}>
-					<TextField
-						disabled
 						id="country"
 						name="country"
 						label="Страна"
 						fullWidth
 						value="Россия"
 						autoComplete="shipping country"
+					/>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<TextField
+						id="city"
+						name="city"
+						label="Город"
+						fullWidth
+						value={address.city}
+						onChange={cityChangeHandler}
+						autoComplete="shipping city"
 					/>
 				</Grid>
 				<Grid item xs={12}>
@@ -79,7 +89,7 @@ const AddressForm = ({ address, setAddress, deliveryType, setDeliveryType, error
 						helperText={streetIsInvalid ? errorsList.streetIsRequiredError : undefined}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={12} sm={8}>
 					<InputLabel id="delivery">Способ доставки</InputLabel>
 					<Select
 						labelId="delivery"
@@ -88,11 +98,14 @@ const AddressForm = ({ address, setAddress, deliveryType, setDeliveryType, error
 						onChange={e => setDeliveryType(Number(e.target.value))}
 					>
 						<MenuItem value={DeliveryType.Mail}>Почта</MenuItem>
-						<MenuItem value={DeliveryType.Service}>Служба доставки</MenuItem>
+						<MenuItem value={DeliveryType.ServiceWithinMoscowRingRoad}>
+							Служба доставки в пределах МКАД
+						</MenuItem>
+						<MenuItem value={DeliveryType.ServiceOutsideMoscowRingRoad}>Служба доставки за МКАД</MenuItem>
 						{/* <MenuItem value={2}>Самовывоз</MenuItem> */}
 					</Select>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={12} sm={4}>
 					<TextField
 						id="zip"
 						name="zip"

@@ -112,6 +112,11 @@ const infoBlocks = [
 		body: 'Что делать, если что-то пошло не по плану? Например, тебя не устроило содержимое подарка при получении. В этом случае, мы гарантируем полный возврат денег.',
 		imagePath: 'url(assets/main-5.webp)',
 	},
+	{
+		title: 'Оплата и доставка',
+		body: 'Оплата при получении. Доставляем по всей Москве и Московской области. Стоимость доставки в пределах МКАД - 300 ₽. Доставка за МКАД обсуждается отдельно. Также осуществляем отправку Почтой России.',
+		imagePath: null,
+	},
 ]
 
 interface ProductSetImages {
@@ -266,8 +271,9 @@ const StorePage = () => {
 				</Container>
 
 				<InfoBlock {...infoBlocks[0]} />
-				<Container className={classes.cardGrid} maxWidth="lg" id="setList">
+				<Container className={classes.cardGrid} maxWidth="lg">
 					<Typography
+						id="setList"
 						className={classes.manSets}
 						component="h2"
 						align="center"
@@ -364,9 +370,10 @@ const StorePage = () => {
 						))}
 					</Grid>
 				</Container>
+				<Note />
 				<InfoBlock {...infoBlocks[1]} />
+				<InfoBlock {...infoBlocks[2]} />
 			</main>
-			<Note />
 			<StoreFooter />
 		</>
 	)

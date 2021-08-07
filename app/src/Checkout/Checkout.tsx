@@ -95,7 +95,7 @@ function getStepContent(
 		case 2:
 			return (
 				productSet &&
-				orderInfo && <Review productSet={productSet} productsInSet={productsInSet} orderInfo={orderInfo} />
+				orderInfo && <Review productSet={productSet} productsInSet={productsInSet} orderInfo={orderInfo} deliveryType={deliveryType} />
 			)
 		default:
 			throw new Error('Unknown step')
@@ -110,7 +110,8 @@ export const errorsList = {
 
 export enum DeliveryType {
 	Mail = 0,
-	Service = 1,
+	ServiceWithinMoscowRingRoad = 1,
+	ServiceOutsideMoscowRingRoad = 2,
 }
 
 const Checkout = () => {
@@ -122,7 +123,7 @@ const Checkout = () => {
 	const classes = useStyles()
 	const [activeStep, setActiveStep] = useState(0)
 	const [orderInfo, setOrderInfo] = useState(null as OrderInfoContract | null)
-	const [address, setAddress] = useState({ city: 'Москва', street: '', zipCode: '' } as AddressContract)
+	const [address, setAddress] = useState({ city: '', street: '', zipCode: '' } as AddressContract)
 	const [deliveryType, setDeliveryType] = useState(DeliveryType.Mail)
 	const [customerInfo, setCustomerInfo] = useState({ name: '', phoneNumber: '' } as CustomerInfoContract)
 	const [orderItems, setOrderItems] = useState([] as OrderItemContract[])

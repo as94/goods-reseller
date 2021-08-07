@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { Button } from '@material-ui/core'
+import useMediaQuery from '@material-ui/core/useMediaQuery'
 
 const useStyles = makeStyles(theme => ({
 	mainFeaturedPost: {
@@ -26,29 +27,30 @@ const useStyles = makeStyles(theme => ({
 		minHeight: '95.0vh',
 	},
 	setButton: {
-		color: 'white',
-		marginTop: theme.spacing(4),
+		color: theme.palette.common.black,
+		backgroundColor: theme.palette.common.white,
+		marginTop: theme.spacing(3),
 	},
 }))
 
 const MainFeaturedPost = () => {
 	const classes = useStyles()
+	const matches = useMediaQuery('(max-width:360px)')
 
 	return (
 		<Paper className={classes.mainFeaturedPost}>
 			<Grid container>
 				<Grid item md={4}>
 					<div className={classes.mainFeaturedPostContent}>
-						<Typography component="h1" variant="h3" color="inherit" gutterBottom>
+						<Typography component="h1" variant={matches ? 'h4' : 'h3'} color="inherit" gutterBottom>
 							Оригинальный подарок мужчине
 						</Typography>
-						<Typography variant="h5" color="inherit" paragraph>
+						<Typography variant={matches ? 'h6' : 'h5'} color="inherit" paragraph>
 							Ищешь подарочный набор для друга или парня? Тогда ты на правильном пути! Здесь ты сможешь
 							выбрать подходящий вариант подарочного набора и заказать подарок мужчине.
 						</Typography>
 						<Button
-							color="primary"
-							size="large"
+							size={matches ? 'small' : 'large'}
 							variant="contained"
 							className={classes.setButton}
 							href="#setList"
