@@ -27,5 +27,8 @@ dotnet ef database update -s GoodsReseller.Api/GoodsReseller.Api.csproj -p  Good
 docker exec -t your-db-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
 cat your_dump.sql | docker exec -i your-db-container psql -U postgres
 
-### Jmetr
+### JMeter
 open /usr/local/bin/jmeter
+
+### Сертификаты
+https://certbot.eff.org/lets-encrypt/ubuntuxenial-other
