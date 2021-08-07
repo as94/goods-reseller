@@ -149,6 +149,25 @@ const StorePage = () => {
 		[products],
 	)
 
+	const getSetPrice = useCallback(
+		(setId: string) => {
+			const set = products.find(x => x.id === setId)
+			if (!set) {
+				return 0
+			}
+
+			const productsInSet = products.filter(x => set.productIds.includes(x.id))
+
+			const orderItemsCost = productsInSet.reduce(
+				(acc, cur) => (acc += cur.unitPrice * (1 - cur.discountPerUnit)),
+				0,
+			)
+
+			return orderItemsCost + set.addedCost
+		},
+		[products],
+	)
+
 	const changeProductImageHandler = useCallback(
 		(setId: string, product: ProductListItemContract) => {
 			if (productSetImages[setId].firstProduct && productSetImages[setId].secondProduct) {
@@ -240,14 +259,14 @@ const StorePage = () => {
 			<StoreHeader />
 			<main>
 				<MainFeaturedPost />
-				<Container className={classes.cardGrid} maxWidth="lg" id="sets">
+				<Container className={classes.cardGrid} maxWidth="lg">
 					{saleBlocks.map(saleBlock => (
 						<SaleBlock {...saleBlock} />
 					))}
 				</Container>
 
 				<InfoBlock {...infoBlocks[0]} />
-				<Container className={classes.cardGrid} maxWidth="lg" id="sets">
+				<Container className={classes.cardGrid} maxWidth="lg" id="setList">
 					<Typography
 						className={classes.manSets}
 						component="h2"
@@ -327,7 +346,9 @@ const StorePage = () => {
 											))}
 										</div>
 									</CardContent>
-									<CardActions>
+									<CardActions
+										style={{ justifyContent: 'space-between', padding: '10px 20px 10px 10px' }}
+									>
 										<Button
 											color="primary"
 											size="small"
@@ -336,6 +357,7 @@ const StorePage = () => {
 										>
 											Хочу этот
 										</Button>
+										<Typography variant="h5">{getSetPrice(x.id)} ₽</Typography>
 									</CardActions>
 								</Card>
 							</Grid>

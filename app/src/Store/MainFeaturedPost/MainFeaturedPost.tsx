@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
+import { Button } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
 	mainFeaturedPost: {
@@ -24,6 +25,10 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor: 'rgba(1,87,155 ,.6)',
 		minHeight: '95.0vh',
 	},
+	setButton: {
+		color: 'white',
+		marginTop: theme.spacing(4),
+	},
 }))
 
 const MainFeaturedPost = () => {
@@ -41,6 +46,15 @@ const MainFeaturedPost = () => {
 							Ищешь подарочный набор для друга или парня? Тогда ты на правильном пути! Здесь ты сможешь
 							выбрать подходящий вариант подарочного набора и заказать подарок мужчине.
 						</Typography>
+						<Button
+							color="primary"
+							size="large"
+							variant="contained"
+							className={classes.setButton}
+							href="#setList"
+						>
+							Перейти к подарочным наборам
+						</Button>
 					</div>
 				</Grid>
 			</Grid>
