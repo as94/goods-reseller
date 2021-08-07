@@ -17,8 +17,9 @@ export const Note = () => {
 		<div className={classes.cardGrid}>
 			<Container maxWidth="md">
 				<Typography variant="body1" align="left" color="textSecondary" paragraph>
-					Примечание: часть товаров можно заменить на
-					аналогичные. Например: подписку на Play Station 4, из стандартного набора, можно заменить на Xbox One. После оформления заказа мы расскажем все подробности.
+					Примечание: часть товаров можно заменить на аналогичные. Например: подписку на Play Station 4, из
+					стандартного набора, можно заменить на Xbox One. После оформления заказа мы расскажем все
+					подробности.
 				</Typography>
 			</Container>
 		</div>
