@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid'
 const useStyles = makeStyles(theme => ({
 	infoBlockWithImage: {
 		position: 'relative',
-		color: theme.palette.common.black,
+		color: theme.palette.common.white,
 		marginBottom: theme.spacing(4),
 		backgroundSize: 'cover',
 		backgroundRepeat: 'no-repeat',
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	infoBlockWithoutImage: {
 		position: 'relative',
-		color: theme.palette.primary.main,
+		color: theme.palette.common.black,
 		marginBottom: theme.spacing(4),
 		backgroundColor: 'white',
 	},
@@ -32,15 +32,15 @@ const useStyles = makeStyles(theme => ({
 interface IOwnProps {
 	title: string
 	body: string | null
-	textItems: any[] | null
 	imagePath: string | null
 }
 
-const InfoBlock = ({ title, body, textItems, imagePath }: IOwnProps) => {
+const InfoBlock = ({ title, body, imagePath }: IOwnProps) => {
 	const classes = useStyles()
 
 	return (
 		<Paper
+			square
 			className={imagePath ? classes.infoBlockWithImage : classes.infoBlockWithoutImage}
 			style={{ backgroundImage: imagePath ? imagePath : undefined }}
 		>
@@ -54,23 +54,6 @@ const InfoBlock = ({ title, body, textItems, imagePath }: IOwnProps) => {
 							<Typography variant="h5" align="center" color="inherit" paragraph>
 								{body}
 							</Typography>
-						)}
-						{textItems && (
-							<div style={{ display: 'flex', paddingTop: '20px' }}>
-								{textItems.map(textItem => (
-									<div
-										key={textItem.title}
-										style={{ flexGrow: 1, flexBasis: '0', padding: '0 10px' }}
-									>
-										<Typography variant="h5" align="center" color="inherit" paragraph>
-											{textItem.title}
-										</Typography>
-										<Typography variant="body1" align="center" color="inherit" paragraph>
-											{textItem.text}
-										</Typography>
-									</div>
-								))}
-							</div>
 						)}
 					</div>
 				</Grid>
