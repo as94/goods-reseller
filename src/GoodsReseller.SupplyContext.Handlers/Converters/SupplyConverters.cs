@@ -13,7 +13,7 @@ namespace GoodsReseller.SupplyContext.Handlers.Converters
                 Id = supply.Id,
                 Date = supply.CreationDate.Date,
                 SupplierInfo = supply.SupplierInfo.ToContract(),
-                SupplyItems = supply.SupplyItems.Select(x => x.ToContract()).ToArray(),
+                SupplyItems = supply.GetExistingSupplyItems().Select(x => x.ToContract()).ToArray(),
                 TotalCost = supply.TotalCost.ToContract()
             };
         }

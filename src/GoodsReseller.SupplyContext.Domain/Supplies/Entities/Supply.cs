@@ -10,7 +10,8 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
     public sealed class Supply : Entity, IAggregateRoot
     {
         private readonly List<SupplyItem> _supplyItems;
-        public IReadOnlyCollection<SupplyItem> SupplyItems => _supplyItems.Where(x => !x.IsRemoved).ToList();
+        public IReadOnlyCollection<SupplyItem> SupplyItems => _supplyItems.ToList().AsReadOnly();
+        public IEnumerable<SupplyItem> GetExistingSupplyItems() => SupplyItems.Where(x => !x.IsRemoved);
         public SupplierInfo SupplierInfo { get; private set; }
         public Money TotalCost { get; private set; }
         
@@ -47,7 +48,7 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
 
             SupplierInfo = supplyInfo.SupplierInfo.Copy();
 
-            var existingSupplyItemIds = SupplyItems.Select(x => x.Id).ToArray();
+            var existingSupplyItemIds = GetExistingSupplyItems().Select(x => x.Id).ToArray();
             var incomingSupplyItemIds = supplyInfo.SupplyItems.Select(x => x.Id).ToArray();
 
             var toCreateIds = incomingSupplyItemIds.Where(id => !existingSupplyItemIds.Contains(id));
@@ -81,7 +82,7 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
         {
             var totalCost = Money.Zero;
 
-            foreach (var orderItem in SupplyItems)
+            foreach (var orderItem in GetExistingSupplyItems())
             {
                 var unitPriceFactor = new Factor(1 - orderItem.DiscountPerUnit.Value);
                 var quantityFactor = new Factor(orderItem.Quantity.Value);
@@ -92,6 +93,15 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
             }
 
             TotalCost = totalCost;
+        }
+        
+        public override void Remove()
+        {
+            base.Remove();
+            foreach (var supplyItem in _supplyItems)
+            {
+                supplyItem.Remove();
+            }
         }
     }
 }
