@@ -10,7 +10,9 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
     public sealed class Order : VersionedEntity, IAggregateRoot
     {
         private readonly List<OrderItem> _orderItems;
-        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.Where(x => !x.IsRemoved).ToList();
+        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.ToList().AsReadOnly();
+
+        public IEnumerable<OrderItem> GetExistingOrderItems() => OrderItems.Where(x => !x.IsRemoved);
 
         public OrderStatus Status { get; private set; }
         
@@ -111,7 +113,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             DeliveryCost = new Money(orderInfo.DeliveryCost.Value);
             AddedCost = new Money(orderInfo.AddedCost.Value);
             
-            var existingOrderItemIds = OrderItems.Select(x => x.Id).ToArray();
+            var existingOrderItemIds = GetExistingOrderItems().Select(x => x.Id).ToArray();
             var incomingOrderItemIds = orderInfo.OrderItems.Select(x => x.Id).ToArray();
             
             var toCreateIds = incomingOrderItemIds.Where(id => !existingOrderItemIds.Contains(id));
@@ -146,7 +148,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         {
             var totalCost = Money.Zero;
 
-            foreach (var orderItem in OrderItems)
+            foreach (var orderItem in GetExistingOrderItems())
             {
                 var unitPriceFactor = new Factor(1 - orderItem.DiscountPerUnit.Value);
                 var quantityFactor = new Factor(orderItem.Quantity.Value);
@@ -157,6 +159,15 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             }
 
             TotalCost = totalCost.Add(DeliveryCost).Add(AddedCost);
+        }
+
+        public override void Remove()
+        {
+            base.Remove();
+            foreach (var orderItem in _orderItems)
+            {
+                orderItem.Remove();
+            }
         }
     }
 }
