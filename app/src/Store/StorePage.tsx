@@ -21,6 +21,7 @@ import Grow from '@material-ui/core/Grow'
 import { Note } from './Note/Note'
 import { SaleBlock } from './SaleBlock/SaleBlock'
 import InfoBlock from './InfoBlock/InfoBlock'
+import { YMInitializer } from 'react-yandex-metrika'
 
 const useStyles = makeStyles(theme => ({
 	icon: {
@@ -260,6 +261,7 @@ const StorePage = () => {
 
 	return (
 		<>
+			<YMInitializer accounts={[83842642]} options={{ webvisor: true }} version="2" />
 			<CssBaseline />
 			<StoreHeader />
 			<main>

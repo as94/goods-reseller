@@ -12,7 +12,6 @@ import AddressForm from './AddressForm'
 import CustomerInfoForm from './CustomerInfoForm'
 import Review from './Review'
 import { useParams } from 'react-router-dom'
-import Copyright from '../Copyright/Copyright'
 import StoreHeader from '../StoreHeader/StoreHeader'
 import { ProductListItemContract } from '../Api/Products/contracts'
 import productsApi from '../Api/Products/productsApi'
@@ -26,6 +25,7 @@ import {
 import { MoneyContract } from '../Api/contracts'
 import ordersApi from '../Api/Orders/ordersApi'
 import StoreFooter from '../StoreFooter/StoreFooter'
+import { withId } from 'react-yandex-metrika'
 
 const useStyles = makeStyles(theme => ({
 	appBar: {
@@ -95,7 +95,14 @@ function getStepContent(
 		case 2:
 			return (
 				productSet &&
-				orderInfo && <Review productSet={productSet} productsInSet={productsInSet} orderInfo={orderInfo} deliveryType={deliveryType} />
+				orderInfo && (
+					<Review
+						productSet={productSet}
+						productsInSet={productsInSet}
+						orderInfo={orderInfo}
+						deliveryType={deliveryType}
+					/>
+				)
 			)
 		default:
 			throw new Error('Unknown step')
@@ -103,6 +110,7 @@ function getStepContent(
 }
 
 export const errorsList = {
+	cityIsRequiredError: 'Город обязателен для заполнения',
 	streetIsRequiredError: 'Улица обязательна для заполнения',
 	zipCodeIsRequiredError: 'Почтовый индекс обязателен для заполнения',
 	phoneNumberIsRequiredError: 'Телефон обязателен для заполнения',
@@ -136,6 +144,9 @@ const Checkout = () => {
 	const getValidationErrors = useCallback(() => {
 		let currentErrors = [] as string[]
 		if (activeStep === 0) {
+			if (!address.city) {
+				currentErrors = [...currentErrors, errorsList.cityIsRequiredError]
+			}
 			if (!address.street) {
 				currentErrors = [...currentErrors, errorsList.streetIsRequiredError]
 			}
@@ -157,6 +168,7 @@ const Checkout = () => {
 
 		if (activeStep === steps.length - 1 && orderInfo) {
 			await ordersApi.Create(orderInfo)
+			withId(206640373)('reachGoal', 'order_place')
 		}
 	}, [activeStep, setActiveStep, orderInfo])
 

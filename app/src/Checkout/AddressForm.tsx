@@ -15,6 +15,7 @@ interface IOwnProps {
 }
 
 const AddressForm = ({ address, setAddress, deliveryType, setDeliveryType, errors }: IOwnProps) => {
+	const cityIsInvalid = errors.includes(errorsList.cityIsRequiredError)
 	const streetIsInvalid = errors.includes(errorsList.streetIsRequiredError)
 	const zipCodeIsInvalid = errors.includes(errorsList.zipCodeIsRequiredError)
 
@@ -74,6 +75,8 @@ const AddressForm = ({ address, setAddress, deliveryType, setDeliveryType, error
 						value={address.city}
 						onChange={cityChangeHandler}
 						autoComplete="shipping city"
+						error={cityIsInvalid}
+						helperText={cityIsInvalid ? errorsList.cityIsRequiredError : undefined}
 					/>
 				</Grid>
 				<Grid item xs={12}>
