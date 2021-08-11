@@ -12,7 +12,8 @@ interface IOwnProps {
 }
 
 const CustomerInfoForm = ({ customerInfo, setCustomerInfo, errors }: IOwnProps) => {
-	const phoneNumberIsInvalid = errors.includes(errorsList.phoneNumberIsRequiredError)
+	const phoneNumberIsRequired = errors.includes(errorsList.phoneNumberIsRequiredError)
+	const phoneNumberIsIncorrect = errors.includes(errorsList.phoneNumberIsIncorrect)
 
 	const nameChangeHandler = useCallback(
 		(e: any) => {
@@ -58,8 +59,14 @@ const CustomerInfoForm = ({ customerInfo, setCustomerInfo, errors }: IOwnProps) 
 						onChange={phoneNumberChangeHandler}
 						fullWidth
 						autoComplete="phoneNumber"
-						error={phoneNumberIsInvalid}
-						helperText={phoneNumberIsInvalid ? errorsList.phoneNumberIsRequiredError : undefined}
+						error={phoneNumberIsRequired || phoneNumberIsIncorrect}
+						helperText={
+							phoneNumberIsRequired
+								? errorsList.phoneNumberIsRequiredError
+								: phoneNumberIsIncorrect
+								? errorsList.phoneNumberIsIncorrect
+								: undefined
+						}
 					/>
 				</Grid>
 			</Grid>
