@@ -36,7 +36,7 @@ const StoreFooter = () => {
 					className={classes.contact}
 					style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.2)' }}
 				>
-					Мы работаем по всей Москве и Московской области
+					Мы работаем по всей России
 				</Typography>
 			</div>
 			<div className={classes.contacts}>
