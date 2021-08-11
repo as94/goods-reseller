@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import AddressForm from './AddressForm'
 import CustomerInfoForm from './CustomerInfoForm'
 import Review from './Review'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import StoreHeader from '../StoreHeader/StoreHeader'
 import { ProductListItemContract } from '../Api/Products/contracts'
 import productsApi from '../Api/Products/productsApi'
@@ -25,7 +25,7 @@ import {
 import { MoneyContract } from '../Api/contracts'
 import ordersApi from '../Api/Orders/ordersApi'
 import StoreFooter from '../StoreFooter/StoreFooter'
-import { withId } from 'react-yandex-metrika'
+import { MessageModal } from '../Modal/MessageModal'
 
 const useStyles = makeStyles(theme => ({
 	appBar: {
@@ -114,6 +114,7 @@ export const errorsList = {
 	streetIsRequiredError: 'Улица обязательна для заполнения',
 	zipCodeIsRequiredError: 'Почтовый индекс обязателен для заполнения',
 	phoneNumberIsRequiredError: 'Телефон обязателен для заполнения',
+	phoneNumberIsIncorrect: 'Телефонный номер не соответствует формату',
 }
 
 export enum DeliveryType {
@@ -129,6 +130,7 @@ const Checkout = () => {
 	}
 
 	const classes = useStyles()
+	const history = useHistory()
 	const [activeStep, setActiveStep] = useState(0)
 	const [orderInfo, setOrderInfo] = useState(null as OrderInfoContract | null)
 	const [address, setAddress] = useState({ city: '', street: '', zipCode: '' } as AddressContract)
@@ -140,6 +142,7 @@ const Checkout = () => {
 
 	const [errors, setErrors] = useState([] as string[])
 	const [touched, setTouched] = useState(false)
+	const [showErrorModal, setShowErrorModal] = useState(false)
 
 	const getValidationErrors = useCallback(() => {
 		let currentErrors = [] as string[]
@@ -158,19 +161,29 @@ const Checkout = () => {
 			if (!customerInfo.phoneNumber) {
 				currentErrors = [...currentErrors, errorsList.phoneNumberIsRequiredError]
 			}
+
+			if (!customerInfo.phoneNumber.match(/^(?:\+\d{1,3}|0\d{1,3}|00\d{1,2})?(?:\s?\(\d+\))?(?:[-\/\s.]|\d)+$/){
+				currentErrors = [...currentErrors, errorsList.phoneNumberIsIncorrect]
+			}
 		}
 		return currentErrors
 	}, [activeStep, address, customerInfo, errorsList, deliveryType])
 
 	const moveToNextStep = useCallback(async () => {
-		setActiveStep(activeStep + 1)
 		setTouched(false)
 
-		if (activeStep === steps.length - 1 && orderInfo) {
-			await ordersApi.Create(orderInfo)
-			withId(206640373)('reachGoal', 'order_place')
+		if (activeStep < steps.length - 1) {
+			setActiveStep(activeStep + 1)
+		} else if (orderInfo) {
+			try {
+				await ordersApi.Create(orderInfo)
+				setActiveStep(activeStep + 1)
+				history.push('/store/thanks')
+			} catch (e) {
+				setShowErrorModal(true)
+			}
 		}
-	}, [activeStep, setActiveStep, orderInfo])
+	}, [activeStep, setActiveStep, orderInfo, history])
 
 	const handleNext = useCallback(async () => {
 		const validationErrors = getValidationErrors()
@@ -250,6 +263,12 @@ const Checkout = () => {
 		<>
 			<CssBaseline />
 			<StoreHeader />
+			<MessageModal
+				open={showErrorModal}
+				setOpen={setShowErrorModal}
+				title="Произошла ошибка при оформлении заказа"
+				message="Пожалуйста, перепроверьте данные формы и попробуйте ещё раз. Или свяжитесь с нами через контакты"
+			/>
 			<main className={classes.layout}>
 				<Paper className={classes.paper}>
 					<Typography component="h1" variant="h4" align="center">
@@ -262,50 +281,39 @@ const Checkout = () => {
 							</Step>
 						))}
 					</Stepper>
-					<>
-						{activeStep === steps.length ? (
-							<>
-								<Typography variant="h5" gutterBottom>
-									Спасибо за ваш заказ.
-								</Typography>
-								<Typography variant="subtitle1">
-									Мы свяжимся с вами в ближайшее время для уточнения деталей.
-								</Typography>
-							</>
-						) : (
-							<>
-								{getStepContent(
-									activeStep,
-									address,
-									setAddress,
-									deliveryType,
-									setDeliveryType,
-									customerInfo,
-									setCustomerInfo,
-									productSet,
-									productsInSet,
-									orderInfo,
-									errors,
-								)}
-								<div className={classes.buttons}>
-									{activeStep !== 0 && (
-										<Button onClick={handleBack} className={classes.button}>
-											Назад
-										</Button>
-									)}
-									<Button
-										variant="contained"
-										color="primary"
-										onClick={handleNext}
-										className={classes.button}
-										disabled={touched && errors.length > 0}
-									>
-										{activeStep === steps.length - 1 ? 'Разместить заказ' : 'Дальше'}
+					{activeStep !== steps.length && (
+						<>
+							{getStepContent(
+								activeStep,
+								address,
+								setAddress,
+								deliveryType,
+								setDeliveryType,
+								customerInfo,
+								setCustomerInfo,
+								productSet,
+								productsInSet,
+								orderInfo,
+								errors,
+							)}
+							<div className={classes.buttons}>
+								{activeStep !== 0 && (
+									<Button onClick={handleBack} className={classes.button}>
+										Назад
 									</Button>
-								</div>
-							</>
-						)}
-					</>
+								)}
+								<Button
+									variant="contained"
+									color="primary"
+									onClick={handleNext}
+									className={classes.button}
+									disabled={touched && errors.length > 0}
+								>
+									{activeStep === steps.length - 1 ? 'Разместить заказ' : 'Дальше'}
+								</Button>
+							</div>
+						</>
+					)}
 				</Paper>
 			</main>
 			<StoreFooter />

@@ -9,6 +9,7 @@ import StorePage from './Store/StorePage'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Checkout from './Checkout/Checkout'
 import { blue, lightBlue } from '@material-ui/core/colors'
+import { Thanks } from './Checkout/Thanks'
 
 const theme = createMuiTheme({
 	palette: {
@@ -47,6 +48,9 @@ const App = () => (
 					</Route>
 					<Route path="/store/checkout/:setId">
 						<Checkout />
+					</Route>
+					<Route path="/store/thanks">
+						<Thanks />
 					</Route>
 					<Route path={['/', '/store']}>
 						<StorePage />
