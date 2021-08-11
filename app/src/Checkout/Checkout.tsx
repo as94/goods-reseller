@@ -162,7 +162,7 @@ const Checkout = () => {
 				currentErrors = [...currentErrors, errorsList.phoneNumberIsRequiredError]
 			}
 
-			if (!customerInfo.phoneNumber.match(/^(?:\+\d{1,3}|0\d{1,3}|00\d{1,2})?(?:\s?\(\d+\))?(?:[-\/\s.]|\d)+$/){
+			if (!customerInfo.phoneNumber.match(/^(?:\+\d{1,3}|0\d{1,3}|00\d{1,2})?(?:\s?\(\d+\))?(?:[-\/\s.]|\d)+$/)) {
 				currentErrors = [...currentErrors, errorsList.phoneNumberIsIncorrect]
 			}
 		}
