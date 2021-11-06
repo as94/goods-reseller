@@ -31,6 +31,7 @@ cat your_dump.sql | docker exec -i your-db-container psql -U postgres
 open /usr/local/bin/jmeter
 
 ### Сертификаты
+Stop all containers and run command "sudo certbot certonly --standalone"
 https://certbot.eff.org/lets-encrypt/ubuntuxenial-other
 
 ### Работа с изображениями
