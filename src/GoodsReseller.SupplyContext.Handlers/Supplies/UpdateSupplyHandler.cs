@@ -29,18 +29,19 @@ namespace GoodsReseller.SupplyContext.Handlers.Supplies
             }
             
             var supplierInfo = new SupplierInfo(request.Supply.SupplierInfo.Name);
-            var supplyItems = request.Supply.SupplyItems.Select(x => new SupplyItem(
-                x.Id,
-                x.ProductId,
-                new Money(x.UnitPrice),
-                new Quantity(x.Quantity),
-                new Discount(x.DiscountPerUnit)));
+            var supplyItems = request.Supply.SupplyItems
+                .Select(x => new SupplyItem(
+                    x.Id,
+                    x.ProductId,
+                    new Money(x.UnitPrice),
+                    new Quantity(x.Quantity),
+                    new Discount(x.DiscountPerUnit)));
             
-            supply.Update(new SupplyInfo(supplierInfo, supplyItems));
+            supply.Update(new SupplyInfo(supplierInfo, supplyItems), request.Supply.Version);
 
             await _suppliesRepository.SaveAsync(supply, cancellationToken);
             
-            return new Unit();
+            return Unit.Value;
         }
     }
 }

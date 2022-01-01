@@ -6,7 +6,7 @@ namespace GoodsReseller.AuthContext.Domain.Users
 {
     public interface IUsersRepository
     {
-        Task<User> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
-        Task SaveUserAsync(User user, CancellationToken cancellationToken);
+        Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken);
+        Task SaveAsync(User user, CancellationToken cancellationToken);
     }
 }

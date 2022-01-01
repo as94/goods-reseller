@@ -28,7 +28,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 
             await _productsRepository.SaveAsync(product, cancellationToken);
             
-            return new Unit();
+            return Unit.Value;
         }
     }
 }

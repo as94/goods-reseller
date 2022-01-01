@@ -22,6 +22,7 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
             builder.Property(e => e.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.Property(e => e.Version).IsRequired().HasColumnType("integer");
+            builder.UseXminAsConcurrencyToken();
 
             builder.Property(x => x.Label).IsRequired().HasColumnType("varchar(255)");
             builder.Property(x => x.Name).IsRequired().HasColumnType("varchar(255)");

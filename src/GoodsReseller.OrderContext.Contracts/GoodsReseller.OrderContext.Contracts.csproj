@@ -12,8 +12,4 @@
       <ProjectReference Include="..\GoodsReseller.OrderContext.Domain\GoodsReseller.OrderContext.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="OrderItems" />
-    </ItemGroup>
-
 </Project>

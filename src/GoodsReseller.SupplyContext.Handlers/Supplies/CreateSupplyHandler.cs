@@ -11,7 +11,7 @@ using MediatR;
 
 namespace GoodsReseller.SupplyContext.Handlers.Supplies
 {
-    public class CreateSupplyHandler : IRequestHandler<CreateSupplyRequest, CreateSupplyResponse>
+    public class CreateSupplyHandler : IRequestHandler<CreateSupplyRequest>
     {
         private readonly ISuppliesRepository _suppliesRepository;
 
@@ -20,10 +20,8 @@ namespace GoodsReseller.SupplyContext.Handlers.Supplies
             _suppliesRepository = suppliesRepository;
         }
 
-        public async Task<CreateSupplyResponse> Handle(CreateSupplyRequest request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateSupplyRequest request, CancellationToken cancellationToken)
         {
-            var supplyId = Guid.NewGuid();
-
             var supplierInfo = new SupplierInfo(request.Supply.SupplierInfo.Name);
             var supplyItems = request.Supply.SupplyItems.Select(x => new SupplyItem(
                 x.Id,
@@ -33,16 +31,14 @@ namespace GoodsReseller.SupplyContext.Handlers.Supplies
                 new Discount(x.DiscountPerUnit)));
             
             var supply = new Supply(
-                supplyId,
+                request.Supply.Id,
+                request.Supply.Version,
                 supplierInfo,
                 supplyItems);
 
             await _suppliesRepository.SaveAsync(supply, cancellationToken);
             
-            return new CreateSupplyResponse
-            {
-                SupplyId = supplyId
-            };
+            return Unit.Value;
         }
     }
 }

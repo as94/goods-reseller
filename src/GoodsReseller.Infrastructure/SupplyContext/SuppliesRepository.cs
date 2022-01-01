@@ -20,10 +20,7 @@ namespace GoodsReseller.Infrastructure.SupplyContext
 
         public async Task<Supply> GetAsync(Guid supplyId, CancellationToken cancellationToken)
         {
-            return await _dbContext.Supplies
-                .Include(x => x.SupplyItems)
-                .FirstOrDefaultAsync(x => x.Id == supplyId && !x.IsRemoved,
-                    cancellationToken);
+            return await GetSupplyAsync(supplyId, cancellationToken);
         }
 
         public async Task<IEnumerable<Supply>> BatchAsync(int offset, int count, CancellationToken cancellationToken)
@@ -44,18 +41,21 @@ namespace GoodsReseller.Infrastructure.SupplyContext
             {
                 throw new ArgumentNullException(nameof(supply));
             }
-            // TODO: add handling concurrency (like OrdersRepository)
-            
-            var existing = await _dbContext.Supplies.FirstOrDefaultAsync(
-                x => x.Id == supply.Id,
-                cancellationToken);
-            
+            var existing = await GetSupplyAsync(supply.Id, cancellationToken);
             if (existing == null)
             {
                 await _dbContext.Supplies.AddAsync(supply, cancellationToken);
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        
+        private async Task<Supply> GetSupplyAsync(Guid supplyId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Supplies
+                .Include(x => x.SupplyItems)
+                .FirstOrDefaultAsync(x => x.Id == supplyId && !x.IsRemoved,
+                    cancellationToken);
         }
     }
 }

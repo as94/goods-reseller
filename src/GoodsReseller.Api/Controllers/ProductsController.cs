@@ -86,12 +86,12 @@ namespace GoodsReseller.Api.Controllers
             [FromBody] [Required] ProductInfoContract product,
             CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(new CreateProductRequest
+            await _mediator.Send(new CreateProductRequest
             {
                 ProductInfo = product
             }, cancellationToken);
 
-            return Ok(response);
+            return Ok();
         }
 
         [HttpPut("{productId}")]
@@ -122,12 +122,14 @@ namespace GoodsReseller.Api.Controllers
             return Ok();
         }
 
-        [HttpPost("{productId}/photos")]
-        public async Task UploadProductPhotoAsync(
+        [HttpPost("{productId}/versions/{newVersion}/photos")]
+        public async Task<IActionResult> UploadProductPhotoAsync(
             [Required] [FromRoute] Guid productId,
+            [Required] [FromRoute] int newVersion,
             [Required] [FromForm] FileUpload fileUpload,
             CancellationToken cancellationToken)
         {
+            // TODO: think about problems
             var photoPath = Path.Combine(
                 _webHostEnvironment.WebRootPath,
                 "assets",
@@ -141,7 +143,7 @@ namespace GoodsReseller.Api.Controllers
             var fileName = fileUpload.FileName.ToLower();
             var path = Path.Combine(photoPath, fileName);
 
-            using (var fileStream = System.IO.File.Create(path))
+            await using (var fileStream = System.IO.File.Create(path))
             {
                 await fileUpload.FileContent.CopyToAsync(fileStream, cancellationToken);
             }
@@ -150,16 +152,24 @@ namespace GoodsReseller.Api.Controllers
             await _mediator.Send(new UpdateProductPhotoRequest
                 {
                     ProductId = productId,
+                    Version = newVersion,
                     PhotoPath = relativePath
                 },
                 cancellationToken);
+
+            return Ok(new
+            {
+                PhotoPath = relativePath
+            });
         }
 
-        [HttpDelete("{productId}/photos")]
+        [HttpDelete("{productId}/versions/{newVersion}/photos")]
         public async Task RemoveProductPhotoAsync(
             [FromRoute] [Required] Guid productId,
+            [Required] [FromRoute] int newVersion,
             CancellationToken cancellationToken)
         {
+            // TODO: think about problems
             var photoPath = Path.Combine(
                 _webHostEnvironment.WebRootPath,
                 "assets",
@@ -173,6 +183,7 @@ namespace GoodsReseller.Api.Controllers
             await _mediator.Send(new UpdateProductPhotoRequest
                 {
                     ProductId = productId,
+                    Version = newVersion,
                     PhotoPath = string.Empty
                 },
                 cancellationToken);

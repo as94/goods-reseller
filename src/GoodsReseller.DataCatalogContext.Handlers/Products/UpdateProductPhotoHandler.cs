@@ -24,11 +24,11 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
                 throw new InvalidOperationException($"Product with Id = {request.ProductId} doesn't exist");
             }
             
-            product.UpdateProductPhoto(request.PhotoPath);
+            product.UpdateProductPhoto(request.Version, request.PhotoPath);
 
             await _productsRepository.SaveAsync(product, cancellationToken);
             
-            return new Unit();
+            return Unit.Value;
         }
     }
 }

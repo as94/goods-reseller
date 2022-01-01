@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GoodsReseller.OrderContext.Domain.Orders.ValueObjects;
 using GoodsReseller.SeedWork;
+using GoodsReseller.SeedWork.Exceptions;
 using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.OrderContext.Domain.Orders.Entities
@@ -88,7 +89,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             TotalCost = Money.Zero;
         }
 
-        public void Update(OrderInfo orderInfo, int version)
+        public void Update(OrderInfo orderInfo, int newVersion)
         {
             if (IsRemoved)
             {
@@ -98,6 +99,11 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             if (orderInfo == null)
             {
                 throw new ArgumentNullException(nameof(orderInfo));
+            }
+
+            if (Version >= newVersion)
+            {
+                throw new ConcurrencyException();
             }
 
             if (!Enumeration.TryParse<OrderStatus>(orderInfo.Status, out var parsedStatus))
@@ -140,7 +146,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             
             RecalculateTotalCost();
 
-            Version = version;
+            Version = newVersion;
             LastUpdateDate = new DateValueObject();
         }
 

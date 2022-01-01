@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GoodsReseller.SeedWork;
+using GoodsReseller.SeedWork.Exceptions;
 using GoodsReseller.SeedWork.ValueObjects;
 using GoodsReseller.SupplyContext.Domain.Supplies.ValueObjects;
 
 namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
 {
-    public sealed class Supply : Entity, IAggregateRoot
+    public sealed class Supply : VersionedEntity, IAggregateRoot
     {
         private readonly List<SupplyItem> _supplyItems;
         public IReadOnlyCollection<SupplyItem> SupplyItems => _supplyItems.ToList().AsReadOnly();
@@ -16,8 +17,8 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
         public Money TotalCost { get; private set; }
         
 
-        public Supply(Guid id, SupplierInfo supplierInfo, IEnumerable<SupplyItem> supplyItems)
-            : this(id)
+        public Supply(Guid id, int version, SupplierInfo supplierInfo, IEnumerable<SupplyItem> supplyItems)
+            : this(id, version)
         {
             if (supplierInfo == null)
             {
@@ -29,12 +30,12 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
             RecalculateTotalCost();
         }
         
-        private Supply(Guid id) : base(id)
+        private Supply(Guid id, int version) : base(id, version)
         {
             _supplyItems = new List<SupplyItem>();
         }
 
-        public void Update(SupplyInfo supplyInfo)
+        public void Update(SupplyInfo supplyInfo, int newVersion)
         {
             if (IsRemoved)
             {
@@ -44,6 +45,11 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
             if (supplyInfo == null)
             {
                 throw new ArgumentNullException(nameof(supplyInfo));
+            }
+
+            if (Version >= newVersion)
+            {
+                throw new ConcurrencyException();
             }
 
             SupplierInfo = supplyInfo.SupplierInfo.Copy();
@@ -75,6 +81,7 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
             
             RecalculateTotalCost();
             
+            Version = newVersion;
             LastUpdateDate = new DateValueObject();
         }
         

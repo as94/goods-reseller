@@ -77,14 +77,14 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 
 	const updateSupply = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await suppliesApi.Update(supply.id, { ...supply, supplyItems })
+			await suppliesApi.Update(supply.id, { ...supply, supplyItems, version: supply.version + 1 })
 			hide()
 		} else {
 			setErrorText(t('FormIsInvalid'))
 		}
 	}, [formIsValid, formValidation, supply, supplyItems, suppliesApi, hide, setErrorText])
 
-	const deleteProduct = useCallback(async () => {
+	const deleteSupply = useCallback(async () => {
 		await suppliesApi.Delete(supplyId)
 		hide()
 	}, [suppliesApi, supplyId])
@@ -146,7 +146,7 @@ const Supply = ({ supplyId, products, hide }: IOwnProps) => {
 					cancel={() => setShowDeleteDialog(false)}
 					cancelText={t('Cancel')}
 					okText={t('Ok')}
-					confirm={deleteProduct}
+					confirm={deleteSupply}
 				/>
 			)}
 		</React.Fragment>

@@ -19,6 +19,8 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
             
             builder.Property(e => e.Id).IsRequired();
             builder.HasKey(x => x.Id);
+            builder.Property(e => e.Version).IsRequired().HasColumnType("integer").HasDefaultValue(1);
+            builder.UseXminAsConcurrencyToken();
             
             builder.Property(e => e.SupplierInfo)
                 .HasColumnType("json")

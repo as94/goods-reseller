@@ -16,7 +16,7 @@ namespace GoodsReseller.Infrastructure.AuthContext
             _dbContext = dbContext;
         }
         
-        public async Task<User> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
+        public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
             if (email == null)
             {
@@ -28,7 +28,7 @@ namespace GoodsReseller.Infrastructure.AuthContext
                 cancellationToken);
         }
 
-        public async Task SaveUserAsync(User user, CancellationToken cancellationToken)
+        public async Task SaveAsync(User user, CancellationToken cancellationToken)
         {
             if (user == null)
             {

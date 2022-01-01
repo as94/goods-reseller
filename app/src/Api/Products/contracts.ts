@@ -32,6 +32,8 @@ export interface ProductListContract {
 }
 
 export interface ProductInfoContract {
+	id: string
+	version: number
 	label: string
 	name: string
 	description: string
@@ -44,4 +46,8 @@ export interface ProductInfoContract {
 export interface FileUpload {
 	fileName: string
 	fileContent: any
+}
+
+export interface UploadPhotoResult {
+	photoPath: string
 }

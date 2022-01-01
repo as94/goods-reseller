@@ -137,7 +137,7 @@ const CreateOrder = ({ products, hide }: IOwnProps) => {
 
 	const createOrder = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			await ordersApi.Create({ ...order, orderItems, status: OrderStatuses[0], version: 1 })
+			await ordersApi.Create({ ...order, orderItems, status: OrderStatuses[0] })
 			hide()
 		} else {
 			setErrorText(t('FormIsInvalid'))

@@ -19,9 +19,7 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
         
         public async Task<Product> GetAsync(Guid productId, CancellationToken cancellationToken)
         {
-            return await _dbContext.Products.FirstOrDefaultAsync(
-                x => x.Id == productId && !x.IsRemoved,
-                cancellationToken);
+            return await GetProductAsync(productId, cancellationToken);
         }
 
         public async Task<Product> GetAsync(string label, CancellationToken cancellationToken)
@@ -48,18 +46,21 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
             {
                 throw new ArgumentNullException(nameof(product));
             }
-            // TODO: add handling concurrency (like OrdersRepository)
             
-            var existing = await _dbContext.Products.FirstOrDefaultAsync(
-                x => x.Id == product.Id,
-                cancellationToken);
-
+            var existing = await GetProductAsync(product.Id, cancellationToken);
             if (existing == null)
             {
                 await _dbContext.Products.AddAsync(product, cancellationToken);
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        
+        private async Task<Product> GetProductAsync(Guid productId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Products.FirstOrDefaultAsync(
+                x => x.Id == productId && !x.IsRemoved,
+                cancellationToken);
         }
     }
 }

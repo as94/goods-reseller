@@ -9,6 +9,7 @@ import { Alert } from '@material-ui/lab'
 import ResponsiveDialog from '../../../Dialogs/ResponsiveDialog'
 import MultipleSelect from '../../../MultipleSelect/MultipleSelect'
 import { useTranslation } from 'react-i18next'
+import { version } from 'os'
 
 const useStyles = makeStyles(theme => ({
 	buttons: {
@@ -135,26 +136,38 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 		[setFileUpload],
 	)
 
-	const removeProductPhotoHandler = useCallback(async () => {
-		await productsApi.RemoveProductPhoto(product.id)
-		setPhotoPath('')
-	}, [product, setPhotoPath])
-
 	const updateProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			let productPhoto = null as any | null
-			if (fileUpload.fileName) {
-				const formData = new FormData()
-				formData.append('fileName', fileUpload.fileName)
-				formData.append('fileContent', fileUpload.fileContent)
-				productPhoto = formData
-			}
-			await productsApi.Update(product.id, { ...product, productIds: selectedProductIds }, productPhoto)
+			await productsApi.Update(product.id, {
+				...product,
+				productIds: selectedProductIds,
+				version: product.version + 1,
+			})
 			hide()
 		} else {
 			setErrorText(t('FormIsInvalid'))
 		}
-	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, fileUpload, hide, setErrorText])
+	}, [formIsValid, formValidation, product, selectedProductIds, productsApi, hide, setErrorText])
+
+	const updatePhotoHandler = useCallback(async () => {
+		if (fileUpload.fileName) {
+			const formData = new FormData()
+			formData.append('fileName', fileUpload.fileName)
+			formData.append('fileContent', fileUpload.fileContent)
+			const productPhoto = formData
+			const result = await productsApi.UploadProductPhoto(product.id, product.version + 1, productPhoto)
+
+			await getProduct()
+		}
+	}, [fileUpload, getProduct])
+
+	const removeProductPhotoHandler = useCallback(async () => {
+		await productsApi.RemoveProductPhoto(product.id, product.version + 1)
+
+		setFileUpload({ fileName: '' } as FileUpload)
+
+		await getProduct()
+	}, [product, getProduct])
 
 	const deleteProduct = useCallback(async () => {
 		await productsApi.Delete(productId)
@@ -257,7 +270,7 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 								>
 									{t('ChooseProductPhoto')}
 								</Button>
-								{product.photoPath && (
+								{photoPath && (
 									<Button
 										variant="outlined"
 										className={classes.button}
@@ -265,6 +278,17 @@ const Product = ({ products, productId, hide }: IOwnProps) => {
 										disabled={!photoPath}
 									>
 										{t('RemoveProductPhoto')}
+									</Button>
+								)}
+								{fileUpload && fileUpload.fileName && (
+									<Button
+										variant="contained"
+										color="primary"
+										onClick={updatePhotoHandler}
+										className={classes.button}
+										disabled={Boolean(photoPath)}
+									>
+										{t('Save')}
 									</Button>
 								)}
 							</label>

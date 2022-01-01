@@ -6,9 +6,10 @@ using System.Security;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
-using GoodsReseller.Infrastructure.Exceptions;
+using GoodsReseller.SeedWork.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace GoodsReseller.Api.Middlewares
@@ -52,6 +53,13 @@ namespace GoodsReseller.Api.Middlewares
 				WriteTextResponse(context, httpStatusCode);
 			}
 			catch (ConcurrencyException ex)
+			{
+				// ошибки конкурентности, повторять без изменений не нужно, 409
+				var httpStatusCode = HttpStatusCode.Conflict;
+				await LogExceptionAsync(ex, httpStatusCode, context.Request);
+				WriteTextResponse(context, httpStatusCode, ex.Message);
+			}
+			catch (DbUpdateConcurrencyException ex)
 			{
 				// ошибки конкурентности, повторять без изменений не нужно, 409
 				var httpStatusCode = HttpStatusCode.Conflict;

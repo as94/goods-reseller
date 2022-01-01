@@ -20,6 +20,7 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
             builder.Property(e => e.Id).IsRequired();
             builder.HasKey(x => x.Id);
             builder.Property(e => e.Version).IsRequired().HasColumnType("integer");
+            builder.UseXminAsConcurrencyToken();
             
             builder
                 .OwnsOne(o => o.Status, x =>

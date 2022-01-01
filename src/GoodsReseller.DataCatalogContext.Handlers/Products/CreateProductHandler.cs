@@ -8,7 +8,7 @@ using MediatR;
 
 namespace GoodsReseller.DataCatalogContext.Handlers.Products
 {
-    public class CreateProductHandler : IRequestHandler<CreateProductRequest, CreateProductResponse>
+    public class CreateProductHandler : IRequestHandler<CreateProductRequest>
     {
         private readonly IProductsRepository _productsRepository;
 
@@ -17,14 +17,11 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
             _productsRepository = productsRepository;
         }
         
-        public async Task<CreateProductResponse> Handle(CreateProductRequest request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateProductRequest request, CancellationToken cancellationToken)
         {
-            var productId = Guid.NewGuid();
-            var version = 1;
-            
             var product = new Product(
-                productId,
-                version,
+                request.ProductInfo.Id,
+                request.ProductInfo.Version,
                 request.ProductInfo.Label,
                 request.ProductInfo.Name,
                 request.ProductInfo.Description,
@@ -35,10 +32,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 
             await _productsRepository.SaveAsync(product, cancellationToken);
             
-            return new CreateProductResponse
-            {
-                ProductId = productId
-            };
+            return Unit.Value;
         }
     }
 }

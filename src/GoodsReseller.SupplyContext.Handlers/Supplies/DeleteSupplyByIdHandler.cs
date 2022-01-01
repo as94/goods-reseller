@@ -28,7 +28,7 @@ namespace GoodsReseller.SupplyContext.Handlers.Supplies
 
             await _suppliesRepository.SaveAsync(supply, cancellationToken);
             
-            return new Unit();
+            return Unit.Value;
         }
     }
 }
