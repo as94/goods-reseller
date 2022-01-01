@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Net;
 using System.Security;
 using System.Security.Authentication;
@@ -33,34 +34,34 @@ namespace GoodsReseller.Api.Middlewares
 			{
 				// ошибки валидации в синтаксисе запросов, повторять без изменений не нужно, 400
 				var httpStatusCode = HttpStatusCode.BadRequest;
-				LogException(ex, httpStatusCode, context.Request);
+				await LogExceptionAsync(ex, httpStatusCode, context.Request);
 				WriteTextResponse(context, httpStatusCode, ex.Message);
 			}
 			catch (AuthenticationException ex)
 			{
 				// ошибки доступа 401
 				var httpStatusCode = HttpStatusCode.Unauthorized;
-				LogException(ex, httpStatusCode, context.Request);
+				await LogExceptionAsync(ex, httpStatusCode, context.Request);
 				WriteTextResponse(context, httpStatusCode);
 			}
 			catch (SecurityException ex)
 			{
 				// ошибки доступа 403
 				var httpStatusCode = HttpStatusCode.Forbidden;
-				LogException(ex, httpStatusCode, context.Request);
+				await LogExceptionAsync(ex, httpStatusCode, context.Request);
 				WriteTextResponse(context, httpStatusCode);
 			}
 			catch (ConcurrencyException ex)
 			{
 				// ошибки конкурентности, повторять без изменений не нужно, 409
 				var httpStatusCode = HttpStatusCode.Conflict;
-				LogException(ex, httpStatusCode, context.Request);
+				await LogExceptionAsync(ex, httpStatusCode, context.Request);
 				WriteTextResponse(context, httpStatusCode, ex.Message);
 			}
 			catch (Exception ex)
 			{
 				var httpStatusCode = HttpStatusCode.InternalServerError;
-				LogException(ex, httpStatusCode, context.Request);
+				await LogExceptionAsync(ex, httpStatusCode, context.Request);
 				WriteTextResponse(context, httpStatusCode, ex.Message);
 			}
 		}
@@ -73,9 +74,10 @@ namespace GoodsReseller.Api.Middlewares
 			await context.Response.WriteAsync(string.IsNullOrEmpty(message) ? string.Empty : message);
 		}
 
-		private void LogException(Exception exception, HttpStatusCode httpStatusCode, HttpRequest request)
+		private async Task LogExceptionAsync(Exception exception, HttpStatusCode httpStatusCode, HttpRequest request)
 		{
-			var dumpRequest = DumpRequest(request);
+			var bodyText = await GetBodyTextAsync(request);
+			var dumpRequest = DumpRequest(request, bodyText);
 
 			if ((int) httpStatusCode < (int) HttpStatusCode.InternalServerError)
 			{
@@ -87,7 +89,7 @@ namespace GoodsReseller.Api.Middlewares
 			}
 		}
 
-		private static string DumpRequest(HttpRequest request)
+		private static string DumpRequest(HttpRequest request, string bodyText)
 		{
 			var sb = new StringBuilder(1024);
 
@@ -96,6 +98,11 @@ namespace GoodsReseller.Api.Middlewares
 			foreach (var header in request.Headers)
 			{
 				sb.AppendLine($"{header.Key} : {header.Value}");
+			}
+			
+			if (bodyText != null)
+			{
+				sb.AppendLine(bodyText);
 			}
 
 			if (!request.HasFormContentType)
@@ -110,6 +117,23 @@ namespace GoodsReseller.Api.Middlewares
 			}
 
 			return sb.ToString();
+		}
+		
+		private static async Task<string> GetBodyTextAsync(HttpRequest request)
+		{
+			if (!request.Body.CanSeek)
+			{
+				request.EnableBuffering();
+			}
+
+			request.Body.Position = 0;
+
+			var body = request.Body;
+			using var reader = new StreamReader(body, Encoding.UTF8, true, 1024, true);
+			var result = await reader.ReadToEndAsync();
+			request.Body.Position = 0;
+
+			return result;
 		}
 	}
 }
