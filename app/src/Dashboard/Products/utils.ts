@@ -1,4 +1,5 @@
 import { ProductInfoContract } from '../../Api/Products/contracts'
+import { v4 as uuid } from 'uuid'
 
 export interface FormValidation {
 	labelValid: boolean
@@ -25,11 +26,13 @@ export const formIsValid = (formValidation: FormValidation) =>
 	formValidation.addedCostValid
 
 export const initialProduct = {
+	id: uuid(),
+	version: 1,
 	label: '',
 	name: '',
 	description: '',
 	unitPrice: 0,
 	discountPerUnit: 0,
 	addedCost: 0,
-	productIds: []
+	productIds: [],
 } as ProductInfoContract

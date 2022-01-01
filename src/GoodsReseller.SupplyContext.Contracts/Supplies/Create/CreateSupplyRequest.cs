@@ -3,7 +3,7 @@ using MediatR;
 
 namespace GoodsReseller.SupplyContext.Contracts.Supplies.Create
 {
-    public class CreateSupplyRequest : IRequest<CreateSupplyResponse>
+    public class CreateSupplyRequest : IRequest
     {
         public SupplyInfoContract Supply { get; set; }
     }

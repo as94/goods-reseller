@@ -98,26 +98,9 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 		[product, setProduct, formValidation, setFormValidation],
 	)
 
-	const productPhotoChangeHandler = useCallback(
-		(e: any) => {
-			setFileUpload({
-				fileName: e.target.files[0].name,
-				fileContent: e.target.files[0],
-			} as FileUpload)
-		},
-		[setFileUpload],
-	)
-
 	const createProduct = useCallback(async () => {
 		if (formIsValid(formValidation)) {
-			let productPhoto = null as any | null
-			if (fileUpload.fileName) {
-				const formData = new FormData()
-				formData.append('fileName', fileUpload.fileName)
-				formData.append('fileContent', fileUpload.fileContent)
-				productPhoto = formData
-			}
-			await productsApi.Create({ ...product, productIds: selectedProductIds }, productPhoto)
+			await productsApi.Create({ ...product, productIds: selectedProductIds })
 			hide()
 		} else {
 			setErrorText(t('FormIsInvalid'))
@@ -190,24 +173,6 @@ const CreateProduct = ({ products, hide }: IOwnProps) => {
 							onChange={addedCostChangeHandler}
 						/>
 					</FormControl>
-				</Grid>
-				<Grid item xs={6}>
-					<div className={classes.uploadBlock}>
-						<input
-							accept="image/*"
-							style={{ display: 'none' }}
-							id="raised-button-file"
-							multiple
-							type="file"
-							onChange={productPhotoChangeHandler}
-						/>
-						<label htmlFor="raised-button-file">
-							<Button variant="outlined" component="span" className={classes.button}>
-								{t('ChooseProductPhoto')}
-							</Button>
-						</label>
-						<span className={classes.uploadFileName}>{fileUpload.fileName}</span>
-					</div>
 				</Grid>
 				<Grid item xs={12} md={12}>
 					<MultipleSelect

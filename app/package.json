@@ -28,9 +28,7 @@
   },
   "scripts": {
     "build-prod": "ENVIRONMENT=production webpack --config webpack.production.ts --mode=production",
-    "build": "ENVIRONMENT=development tsc --noEmit && webpack --config webpack.development.ts --mode=development",
-    "watch": "ENVIRONMENT=development webpack --watch --config webpack.development.ts --mode=development",
-    "start": "ENVIRONMENT=development webpack-dev-server --config webpack.development.ts --mode=development"
+    "watch": "ENVIRONMENT=development webpack --watch --config webpack.development.ts --mode=development"
   },
   "eslintConfig": {
     "extends": [

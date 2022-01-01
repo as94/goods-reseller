@@ -3,7 +3,7 @@ using MediatR;
 
 namespace GoodsReseller.DataCatalogContext.Contracts.Products.Create
 {
-    public class CreateProductRequest : IRequest<CreateProductResponse>
+    public class CreateProductRequest : IRequest
     {
         public ProductInfoContract ProductInfo { get; set; }
     }

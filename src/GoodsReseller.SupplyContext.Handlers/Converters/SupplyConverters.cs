@@ -11,6 +11,7 @@ namespace GoodsReseller.SupplyContext.Handlers.Converters
             return new SupplyContract
             {
                 Id = supply.Id,
+                Version = supply.Version,
                 Date = supply.CreationDate.Date,
                 SupplierInfo = supply.SupplierInfo.ToContract(),
                 SupplyItems = supply.GetExistingSupplyItems().Select(x => x.ToContract()).ToArray(),

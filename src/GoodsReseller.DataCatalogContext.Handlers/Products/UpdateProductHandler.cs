@@ -26,6 +26,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
             }
             
             product.Update(
+                request.ProductInfo.Version,
                 request.ProductInfo.Label,
                 request.ProductInfo.Name,
                 request.ProductInfo.Description,
@@ -36,7 +37,7 @@ namespace GoodsReseller.DataCatalogContext.Handlers.Products
 
             await _productsRepository.SaveAsync(product, cancellationToken);
             
-            return new Unit();
+            return Unit.Value;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace GoodsReseller.AuthContext.Handlers.Users
         
         public async Task<RegisterUserResponse> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
         {
-            var existingUser = await _usersRepository.GetUserByEmailAsync(request.Email, cancellationToken);
+            var existingUser = await _usersRepository.GetByEmailAsync(request.Email, cancellationToken);
             if (existingUser != null)
             {
                 throw new InvalidOperationException($"User with Email = {request.Email} has already been existed");
@@ -37,7 +37,7 @@ namespace GoodsReseller.AuthContext.Handlers.Users
                 passwordHash,
                 request.Role);
 
-            await _usersRepository.SaveUserAsync(user, cancellationToken);
+            await _usersRepository.SaveAsync(user, cancellationToken);
             
             return new RegisterUserResponse
             {

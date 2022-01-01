@@ -90,7 +90,16 @@ const OrderItem = ({ setProducts, simpleProducts, addOrderItem, addOrderItems, s
 			}
 			setOrderAddedCost(set.addedCost)
 		}
-	}, [selectedSetId, setProducts, simpleProducts, selectedSetId, uuid, addOrderItems, setSelectedSetId, setOrderAddedCost])
+	}, [
+		selectedSetId,
+		setProducts,
+		simpleProducts,
+		selectedSetId,
+		uuid,
+		addOrderItems,
+		setSelectedSetId,
+		setOrderAddedCost,
+	])
 
 	return (
 		<Grid item xs={12} md={12} className={classes.root}>

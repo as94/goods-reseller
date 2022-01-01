@@ -62,18 +62,19 @@ namespace GoodsReseller.Api.Controllers
             [FromBody] [Required] OrderInfoContract orderInfo,
             CancellationToken cancellationToken)
         {
-            var response = await _mediator.Send(new CreateOrderRequest
+            await _mediator.Send(new CreateOrderRequest
             {
                 OrderInfo = orderInfo
             }, cancellationToken);
 
+            // TODO: add to local_queue
             await _mediator.Send(new OrderAcceptedNotificationRequest
             {
                 ClientPhoneNumber = orderInfo.CustomerInfo.PhoneNumber,
                 ClientName = orderInfo.CustomerInfo.Name
             }, cancellationToken);
 
-            return Ok(response);
+            return Ok();
         }
 
         [HttpPut("{orderId}")]

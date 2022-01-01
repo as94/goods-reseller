@@ -241,6 +241,7 @@ const Checkout = () => {
 	useEffect(() => {
 		if (productSet) {
 			setOrderInfo({
+				id: uuid(),
 				version: 1,
 				status: OrderStatuses[0],
 				address,

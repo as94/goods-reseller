@@ -18,7 +18,7 @@ namespace GoodsReseller.AuthContext.Handlers.Users
         
         public async Task<LoginUserResponse> Handle(LoginUserRequest request, CancellationToken cancellationToken)
         {
-            var existingUser = await _usersRepository.GetUserByEmailAsync(request.Email, cancellationToken);
+            var existingUser = await _usersRepository.GetByEmailAsync(request.Email, cancellationToken);
             if (existingUser == null)
             {
                 throw new AuthenticationException();

@@ -6,6 +6,9 @@ namespace GoodsReseller.OrderContext.Contracts.Models
     public class OrderInfoContract
     {
         [Required]
+        public Guid Id { get; set; }
+        
+        [Required]
         public int Version { get; set; }
         
         [Required]

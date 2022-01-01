@@ -29,7 +29,7 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
 
             await _ordersRepository.SaveAsync(order, cancellationToken);
             
-            return new Unit();
+            return Unit.Value;
         }
     }
 }

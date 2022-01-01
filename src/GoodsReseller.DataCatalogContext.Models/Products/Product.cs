@@ -1,5 +1,6 @@
 using System;
 using GoodsReseller.SeedWork;
+using GoodsReseller.SeedWork.Exceptions;
 using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.DataCatalogContext.Models.Products
@@ -65,6 +66,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
         }
 
         public void Update(
+            int newVersion,
             string label,
             string name,
             string description,
@@ -76,6 +78,11 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             if (IsRemoved)
             {
                 throw new InvalidOperationException($"Product with id = {Id} has already been removed");
+            }
+            
+            if (Version >= newVersion)
+            {
+                throw new ConcurrencyException();
             }
             
             if (label == null)
@@ -103,19 +110,31 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
             AddedCost = addedCost;
             ProductIds = productIds ?? Array.Empty<Guid>();
             
-            IncrementVersion();
+            Version = newVersion;
             LastUpdateDate = new DateValueObject();
         }
 
-        public void UpdateProductPhoto(string photoPath)
+        public void UpdateProductPhoto(int newVersion, string photoPath)
         {
+            if (IsRemoved)
+            {
+                throw new InvalidOperationException($"Product with id = {Id} has already been removed");
+            }
+            
+            if (Version >= newVersion)
+            {
+                throw new ConcurrencyException();
+            }
+            
             if (photoPath == null)
             {
                 throw new ArgumentNullException(nameof(photoPath));
             }
 
             PhotoPath = photoPath;
-            IncrementVersion();
+            
+            Version = newVersion;
+            LastUpdateDate = new DateValueObject();
         }
     }
 }

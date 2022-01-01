@@ -68,7 +68,7 @@ namespace GoodsReseller.NotificationContext
         {
             if (!_enabled)
             {
-                return new Unit();
+                return Unit.Value;
             }
             
             var message = $"Поступил заказ от клиента с номером {request.ClientPhoneNumber}";
@@ -86,7 +86,7 @@ namespace GoodsReseller.NotificationContext
                     cancellationToken: cancellationToken);
             }
 
-            return new Unit();
+            return Unit.Value;
         }
 
         private async Task<IEnumerable<long>> GetChatIdsAsync(CancellationToken cancellationToken)

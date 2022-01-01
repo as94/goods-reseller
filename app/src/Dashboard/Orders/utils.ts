@@ -1,4 +1,5 @@
 import { OrderInfoContract } from '../../Api/Orders/contracts'
+import { v4 as uuid } from 'uuid'
 
 export interface AddressValid {
 	cityValid: boolean
@@ -46,6 +47,8 @@ export const customerInfoIsValid = (customerInfoIsValid: boolean) =>
 	} as CustomerInfoValid)
 
 export const initialOrder = {
+	id: uuid(),
+	version: 1,
 	address: {
 		city: '',
 		street: '',
@@ -58,6 +61,6 @@ export const initialOrder = {
 		value: 0,
 	},
 	addedCost: {
-		value: 0
-	}
+		value: 0,
+	},
 } as OrderInfoContract

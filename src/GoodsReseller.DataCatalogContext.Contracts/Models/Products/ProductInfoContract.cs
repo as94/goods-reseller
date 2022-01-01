@@ -6,6 +6,12 @@ namespace GoodsReseller.DataCatalogContext.Contracts.Models.Products
     public class ProductInfoContract
     {
         [Required]
+        public Guid Id { get; set; }
+        
+        [Required]
+        public int Version { get; set; }
+        
+        [Required]
         public string Label { get; set; }
         
         [Required]

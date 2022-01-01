@@ -1,6 +1,6 @@
 using System;
 
-namespace GoodsReseller.Infrastructure.Exceptions
+namespace GoodsReseller.SeedWork.Exceptions
 {
     public class ConcurrencyException : Exception
     {
@@ -8,12 +8,12 @@ namespace GoodsReseller.Infrastructure.Exceptions
         {
         }
         
-        public ConcurrencyException(string? message)
+        public ConcurrencyException(string message)
             : base(message)
         {
         }
         
-        public ConcurrencyException(string? message, Exception? innerException)
+        public ConcurrencyException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

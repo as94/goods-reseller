@@ -24,12 +24,15 @@ export interface SupplyItemContract {
 }
 
 export interface SupplyInfoContract {
+	id: string
+	version: number
 	supplierInfo: SupplierInfoContract
 	supplyItems: SupplyItemContract[]
 }
 
 export interface SupplyContract {
 	id: string
+	version: number
 	date: Date
 	supplierInfo: SupplierInfoContract
 	supplyItems: SupplyItemContract[]
