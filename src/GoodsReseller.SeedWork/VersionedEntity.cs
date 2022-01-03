@@ -52,15 +52,10 @@ namespace GoodsReseller.SeedWork
             return base.GetHashCode();
         }
 
-        protected void IncrementVersion()
-        {
-            Version++;
-        }
-        
         public override void Remove()
         {
             base.Remove();
-            IncrementVersion();
+            Version++;
         }
     }
 }

@@ -19,7 +19,7 @@ export default {
 	},
 
 	Register: async (registerUser: RegisterUserContract): Promise<void> => {
-		var response = await api.post('/auth/registerAdmin', registerUser)
+		var response = await api.post('/auth/register', registerUser)
 
 		if (response.status !== 200) {
 			throw new Error()

@@ -10,7 +10,7 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
         {
             builder.ToTable("telegram_chats");
 
-            builder.Property(e => e.ChatId).IsRequired();
+            builder.Property(x => x.ChatId).IsRequired();
             builder.HasKey(x => x.ChatId);
             
             builder.Property(x => x.UserName).IsRequired().HasColumnType("varchar(255)");
