@@ -9,7 +9,7 @@ namespace GoodsReseller.DataCatalogContext.Models.Products
     {
         Task<Product> GetAsync(Guid productId, CancellationToken cancellationToken);
         Task<Product> GetAsync(string label, CancellationToken cancellationToken);
-        Task<IEnumerable<Product>> BatchAsync(int offset, int count, CancellationToken cancellationToken);
+        Task<(IEnumerable<Product> Products, int RowsCount)> BatchAsync(int offset, int count, CancellationToken cancellationToken);
         Task SaveAsync(Product product, CancellationToken cancellationToken);
     }
 }

@@ -18,26 +18,27 @@ const useStyles = makeStyles(theme => ({
 }))
 
 interface IOwnProps {
-	supplies: SupplyListItemContract[]
-	setSupplies: (supplies: SupplyListItemContract[]) => void
 	setSelectedSupplyId: (selectedSupplyId: string) => void
 	showCreateSupply: () => void
 }
 
-const SupplyList = ({ supplies, setSupplies, setSelectedSupplyId, showCreateSupply }: IOwnProps) => {
+const SupplyList = ({ setSelectedSupplyId, showCreateSupply }: IOwnProps) => {
 	const { t } = useTranslation()
 	const classes = useStyles()
+
+	const [rowsState, setRowsState] = React.useState({
+		page: 1,
+		pageSize: 10,
+		rows: [] as SupplyListItemContract[],
+		rowCount: 0,
+		loading: false,
+	})
 
 	const columns = [
 		{ field: 'date', headerName: t('Date'), width: 300 },
 		{ field: 'supplierName', type: 'string', headerName: t('SupplierName'), width: 300 },
 		{ field: 'totalCost', type: 'number', headerName: t('SupplyTotalCost'), width: 300 },
 	]
-
-	const getSupplies = useCallback(async () => {
-		const response = await suppliesApi.GetSupplyList()
-		setSupplies(response.items)
-	}, [setSupplies])
 
 	const supplyClickHandler = useCallback(
 		(param: RowParams) => {
@@ -51,8 +52,28 @@ const SupplyList = ({ supplies, setSupplies, setSelectedSupplyId, showCreateSupp
 	}, [showCreateSupply])
 
 	useEffect(() => {
-		getSupplies()
-	}, [getSupplies])
+		let active = true
+
+		;(async () => {
+			setRowsState(prev => ({ ...prev, loading: true }))
+			const response = await suppliesApi.GetSupplyList(
+				(rowsState.page - 1) * rowsState.pageSize,
+				rowsState.pageSize,
+			)
+
+			if (!active) {
+				return
+			}
+
+			const newRows = response.items.map(x => ({ ...x, date: new Date(x.date).toLocaleString() }))
+
+			setRowsState(prev => ({ ...prev, loading: false, rows: newRows, rowCount: response.rowsCount }))
+		})()
+
+		return () => {
+			active = false
+		}
+	}, [rowsState.page, rowsState.pageSize])
 
 	return (
 		<React.Fragment>
@@ -65,9 +86,11 @@ const SupplyList = ({ supplies, setSupplies, setSelectedSupplyId, showCreateSupp
 			<div style={{ height: 650, width: '100%' }}>
 				<DataGrid
 					disableColumnMenu={true}
-					rows={supplies.map(x => ({ ...x, date: new Date(x.date).toLocaleString() }))}
+					pagination
+					paginationMode="server"
 					columns={columns}
-					pageSize={10}
+					{...rowsState}
+					onPageChange={pageChangeParams => setRowsState(prev => ({ ...prev, page: pageChangeParams.page }))}
 					onRowClick={supplyClickHandler}
 				/>
 			</div>

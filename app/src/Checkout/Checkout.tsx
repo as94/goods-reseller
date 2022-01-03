@@ -200,7 +200,7 @@ const Checkout = () => {
 	}, [setActiveStep, activeStep, setTouched])
 
 	const getProducts = useCallback(async () => {
-		const response = await productsApi.GetProductList()
+		const response = await productsApi.GetProductList(0, 1000)
 		const products = response.items
 
 		const setProducts = products

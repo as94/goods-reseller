@@ -23,9 +23,9 @@ namespace GoodsReseller.Infrastructure.SupplyContext
             return await GetSupplyAsync(supplyId, cancellationToken);
         }
 
-        public async Task<IEnumerable<Supply>> BatchAsync(int offset, int count, CancellationToken cancellationToken)
+        public async Task<(IEnumerable<Supply> Supplies, int RowsCount)> BatchAsync(int offset, int count, CancellationToken cancellationToken)
         {
-            return (await _dbContext.Supplies
+            var supplies = (await _dbContext.Supplies
                     .Include(x => x.SupplyItems)
                     .Where(x => !x.IsRemoved)
                     .OrderBy(x => x.LastUpdateDate != null ? x.LastUpdateDate.DateUtc : x.CreationDate.DateUtc)
@@ -33,6 +33,10 @@ namespace GoodsReseller.Infrastructure.SupplyContext
                     .Take(count)
                     .ToListAsync(cancellationToken))
                 .AsReadOnly();
+            
+            var rowsCount = await _dbContext.Supplies.CountAsync(cancellationToken);
+
+            return (supplies, rowsCount);
         }
 
         public async Task SaveAsync(Supply supply, CancellationToken cancellationToken)

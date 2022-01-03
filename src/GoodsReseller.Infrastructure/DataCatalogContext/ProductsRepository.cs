@@ -29,15 +29,19 @@ namespace GoodsReseller.Infrastructure.DataCatalogContext
                 cancellationToken);
         }
 
-        public async Task<IEnumerable<Product>> BatchAsync(int offset, int count, CancellationToken cancellationToken)
+        public async Task<(IEnumerable<Product> Products, int RowsCount)> BatchAsync(int offset, int count, CancellationToken cancellationToken)
         {
-            return (await _dbContext.Products
+            var products = (await _dbContext.Products
                     .Where(x => !x.IsRemoved)
                     .OrderBy(x => x.LastUpdateDate != null ? x.LastUpdateDate.DateUtc : x.CreationDate.DateUtc)
                     .Skip(offset)
                     .Take(count)
                     .ToListAsync(cancellationToken))
                 .AsReadOnly();
+            
+            var rowsCount = await _dbContext.Products.CountAsync(cancellationToken);
+
+            return (products, rowsCount);
         }
 
         public async Task SaveAsync(Product product, CancellationToken cancellationToken)

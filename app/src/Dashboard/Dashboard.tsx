@@ -137,7 +137,7 @@ const Dashboard = () => {
 
 	const getProducts = useCallback(async () => {
 		if (!showCreateProduct && !selectedProductId) {
-			const response = await productsApi.GetProductList()
+			const response = await productsApi.GetProductList(0, 1000)
 			setProducts(response.items)
 		}
 	}, [setProducts, showCreateProduct, selectedProductId])
