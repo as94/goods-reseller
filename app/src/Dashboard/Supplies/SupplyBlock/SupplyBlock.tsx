@@ -22,7 +22,6 @@ const useStyles = makeStyles(theme => ({
 
 const SupplyBlock = ({ products }: IOwnProps) => {
 	const classes = useStyles()
-	const [supplies, setSupplies] = useState([] as SupplyListItemContract[])
 
 	const [selectedSupplyId, setSelectedSupplyId] = useState(null as string | null)
 	const [showCreateSupply, setShowCreateSupply] = useState(false)
@@ -36,8 +35,6 @@ const SupplyBlock = ({ products }: IOwnProps) => {
 				<Grid item xs={12}>
 					<Paper className={classes.paper}>
 						<SupplyList
-							supplies={supplies}
-							setSupplies={setSupplies}
 							setSelectedSupplyId={setSelectedSupplyId}
 							showCreateSupply={createSupplyShowHandler}
 						/>

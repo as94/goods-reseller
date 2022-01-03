@@ -9,7 +9,7 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies
     public interface ISuppliesRepository
     {
         Task<Supply> GetAsync(Guid supplyId, CancellationToken cancellationToken);
-        Task<IEnumerable<Supply>> BatchAsync(int offset, int count, CancellationToken cancellationToken);
+        Task<(IEnumerable<Supply> Supplies, int RowsCount)> BatchAsync(int offset, int count, CancellationToken cancellationToken);
         Task SaveAsync(Supply supply, CancellationToken cancellationToken);
     }
 }

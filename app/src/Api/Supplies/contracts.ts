@@ -2,11 +2,12 @@ import { MoneyContract } from '../contracts'
 
 export interface SupplyListContract {
 	items: SupplyListItemContract[]
+	rowsCount: number
 }
 
 export interface SupplyListItemContract {
 	id: string
-	date: Date
+	date: string
 	supplierName: string
 	totalCost: number
 }
@@ -33,7 +34,7 @@ export interface SupplyInfoContract {
 export interface SupplyContract {
 	id: string
 	version: number
-	date: Date
+	date: string
 	supplierInfo: SupplierInfoContract
 	supplyItems: SupplyItemContract[]
 	totalCost: MoneyContract

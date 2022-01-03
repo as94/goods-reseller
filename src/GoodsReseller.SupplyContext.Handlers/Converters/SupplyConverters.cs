@@ -12,7 +12,7 @@ namespace GoodsReseller.SupplyContext.Handlers.Converters
             {
                 Id = supply.Id,
                 Version = supply.Version,
-                Date = supply.CreationDate.Date,
+                Date = supply.LastUpdateDate != null ? supply.LastUpdateDate.DateUtc : supply.CreationDate.DateUtc,
                 SupplierInfo = supply.SupplierInfo.ToContract(),
                 SupplyItems = supply.GetExistingSupplyItems().Select(x => x.ToContract()).ToArray(),
                 TotalCost = supply.TotalCost.ToContract()
@@ -24,7 +24,7 @@ namespace GoodsReseller.SupplyContext.Handlers.Converters
             return new SupplyListItemContract
             {
                 Id = supply.Id,
-                Date = supply.CreationDate.Date,
+                Date = supply.LastUpdateDate != null ? supply.LastUpdateDate.DateUtc : supply.CreationDate.DateUtc,
                 SupplierName = supply.SupplierInfo.Name,
                 TotalCost = supply.TotalCost.Value
             };

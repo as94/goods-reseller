@@ -136,7 +136,7 @@ const StorePage = () => {
 	const [productSetImages, setProductSetImages] = useState({} as ProductSetImages)
 
 	const getSetListHandler = useCallback(async () => {
-		const result = await productsApi.GetProductList()
+		const result = await productsApi.GetProductList(0, 1000)
 		setProducts(result.items)
 	}, [setProducts, productsApi])
 

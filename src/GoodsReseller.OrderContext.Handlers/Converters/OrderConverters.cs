@@ -13,7 +13,7 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
                 Id = order.Id,
                 Version = order.Version,
                 Status = order.Status.Name,
-                Date = order.CreationDate.Date,
+                Date = order.LastUpdateDate != null ? order.LastUpdateDate.DateUtc : order.CreationDate.DateUtc,
                 Address = order.Address.ToContract(),
                 CustomerInfo = order.CustomerInfo.ToContract(),
                 OrderItems = order.GetExistingOrderItems().Select(x => x.ToContract()).ToArray(),
