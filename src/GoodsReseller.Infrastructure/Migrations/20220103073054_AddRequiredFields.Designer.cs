@@ -3,15 +3,17 @@ using System;
 using GoodsReseller.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace GoodsReseller.Infrastructure.Migrations
 {
     [DbContext(typeof(GoodsResellerDbContext))]
-    partial class GoodsResellerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220103073054_AddRequiredFields")]
+    partial class AddRequiredFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,6 +159,12 @@ namespace GoodsReseller.Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("order_items");
+                });
+
+            modelBuilder.Entity("GoodsReseller.OrderContext.Domain.Orders.Views.OrderVersionView", b =>
+                {
+                    b.Property<int>("Version")
+                        .HasColumnType("integer");
                 });
 
             modelBuilder.Entity("GoodsReseller.SupplyContext.Domain.Supplies.Entities.Supply", b =>

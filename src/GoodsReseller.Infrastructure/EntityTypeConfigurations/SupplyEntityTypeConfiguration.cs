@@ -17,40 +17,45 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
         {
             builder.ToTable("supplies");
             
-            builder.Property(e => e.Id).IsRequired();
+            builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
-            builder.Property(e => e.Version).IsRequired().HasColumnType("integer").HasDefaultValue(1);
+            builder.Property(x => x.Version).IsRequired().HasColumnType("integer").HasDefaultValue(1);
             builder.UseXminAsConcurrencyToken();
             
-            builder.Property(e => e.SupplierInfo)
+            builder.Property(x => x.SupplierInfo)
+                .IsRequired()
                 .HasColumnType("json")
                 .HasConversion(
                     x => JsonConvert.SerializeObject(x, _jsonSerializerSettings),
-                    x => JsonConvert.DeserializeObject<SupplierInfo>(x, _jsonSerializerSettings));
+                    x => JsonConvert.DeserializeObject<SupplierInfo>(x, _jsonSerializerSettings))
+                .HasDefaultValueSql("'{}'");
 
             builder
-                .OwnsOne(o => o.TotalCost, x =>
+                .OwnsOne(x => x.TotalCost, x =>
                 {
                     x.Property(x => x.Value).IsRequired().HasColumnName("TotalCostValue");
                     x.WithOwner();
-                });
-            
-            
+                })
+                .Navigation(x => x.TotalCost)
+                .IsRequired();
+
             var navigation =
                 builder.Metadata.FindNavigation(nameof(Supply.SupplyItems));
             
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
             
             builder
-                .OwnsOne(o => o.CreationDate, x =>
+                .OwnsOne(x => x.CreationDate, x =>
                 {
                     x.Property(x => x.Date).IsRequired().HasColumnName("CreationDate");
                     x.Property(x => x.DateUtc).IsRequired().HasColumnName("CreationDateUtc");
                     x.WithOwner();
-                });
+                })
+                .Navigation(x => x.CreationDate)
+                .IsRequired();
 
             builder
-                .OwnsOne(o => o.LastUpdateDate, x =>
+                .OwnsOne(x => x.LastUpdateDate, x =>
                 {
                     x.Property(x => x.Date).HasColumnName("LastUpdateDate");
                     x.Property(x => x.DateUtc).HasColumnName("LastUpdateDateUtc");

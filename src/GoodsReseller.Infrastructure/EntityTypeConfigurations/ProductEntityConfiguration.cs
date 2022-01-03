@@ -19,9 +19,9 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
         {
             builder.ToTable("products");
 
-            builder.Property(e => e.Id).IsRequired();
+            builder.Property(x => x.Id).IsRequired();
             builder.HasKey(x => x.Id);
-            builder.Property(e => e.Version).IsRequired().HasColumnType("integer");
+            builder.Property(x => x.Version).IsRequired().HasColumnType("integer");
             builder.UseXminAsConcurrencyToken();
 
             builder.Property(x => x.Label).IsRequired().HasColumnType("varchar(255)");
@@ -29,32 +29,38 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
             builder.Property(x => x.Description).IsRequired().HasColumnType("varchar(1024)");
 
             builder
-                .OwnsOne(o => o.UnitPrice, x =>
+                .OwnsOne(x => x.UnitPrice, x =>
                 {
                     x.Property(x => x.Value).IsRequired().HasColumnName("UnitPriceValue");
                     x.WithOwner();
-                });
+                })
+                .Navigation(x => x.UnitPrice)
+                .IsRequired();
             
             builder
-                .OwnsOne(o => o.DiscountPerUnit, x =>
+                .OwnsOne(x => x.DiscountPerUnit, x =>
                 {
                     x.Property(x => x.Value).IsRequired().HasColumnName("DiscountPerUnitValue");
                     x.WithOwner();
-                });
+                })
+                .Navigation(x => x.DiscountPerUnit)
+                .IsRequired();
             
             builder
-                .OwnsOne(o => o.AddedCost, x =>
+                .OwnsOne(x => x.AddedCost, x =>
                 {
                     x.Property(x => x.Value).IsRequired().HasColumnName("AddedCostValue").HasDefaultValue(0);
                     x.WithOwner();
-                });
+                })
+                .Navigation(x => x.AddedCost)
+                .IsRequired();
             
             var valueComparer = new ValueComparer<Guid[]>(
                 (c1, c2) => c1.SequenceEqual(c2),
                 c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
                 c => c.ToArray());
 
-            builder.Property(e => e.ProductIds)
+            builder.Property(x => x.ProductIds)
                 .HasColumnType("json")
                 .HasConversion(
                     x => JsonConvert.SerializeObject(x, _jsonSerializerSettings),
@@ -62,18 +68,20 @@ namespace GoodsReseller.Infrastructure.EntityTypeConfigurations
                 .Metadata
                 .SetValueComparer(valueComparer);
 
-            builder.Property(e => e.PhotoPath).HasColumnType("varchar(2048)");
+            builder.Property(x => x.PhotoPath).HasColumnType("varchar(2048)");
 
             builder
-                .OwnsOne(o => o.CreationDate, x =>
+                .OwnsOne(x => x.CreationDate, x =>
                 {
                     x.Property(x => x.Date).IsRequired().HasColumnName("CreationDate");
                     x.Property(x => x.DateUtc).IsRequired().HasColumnName("CreationDateUtc");
                     x.WithOwner();
-                });
+                })
+                .Navigation(x => x.CreationDate)
+                .IsRequired();
 
             builder
-                .OwnsOne(o => o.LastUpdateDate, x =>
+                .OwnsOne(x => x.LastUpdateDate, x =>
                 {
                     x.Property(x => x.Date).HasColumnName("LastUpdateDate");
                     x.Property(x => x.DateUtc).HasColumnName("LastUpdateDateUtc");

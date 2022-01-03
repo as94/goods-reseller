@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace GoodsReseller.Api.Middlewares
 {
@@ -54,17 +55,16 @@ namespace GoodsReseller.Api.Middlewares
 			}
 			catch (ConcurrencyException ex)
 			{
-				// ошибки конкурентности, повторять без изменений не нужно, 409
-				var httpStatusCode = HttpStatusCode.Conflict;
-				await LogExceptionAsync(ex, httpStatusCode, context.Request);
-				WriteTextResponse(context, httpStatusCode, ex.Message);
+				await HandleOptimisticConcurrencyAsync(context, ex);
 			}
 			catch (DbUpdateConcurrencyException ex)
 			{
-				// ошибки конкурентности, повторять без изменений не нужно, 409
-				var httpStatusCode = HttpStatusCode.Conflict;
-				await LogExceptionAsync(ex, httpStatusCode, context.Request);
-				WriteTextResponse(context, httpStatusCode, ex.Message);
+				await HandleOptimisticConcurrencyAsync(context, ex);
+			}
+			catch (DbUpdateException ex)
+				when (ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
+			{
+				await HandleOptimisticConcurrencyAsync(context, ex);
 			}
 			catch (Exception ex)
 			{
@@ -80,6 +80,14 @@ namespace GoodsReseller.Api.Middlewares
 			context.Response.StatusCode = (int) httpCode;
 
 			await context.Response.WriteAsync(string.IsNullOrEmpty(message) ? string.Empty : message);
+		}
+
+		private async Task HandleOptimisticConcurrencyAsync(HttpContext context, Exception ex)
+		{
+			// ошибки конкурентности, повторять без изменений не нужно, 409
+			var httpStatusCode = HttpStatusCode.Conflict;
+			await LogExceptionAsync(ex, httpStatusCode, context.Request);
+			WriteTextResponse(context, httpStatusCode, ex.Message);
 		}
 
 		private async Task LogExceptionAsync(Exception exception, HttpStatusCode httpStatusCode, HttpRequest request)
