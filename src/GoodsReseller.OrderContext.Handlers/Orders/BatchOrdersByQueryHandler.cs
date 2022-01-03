@@ -20,16 +20,16 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
         
         public async Task<BatchOrdersByQueryResponse> Handle(BatchOrdersByQueryRequest request, CancellationToken cancellationToken)
         {
-            var orders = await _ordersRepository.BatchAsync(request.Query.Offset, request.Query.Count, cancellationToken);
+            var (orders, rowsCount) = await _ordersRepository.BatchAsync(request.Query.Offset, request.Query.Count, cancellationToken);
 
             return new BatchOrdersByQueryResponse
             {
                 OrderList = new OrderListContract
                 {
                     Items = orders
-                        .OrderByDescending(x => x.LastUpdateDate ?? x.CreationDate)
                         .Select(x => x.ToListItemContract())
-                        .ToArray()
+                        .ToArray(),
+                    RowsCount = rowsCount
                 }
             };
         }

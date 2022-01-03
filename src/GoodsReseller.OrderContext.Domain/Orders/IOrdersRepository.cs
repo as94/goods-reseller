@@ -9,7 +9,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders
     public interface IOrdersRepository
     {
         Task<Order> GetAsync(Guid orderId, CancellationToken cancellationToken);
-        Task<IEnumerable<Order>> BatchAsync(int offset, int count, CancellationToken cancellationToken);
+        Task<(IEnumerable<Order> Orders, int RowsCount)> BatchAsync(int offset, int count, CancellationToken cancellationToken);
         Task SaveAsync(Order order, CancellationToken cancellationToken);
     }
 }

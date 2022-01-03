@@ -23,9 +23,9 @@ namespace GoodsReseller.Infrastructure.OrderContext
             return await GetOrderAsync(orderId, cancellationToken);
         }
 
-        public async Task<IEnumerable<Order>> BatchAsync(int offset, int count, CancellationToken cancellationToken)
+        public async Task<(IEnumerable<Order> Orders, int RowsCount)> BatchAsync(int offset, int count, CancellationToken cancellationToken)
         {
-            return (await _dbContext.Orders
+            var orders = (await _dbContext.Orders
                     .Include(x => x.OrderItems)
                     .Where(x => !x.IsRemoved)
                     .OrderBy(x => x.LastUpdateDate != null ? x.LastUpdateDate.DateUtc : x.CreationDate.DateUtc)
@@ -33,6 +33,10 @@ namespace GoodsReseller.Infrastructure.OrderContext
                     .Take(count)
                     .ToListAsync(cancellationToken))
                 .AsReadOnly();
+
+            var rowsCount = await _dbContext.Orders.CountAsync(cancellationToken);
+
+            return (orders, rowsCount);
         }
 
         public async Task SaveAsync(Order order, CancellationToken cancellationToken)

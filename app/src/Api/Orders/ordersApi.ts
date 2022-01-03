@@ -12,8 +12,8 @@ export default {
 		return response.data as OrderContract
 	},
 
-	GetOrderList: async (): Promise<OrderListContract> => {
-		const response = await api.get('/orders')
+	GetOrderList: async (offset: number, count: number): Promise<OrderListContract> => {
+		const response = await api.get(`/orders?offset=${offset}&count=${count}`)
 
 		if (response.status !== 200) {
 			throw new Error()

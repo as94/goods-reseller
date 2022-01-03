@@ -23,7 +23,10 @@ namespace GoodsReseller.Infrastructure
             DatabaseOptions databaseOptions)
         {
             serviceCollection.AddDbContextPool<GoodsResellerDbContext>(options =>
-                options.UseNpgsql(databaseOptions.ConnectionString));
+                options
+                    // uncomment for logging sql queries
+                    // .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+                    .UseNpgsql(databaseOptions.ConnectionString));
             
             serviceCollection.AddScoped<IProductsRepository, ProductsRepository>();
             serviceCollection.AddScoped<IUsersRepository, UsersRepository>();

@@ -2,7 +2,6 @@ import { Grid, Paper } from '@material-ui/core'
 import React, { useCallback, useState } from 'react'
 import OrderList from '../OrderList/OrderList'
 import { makeStyles } from '@material-ui/core/styles'
-import { OrderListItemContract } from '../../../Api/Orders/contracts'
 import CreateOrder from '../CreateOrder/CreateOrder'
 import { ProductListItemContract } from '../../../Api/Products/contracts'
 import Order from '../Order/Order'
@@ -22,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 
 const OrderBlock = ({ products }: IOwnProps) => {
 	const classes = useStyles()
-	const [orders, setOrders] = useState([] as OrderListItemContract[])
 
 	const [selectedOrderId, setSelectedOrderId] = useState(null as string | null)
 	const [showCreateOrder, setShowCreateOrder] = useState(false)
@@ -35,12 +33,7 @@ const OrderBlock = ({ products }: IOwnProps) => {
 			{!selectedOrderId && !showCreateOrder && (
 				<Grid item xs={12}>
 					<Paper className={classes.paper}>
-						<OrderList
-							orders={orders}
-							setOrders={setOrders}
-							setSelectedOrderId={setSelectedOrderId}
-							showCreateOrder={createOrderShowHandler}
-						/>
+						<OrderList setSelectedOrderId={setSelectedOrderId} showCreateOrder={createOrderShowHandler} />
 					</Paper>
 				</Grid>
 			)}
