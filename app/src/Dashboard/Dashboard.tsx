@@ -26,6 +26,7 @@ import SupplyBlock from './Supplies/SupplyBlock/SupplyBlock'
 import { BarChart, LocalShipping } from '@material-ui/icons'
 import StatisticBlock from './Statistics/StatisticBlock'
 import { useTranslation } from 'react-i18next'
+import { getAllProducts } from '../Api/Products/productsUtils'
 
 const drawerWidth = 240
 
@@ -137,10 +138,10 @@ const Dashboard = () => {
 
 	const getProducts = useCallback(async () => {
 		if (!showCreateProduct && !selectedProductId) {
-			const response = await productsApi.GetProductList(0, 1000)
-			setProducts(response.items)
+			const allProducts = await getAllProducts()
+			setProducts(allProducts)
 		}
-	}, [setProducts, showCreateProduct, selectedProductId])
+	}, [setProducts, getAllProducts, showCreateProduct, selectedProductId])
 
 	const [selectedMenuItem, setSelectedMenuItem] = useState(menuItems.statistic)
 

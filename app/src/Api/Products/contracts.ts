@@ -29,6 +29,7 @@ export interface ProductListItemContract {
 
 export interface ProductListContract {
 	items: ProductListItemContract[]
+	rowsCount: number
 }
 
 export interface ProductInfoContract {
