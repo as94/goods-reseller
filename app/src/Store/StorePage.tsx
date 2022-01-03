@@ -21,6 +21,7 @@ import Grow from '@material-ui/core/Grow'
 import { Note } from './Note/Note'
 import { SaleBlock } from './SaleBlock/SaleBlock'
 import InfoBlock from './InfoBlock/InfoBlock'
+import { getAllProducts } from '../Api/Products/productsUtils'
 
 const useStyles = makeStyles(theme => ({
 	icon: {
@@ -136,9 +137,9 @@ const StorePage = () => {
 	const [productSetImages, setProductSetImages] = useState({} as ProductSetImages)
 
 	const getSetListHandler = useCallback(async () => {
-		const result = await productsApi.GetProductList(0, 1000)
-		setProducts(result.items)
-	}, [setProducts, productsApi])
+		const allProducts = await getAllProducts()
+		setProducts(allProducts)
+	}, [setProducts, getAllProducts])
 
 	const getSetComposition = useCallback(
 		(setId: string) => {

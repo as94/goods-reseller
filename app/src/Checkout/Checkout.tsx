@@ -26,6 +26,7 @@ import { MoneyContract } from '../Api/contracts'
 import ordersApi from '../Api/Orders/ordersApi'
 import StoreFooter from '../StoreFooter/StoreFooter'
 import { MessageModal } from '../Modal/MessageModal'
+import { getAllProducts } from '../Api/Products/productsUtils'
 
 const useStyles = makeStyles(theme => ({
 	appBar: {
@@ -200,8 +201,8 @@ const Checkout = () => {
 	}, [setActiveStep, activeStep, setTouched])
 
 	const getProducts = useCallback(async () => {
-		const response = await productsApi.GetProductList(0, 1000)
-		const products = response.items
+		const allProducts = await getAllProducts()
+		const products = allProducts
 
 		const setProducts = products
 			.filter(x => x.isSet)
@@ -217,7 +218,7 @@ const Checkout = () => {
 			const pInSet = simpleProducts.filter(x => set.productIds.includes(x.id))
 			setProductsInSet(pInSet)
 		}
-	}, [setId, setProductSet, setProductsInSet])
+	}, [setId, setProductSet, setProductsInSet, getAllProducts])
 
 	useEffect(() => {
 		getProducts()
