@@ -45,7 +45,8 @@ namespace GoodsReseller.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetOrderListAsync([FromQuery] BatchOrdersQuery query,
+        public async Task<IActionResult> GetOrderListAsync(
+            [FromQuery] BatchOrdersQuery query,
             CancellationToken cancellationToken)
         {
             var response = await _mediator.Send(new BatchOrdersByQueryRequest

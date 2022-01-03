@@ -2,6 +2,7 @@ import { MoneyContract } from '../contracts'
 
 export interface OrderListContract {
 	items: OrderListItemContract[]
+	rowsCount: number
 }
 
 export interface OrderListItemContract {

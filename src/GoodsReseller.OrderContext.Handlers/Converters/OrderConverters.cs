@@ -30,7 +30,7 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
                 Id = order.Id,
                 Version = order.Version,
                 Status = order.Status.Name,
-                Date = order.CreationDate.Date,
+                Date = order.LastUpdateDate != null ? order.LastUpdateDate.DateUtc : order.CreationDate.DateUtc,
                 CustomerPhoneNumber = order.CustomerInfo.PhoneNumber,
                 CustomerName = order.CustomerInfo.Name,
                 AddressCity = order.Address.City,
