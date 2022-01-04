@@ -120,7 +120,13 @@ namespace GoodsReseller.Api
             app.UseDefaultFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
-                ServeUnknownFileTypes = true
+                ServeUnknownFileTypes = true,
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Headers.Append(
+                        "Cache-Control",
+                        $"public,max-age={TimeSpan.FromMinutes(10).TotalSeconds}");
+                }
             });
             
             app.UseRouting();
