@@ -28,7 +28,7 @@ namespace GoodsReseller.Infrastructure.SupplyContext
             var supplies = (await _dbContext.Supplies
                     .Include(x => x.SupplyItems)
                     .Where(x => !x.IsRemoved)
-                    .OrderBy(x => x.LastUpdateDate != null ? x.LastUpdateDate.DateUtc : x.CreationDate.DateUtc)
+                    .OrderByDescending(x => x.LastUpdateDate != null ? x.LastUpdateDate.DateUtc : x.CreationDate.DateUtc)
                     .Skip(offset)
                     .Take(count)
                     .ToListAsync(cancellationToken))

@@ -28,7 +28,7 @@ namespace GoodsReseller.Infrastructure.OrderContext
             var orders = (await _dbContext.Orders
                     .Include(x => x.OrderItems)
                     .Where(x => !x.IsRemoved)
-                    .OrderBy(x => x.LastUpdateDate != null ? x.LastUpdateDate.DateUtc : x.CreationDate.DateUtc)
+                    .OrderByDescending(x => x.LastUpdateDate != null ? x.LastUpdateDate.DateUtc : x.CreationDate.DateUtc)
                     .Skip(offset)
                     .Take(count)
                     .ToListAsync(cancellationToken))

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using GoodsReseller.Api.Middlewares;
 using GoodsReseller.AuthContext.Handlers;
@@ -119,13 +120,7 @@ namespace GoodsReseller.Api
             app.UseDefaultFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
-                ServeUnknownFileTypes = true,
-                OnPrepareResponse = ctx =>
-                {
-                    ctx.Context.Response.Headers.Append(
-                        "Cache-Control",
-                        "public, max-age=31536000"); // 365d
-                }
+                ServeUnknownFileTypes = true
             });
             
             app.UseRouting();
