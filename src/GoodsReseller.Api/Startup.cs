@@ -16,21 +16,19 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using HostOptions = GoodsReseller.Configurations.HostOptions;
 
 namespace GoodsReseller.Api
 {
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        private readonly IHostEnvironment _environment;
-        
-        // TODO: extract to config
-        private static readonly string SiteDNS = "http://happyboxy.ru";
+        private readonly bool _isProduction;
 
         public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             _configuration = configuration;
-            _environment = environment;
+            _isProduction = environment.IsProduction();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -40,26 +38,27 @@ namespace GoodsReseller.Api
 
             services
                 .Configure<TelegramApiOptions>(_configuration.GetSection(nameof(TelegramApiOptions)));
-            
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.MinimumSameSitePolicy = SameSiteMode.Strict;
                 options.HttpOnly = HttpOnlyPolicy.None;
-                options.Secure = _environment.IsDevelopment()
-                    ? CookieSecurePolicy.None : CookieSecurePolicy.Always;
+                options.Secure = _isProduction
+                    ? CookieSecurePolicy.Always
+                    : CookieSecurePolicy.None;
             });
-            
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     options.Events = new CookieAuthenticationEvents
-                    {                          
+                    {
                         OnRedirectToLogin = redirectContext =>
                         {
                             redirectContext.HttpContext.Response.StatusCode = 401;
                             return Task.CompletedTask;
                         }
-                    };  
+                    };
                 });
 
             var databaseOptions = _configuration.GetSection(nameof(DatabaseOptions)).Get<DatabaseOptions>();
@@ -70,15 +69,18 @@ namespace GoodsReseller.Api
             services.RegisterSupplyContextHandlers();
             services.RegisterNotificationContextHandlers();
 
-            if (!_environment.IsDevelopment())
+            if (_isProduction)
             {
-                services.AddCors(
-                    options => options.AddPolicy("CorsPolicy", builder =>
-                    {
-                        builder.WithOrigins(SiteDNS)
-                            .AllowAnyMethod()
-                            .AllowAnyHeader();
-                    }));
+                var hostOptions = _configuration.GetSection(nameof(HostOptions)).Get<HostOptions>();
+                services.AddCors(options =>
+                    options.AddPolicy(
+                        "CorsPolicy",
+                        builder =>
+                        {
+                            builder.WithOrigins(hostOptions.DomainName)
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                        }));
             }
 
             services.AddControllers();
@@ -89,49 +91,47 @@ namespace GoodsReseller.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (_isProduction)
             {
-                app.UseDeveloperExceptionPage();
+                app.UseHsts();
             }
             else
             {
-                app.UseHsts();
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseWhen(context =>
                     context.Request.Path.StartsWithSegments("/admin") ||
                     context.Request.Path.StartsWithSegments("/store"),
-                appBuilder =>
-                {
-                    appBuilder.UseStatusCodePagesWithReExecute("/");
-                });
+                appBuilder => { appBuilder.UseStatusCodePagesWithReExecute("/"); });
 
-            if (!env.IsProduction())
+            if (!_isProduction)
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Goods Reseller API V1");
-                });
+                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Goods Reseller API V1"); });
             }
 
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
-            app.UseStaticFiles(new StaticFileOptions
+
+            if (_isProduction)
             {
-                ServeUnknownFileTypes = true,
-                OnPrepareResponse = ctx =>
+                app.UseStaticFiles(new StaticFileOptions
                 {
-                    ctx.Context.Response.Headers.Append(
-                        "Cache-Control",
-                        $"public,max-age={TimeSpan.FromMinutes(10).TotalSeconds}");
-                }
-            });
-            
+                    ServeUnknownFileTypes = true,
+                    OnPrepareResponse = ctx =>
+                    {
+                        ctx.Context.Response.Headers.Append(
+                            "Cache-Control",
+                            $"public,max-age={TimeSpan.FromMinutes(10).TotalSeconds}");
+                    }
+                });
+            }
+
             app.UseRouting();
 
-            if (!_environment.IsDevelopment())
+            if (_isProduction)
             {
                 app.UseCors("CorsPolicy");
             }
