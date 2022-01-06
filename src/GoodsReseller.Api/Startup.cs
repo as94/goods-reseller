@@ -115,19 +115,16 @@ namespace GoodsReseller.Api
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
 
-            if (_isProduction)
+            app.UseStaticFiles(new StaticFileOptions
             {
-                app.UseStaticFiles(new StaticFileOptions
+                ServeUnknownFileTypes = true,
+                OnPrepareResponse = ctx =>
                 {
-                    ServeUnknownFileTypes = true,
-                    OnPrepareResponse = ctx =>
-                    {
-                        ctx.Context.Response.Headers.Append(
-                            "Cache-Control",
-                            $"public,max-age={TimeSpan.FromMinutes(10).TotalSeconds}");
-                    }
-                });
-            }
+                    ctx.Context.Response.Headers.Append(
+                        "Cache-Control",
+                        $"public,max-age={TimeSpan.FromMinutes(10).TotalSeconds}");
+                }
+            });
 
             app.UseRouting();
 
