@@ -218,12 +218,12 @@ ALTER TABLE public."__EFMigrationsHistory" OWNER TO postgres;
 CREATE TABLE public.order_items (
     "Id" uuid NOT NULL,
     "ProductId" uuid NOT NULL,
-    "UnitPriceValue" numeric,
-    "QuantityValue" integer,
-    "DiscountPerUnitValue" numeric,
+    "UnitPriceValue" numeric DEFAULT 0.0 NOT NULL,
+    "QuantityValue" integer DEFAULT 0 NOT NULL,
+    "DiscountPerUnitValue" numeric DEFAULT 0.0 NOT NULL,
     "OrderId" uuid,
-    "CreationDate" timestamp without time zone,
-    "CreationDateUtc" timestamp without time zone,
+    "CreationDate" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "CreationDateUtc" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
     "IsRemoved" boolean DEFAULT false NOT NULL,
     "LastUpdateDate" timestamp without time zone,
     "LastUpdateDateUtc" timestamp without time zone
@@ -238,19 +238,19 @@ ALTER TABLE public.order_items OWNER TO postgres;
 
 CREATE TABLE public.orders (
     "Id" uuid NOT NULL,
-    "Address" json,
-    "CustomerInfo" json,
-    "TotalCostValue" numeric,
-    "CreationDate" timestamp without time zone,
-    "CreationDateUtc" timestamp without time zone,
+    "Address" json DEFAULT '{}'::json NOT NULL,
+    "CustomerInfo" json DEFAULT '{}'::json NOT NULL,
+    "TotalCostValue" numeric DEFAULT 0.0 NOT NULL,
+    "CreationDate" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "CreationDateUtc" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
     "LastUpdateDate" timestamp without time zone,
     "LastUpdateDateUtc" timestamp without time zone,
     "IsRemoved" boolean NOT NULL,
     "Version" integer NOT NULL,
-    "Status_Id" integer,
-    "Status_Name" character varying(255),
-    "DeliveryCostValue" numeric DEFAULT 0.0,
-    "AddedCostValue" numeric DEFAULT 0.0
+    "Status_Id" integer DEFAULT 0 NOT NULL,
+    "Status_Name" character varying(255) DEFAULT ''::character varying NOT NULL,
+    "DeliveryCostValue" numeric DEFAULT 0.0 NOT NULL,
+    "AddedCostValue" numeric DEFAULT 0.0 NOT NULL
 );
 
 
@@ -265,16 +265,16 @@ CREATE TABLE public.products (
     "Label" character varying(255) NOT NULL,
     "Name" character varying(255) NOT NULL,
     "Description" character varying(1024) NOT NULL,
-    "UnitPriceValue" numeric,
-    "DiscountPerUnitValue" numeric,
+    "UnitPriceValue" numeric DEFAULT 0.0 NOT NULL,
+    "DiscountPerUnitValue" numeric DEFAULT 0.0 NOT NULL,
     "ProductIds" json,
-    "CreationDate" timestamp without time zone,
-    "CreationDateUtc" timestamp without time zone,
+    "CreationDate" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "CreationDateUtc" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
     "LastUpdateDate" timestamp without time zone,
     "LastUpdateDateUtc" timestamp without time zone,
     "IsRemoved" boolean NOT NULL,
     "Version" integer NOT NULL,
-    "AddedCostValue" numeric DEFAULT 0.0,
+    "AddedCostValue" numeric DEFAULT 0.0 NOT NULL,
     "PhotoPath" character varying(2048)
 );
 
@@ -287,13 +287,14 @@ ALTER TABLE public.products OWNER TO postgres;
 
 CREATE TABLE public.supplies (
     "Id" uuid NOT NULL,
-    "SupplierInfo" json,
-    "TotalCostValue" numeric,
-    "CreationDate" timestamp without time zone,
-    "CreationDateUtc" timestamp without time zone,
+    "SupplierInfo" json DEFAULT '{}'::json NOT NULL,
+    "TotalCostValue" numeric DEFAULT 0.0 NOT NULL,
+    "CreationDate" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "CreationDateUtc" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
     "LastUpdateDate" timestamp without time zone,
     "LastUpdateDateUtc" timestamp without time zone,
-    "IsRemoved" boolean NOT NULL
+    "IsRemoved" boolean NOT NULL,
+    "Version" integer DEFAULT 1 NOT NULL
 );
 
 
@@ -306,12 +307,12 @@ ALTER TABLE public.supplies OWNER TO postgres;
 CREATE TABLE public.supply_items (
     "Id" uuid NOT NULL,
     "ProductId" uuid NOT NULL,
-    "UnitPriceValue" numeric,
-    "QuantityValue" integer,
-    "DiscountPerUnitValue" numeric,
+    "UnitPriceValue" numeric DEFAULT 0.0 NOT NULL,
+    "QuantityValue" integer DEFAULT 0 NOT NULL,
+    "DiscountPerUnitValue" numeric DEFAULT 0.0 NOT NULL,
     "SupplyId" uuid,
-    "CreationDate" timestamp without time zone,
-    "CreationDateUtc" timestamp without time zone,
+    "CreationDate" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "CreationDateUtc" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
     "LastUpdateDate" timestamp without time zone,
     "LastUpdateDateUtc" timestamp without time zone,
     "IsRemoved" boolean NOT NULL
@@ -353,11 +354,11 @@ ALTER TABLE public.telegram_chats ALTER COLUMN "ChatId" ADD GENERATED BY DEFAULT
 CREATE TABLE public.users (
     "Id" uuid NOT NULL,
     "Email" character varying(255) NOT NULL,
-    "PasswordHash_Value" character varying(1024),
-    "Role_Name" character varying(255),
-    "Role_Id" integer,
-    "CreationDate" timestamp without time zone,
-    "CreationDateUtc" timestamp without time zone,
+    "PasswordHash_Value" character varying(1024) DEFAULT ''::character varying NOT NULL,
+    "Role_Name" character varying(255) DEFAULT ''::character varying NOT NULL,
+    "Role_Id" integer DEFAULT 0 NOT NULL,
+    "CreationDate" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
+    "CreationDateUtc" timestamp without time zone DEFAULT '0001-01-01 00:00:00'::timestamp without time zone NOT NULL,
     "LastUpdateDate" timestamp without time zone,
     "LastUpdateDateUtc" timestamp without time zone,
     "IsRemoved" boolean NOT NULL,
@@ -373,6 +374,8 @@ ALTER TABLE public.users OWNER TO postgres;
 
 COPY public."DataProtectionKeys" ("Id", "FriendlyName", "Xml") FROM stdin;
 1	key-a4e4f6a4-d8c2-40b8-8944-4b932b50eaec	<key id="a4e4f6a4-d8c2-40b8-8944-4b932b50eaec" version="1"><creationDate>2021-05-17T06:34:10.4488943Z</creationDate><activationDate>2021-05-17T06:34:05.0655543Z</activationDate><expirationDate>2021-08-15T06:34:05.0655543Z</expirationDate><descriptor deserializerType="Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60"><descriptor><encryption algorithm="AES_256_CBC" /><validation algorithm="HMACSHA256" /><masterKey p4:requiresEncryption="true" xmlns:p4="http://schemas.asp.net/2015/03/dataProtection"><!-- Warning: the key below is in an unencrypted form. --><value>xKrWGdNhY6+z0ZEWVhx2dmxRhP80H+uv3Dz234ITdEZlV+mRPYOW8erXy4LMmpbEAk8/bZTFsnE2qL4hW/9BzQ==</value></masterKey></descriptor></descriptor></key>
+2	key-f9223563-4db0-4749-8cec-365e6a34fdc7	<key id="f9223563-4db0-4749-8cec-365e6a34fdc7" version="1"><creationDate>2021-08-18T06:13:30.7516363Z</creationDate><activationDate>2021-08-18T06:13:24.8174941Z</activationDate><expirationDate>2021-11-16T06:13:24.8174941Z</expirationDate><descriptor deserializerType="Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60"><descriptor><encryption algorithm="AES_256_CBC" /><validation algorithm="HMACSHA256" /><masterKey p4:requiresEncryption="true" xmlns:p4="http://schemas.asp.net/2015/03/dataProtection"><!-- Warning: the key below is in an unencrypted form. --><value>LH50BrTCEbMCVQDDFR/ObWe0ccM4pwGMzW57VSGae6Jx0tPpI3BYZxt9XJYB1de1waMv6MJjiBOpOpm1yAujgQ==</value></masterKey></descriptor></descriptor></key>
+3	key-70dc46b8-2c42-4d46-a30c-8ae71ae91e40	<key id="70dc46b8-2c42-4d46-a30c-8ae71ae91e40" version="1"><creationDate>2021-11-30T06:09:30.4610825Z</creationDate><activationDate>2021-11-30T06:09:24.8555941Z</activationDate><expirationDate>2022-02-28T06:09:24.8555941Z</expirationDate><descriptor deserializerType="Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel.AuthenticatedEncryptorDescriptorDeserializer, Microsoft.AspNetCore.DataProtection, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60"><descriptor><encryption algorithm="AES_256_CBC" /><validation algorithm="HMACSHA256" /><masterKey p4:requiresEncryption="true" xmlns:p4="http://schemas.asp.net/2015/03/dataProtection"><!-- Warning: the key below is in an unencrypted form. --><value>XNnqp9Xd0Su0PGOaPnFarHWR4r7go4i11/le07TiejrTy+xKc09/LIyxRogf2AkHO+bo+WRDaO/tHALetV3ZUw==</value></masterKey></descriptor></descriptor></key>
 \.
 
 
@@ -393,6 +396,8 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 20210515153957_DataProtection	5.0.2
 20210614102354_ProductPhotoPath	5.0.2
 20210710154726_AddTelegramChatsTable	5.0.2
+20220101081523_AddVersions	5.0.2
+20220103073054_AddRequiredFields	5.0.2
 \.
 
 
@@ -401,59 +406,6 @@ COPY public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") FROM stdin
 --
 
 COPY public.order_items ("Id", "ProductId", "UnitPriceValue", "QuantityValue", "DiscountPerUnitValue", "OrderId", "CreationDate", "CreationDateUtc", "IsRemoved", "LastUpdateDate", "LastUpdateDateUtc") FROM stdin;
-eb48322f-e4fb-480f-9550-4830a53ff227	617adb32-0cd2-4b50-8184-38ac47b165d5	100	1	0	d6f3bb0f-97c6-4aeb-b981-6c4a7c59d483	2021-04-10 15:47:46.293251	2021-04-10 15:47:46.293251	t	2021-04-11 13:40:09.027435	2021-04-11 13:40:09.027435
-dffaf0b8-2609-41fa-83f9-4e7da0654468	0286c72e-27ec-4805-bec9-54271c471721	465	1	0	d6f3bb0f-97c6-4aeb-b981-6c4a7c59d483	2021-04-10 15:48:30.156091	2021-04-10 15:48:30.156091	t	2021-04-11 13:40:16.838925	2021-04-11 13:40:16.838925
-c24271f9-7527-427a-a145-8f7921043c16	549e230a-91ea-47ce-b655-aba7d8bafc1f	300	1	0	d6f3bb0f-97c6-4aeb-b981-6c4a7c59d483	2021-04-10 15:47:40.913638	2021-04-10 15:47:40.913638	t	2021-04-11 13:40:19.156608	2021-04-11 13:40:19.156608
-b6920d56-47b6-436e-8c66-304e67d927bd	fa402ed6-f9e8-4e2f-a757-98023421e508	220	1	0	d6f3bb0f-97c6-4aeb-b981-6c4a7c59d483	2021-04-10 14:56:44.926789	2021-04-10 14:56:44.926789	t	2021-04-11 13:40:20.069088	2021-04-11 13:40:20.069088
-b4082fe5-fba9-491e-a5db-0e55cee1be43	3a351394-36cc-447b-bd12-d300d156ec61	1700	1	0	d6f3bb0f-97c6-4aeb-b981-6c4a7c59d483	2021-04-10 15:48:20.012795	2021-04-10 15:48:20.012795	t	2021-04-11 13:40:20.837319	2021-04-11 13:40:20.837319
-a37e3cb3-e066-4501-b2de-de386bf7aaad	2183f519-9560-4eb7-b764-50f481764cf4	300	1	0	d6f3bb0f-97c6-4aeb-b981-6c4a7c59d483	2021-04-10 15:47:55.923232	2021-04-10 15:47:55.923232	t	2021-04-11 13:40:21.35661	2021-04-11 13:40:21.35661
-682cb926-c519-45ef-881a-f46915ed6d04	534fc842-a96b-4f54-bdd1-d89a0134c2fd	980	1	0	d6f3bb0f-97c6-4aeb-b981-6c4a7c59d483	2021-04-10 15:03:03.703632	2021-04-10 15:03:03.703632	t	2021-04-11 13:40:21.802598	2021-04-11 13:40:21.802598
-50ada79f-2d0a-4cf5-bdc8-60682a9b12ea	ce773ba3-bc44-41b9-961a-13bb9a08e98a	2700	1	0	08d1cff2-b44f-496f-8b85-e166d52f086e	2021-04-10 14:54:27.567472	2021-04-10 14:54:27.567472	t	2021-04-11 13:40:26.518715	2021-04-11 13:40:26.518715
-99bdef3c-ca7e-4f0e-9507-13ef79ffb24d	fa402ed6-f9e8-4e2f-a757-98023421e508	220	1	0	478b4923-f5dc-422d-af62-e711ac90fc8b	2021-06-06 12:27:16.032139	2021-06-06 12:27:16.032139	f	\N	\N
-5eaa7430-9f81-4736-8fb8-3e98d790486a	55f77bb3-9c26-486d-8f6c-46953a233c1b	486	1	0	478b4923-f5dc-422d-af62-e711ac90fc8b	2021-06-06 12:27:16.032267	2021-06-06 12:27:16.032267	f	\N	\N
-2609aaed-cdd2-47d0-8222-c3bfc2cde5cc	534fc842-a96b-4f54-bdd1-d89a0134c2fd	980	1	0	478b4923-f5dc-422d-af62-e711ac90fc8b	2021-06-06 12:27:16.032269	2021-06-06 12:27:16.032269	f	\N	\N
-2a8fb7a1-4dcd-4c61-8ded-5a8233c19da4	2183f519-9560-4eb7-b764-50f481764cf4	300	1	0	478b4923-f5dc-422d-af62-e711ac90fc8b	2021-06-06 12:27:16.032269	2021-06-06 12:27:16.032269	f	\N	\N
-901cfd56-e1ac-443e-89c2-2853c3012556	617adb32-0cd2-4b50-8184-38ac47b165d5	100	1	0	478b4923-f5dc-422d-af62-e711ac90fc8b	2021-06-06 12:27:16.03227	2021-06-06 12:27:16.03227	f	\N	\N
-0e4f5f3d-8653-43ac-986c-c5571e9c180c	549e230a-91ea-47ce-b655-aba7d8bafc1f	300	1	0	478b4923-f5dc-422d-af62-e711ac90fc8b	2021-06-06 12:27:16.032271	2021-06-06 12:27:16.032271	f	\N	\N
-91277e80-ab6b-4fdc-9eac-1b96d6103942	11708d95-54db-4ec7-925d-541d33f5d654	1700	1	0	478b4923-f5dc-422d-af62-e711ac90fc8b	2021-06-06 12:27:16.032272	2021-06-06 12:27:16.032272	f	\N	\N
-b449a082-7db9-4d48-a4ff-f047bf885816	617adb32-0cd2-4b50-8184-38ac47b165d5	100	1	0	d77247a5-43d6-4b16-908f-bef79a4c0a09	2021-06-06 15:55:27.547834	2021-06-06 15:55:27.547834	f	\N	\N
-581978f6-b5aa-4acd-bbfd-d2c5859e823d	ab908022-676d-4347-8b3b-2d1de0bb9f81	450	1	0	d77247a5-43d6-4b16-908f-bef79a4c0a09	2021-06-06 15:55:27.547892	2021-06-06 15:55:27.547892	f	\N	\N
-84aef3b8-9f13-4423-8528-826f556abcca	b5f62934-b23b-4a6a-8675-b1dc31b981b2	670	1	0	d77247a5-43d6-4b16-908f-bef79a4c0a09	2021-06-06 15:55:27.547901	2021-06-06 15:55:27.547901	f	\N	\N
-037e8f3c-0feb-44a7-8223-26f3a65ed83b	549e230a-91ea-47ce-b655-aba7d8bafc1f	300	1	0	d77247a5-43d6-4b16-908f-bef79a4c0a09	2021-06-06 15:55:27.547909	2021-06-06 15:55:27.547909	f	\N	\N
-cb759e0e-2e15-4031-89f4-3e2f44db7e44	8f467f7b-f669-4def-a483-b773cd55df04	350	1	0	d77247a5-43d6-4b16-908f-bef79a4c0a09	2021-06-06 15:55:27.547917	2021-06-06 15:55:27.547917	f	\N	\N
-b934b0e2-a8e3-4186-88fb-fe6fc2de55a9	d1a97d04-37f1-425a-ba31-7a22bebc34b2	800	1	0	d77247a5-43d6-4b16-908f-bef79a4c0a09	2021-06-06 15:55:27.547939	2021-06-06 15:55:27.547939	f	\N	\N
-3538a669-44be-4e3e-9434-6ba94e691df3	3d75c72c-798a-43cb-9201-ccb3ce5b488c	1500	1	0	d77247a5-43d6-4b16-908f-bef79a4c0a09	2021-06-06 15:55:27.547948	2021-06-06 15:55:27.547948	f	\N	\N
-ec61b96b-2f5f-471a-a3ec-0e41207df6c0	966be15e-dee6-459f-a7be-33d074a9b321	380	1	0	cfbe94d0-bd04-48c2-a15a-d43efa0e1841	2021-07-04 13:11:10.864714	2021-07-04 13:11:10.864714	f	\N	\N
-cd8232d5-e33e-4efe-a668-cddb8cbcb1af	e77a1098-52a3-418c-8c07-26e74a2c3f17	200	1	0	cfbe94d0-bd04-48c2-a15a-d43efa0e1841	2021-07-04 13:11:10.864849	2021-07-04 13:11:10.864849	f	\N	\N
-90b84ed5-390d-41d8-bc33-961e913f1ca0	f0e83dc0-459b-4620-b8ec-0c5cd397e7df	360	1	0	cfbe94d0-bd04-48c2-a15a-d43efa0e1841	2021-07-04 13:11:10.86485	2021-07-04 13:11:10.86485	f	\N	\N
-f062a3b0-038c-4ae1-aa28-e896119acaad	92e8b6ad-3551-4582-8744-475a94885700	120	1	0	cfbe94d0-bd04-48c2-a15a-d43efa0e1841	2021-07-04 13:11:10.864851	2021-07-04 13:11:10.864851	f	\N	\N
-3e682ac2-095c-4459-aa6d-9ffe3ccce5ed	617adb32-0cd2-4b50-8184-38ac47b165d5	100	1	0	cfbe94d0-bd04-48c2-a15a-d43efa0e1841	2021-07-04 13:11:10.864851	2021-07-04 13:11:10.864851	f	\N	\N
-de2e9109-6743-4aa9-8185-a324c2054d36	30c5678c-d149-4a26-902d-40ca55ede00e	150	1	0	cfbe94d0-bd04-48c2-a15a-d43efa0e1841	2021-07-04 13:11:10.864853	2021-07-04 13:11:10.864853	f	\N	\N
-d91d86b3-3cf9-4bea-bb7d-d26f0c892190	549e230a-91ea-47ce-b655-aba7d8bafc1f	300	1	0	cfbe94d0-bd04-48c2-a15a-d43efa0e1841	2021-07-04 13:11:10.864853	2021-07-04 13:11:10.864853	f	\N	\N
-2e13afda-f668-4c81-83ad-ba60b9027a04	48cef253-2147-4740-8fbe-5739f5870bc8	200	1	0	cfbe94d0-bd04-48c2-a15a-d43efa0e1841	2021-07-04 13:11:10.864854	2021-07-04 13:11:10.864854	f	\N	\N
-78b4c8ce-79b9-4c2d-a572-1d1f072ef720	966be15e-dee6-459f-a7be-33d074a9b321	380	1	0	5846e91b-04c4-469d-bf6e-b46aa83797bb	2021-07-10 17:11:17.634623	2021-07-10 17:11:17.634623	f	\N	\N
-d4157a27-932c-43bb-9a6d-5b3667d57063	e77a1098-52a3-418c-8c07-26e74a2c3f17	200	1	0	5846e91b-04c4-469d-bf6e-b46aa83797bb	2021-07-10 17:11:17.634781	2021-07-10 17:11:17.634781	f	\N	\N
-54ec6812-a176-498c-b16f-5611be1624cc	f0e83dc0-459b-4620-b8ec-0c5cd397e7df	360	1	0	5846e91b-04c4-469d-bf6e-b46aa83797bb	2021-07-10 17:11:17.634783	2021-07-10 17:11:17.634783	f	\N	\N
-13f92bf1-e760-478d-b2f5-ed65c106f35d	92e8b6ad-3551-4582-8744-475a94885700	120	1	0	5846e91b-04c4-469d-bf6e-b46aa83797bb	2021-07-10 17:11:17.634784	2021-07-10 17:11:17.634784	f	\N	\N
-511c7130-d455-4ca8-958e-37adb5eabbb0	617adb32-0cd2-4b50-8184-38ac47b165d5	100	1	0	5846e91b-04c4-469d-bf6e-b46aa83797bb	2021-07-10 17:11:17.634785	2021-07-10 17:11:17.634785	f	\N	\N
-5d829e72-85ba-476e-9bac-53342f8e0a3d	30c5678c-d149-4a26-902d-40ca55ede00e	150	1	0	5846e91b-04c4-469d-bf6e-b46aa83797bb	2021-07-10 17:11:17.634786	2021-07-10 17:11:17.634786	f	\N	\N
-42578502-68aa-4aaa-b673-7fc829c5bf43	549e230a-91ea-47ce-b655-aba7d8bafc1f	300	1	0	5846e91b-04c4-469d-bf6e-b46aa83797bb	2021-07-10 17:11:17.634787	2021-07-10 17:11:17.634787	f	\N	\N
-aacd49a6-bfa9-4b44-ba01-26a88cd26bc2	48cef253-2147-4740-8fbe-5739f5870bc8	200	1	0	5846e91b-04c4-469d-bf6e-b46aa83797bb	2021-07-10 17:11:17.634788	2021-07-10 17:11:17.634788	f	\N	\N
-1769b386-56e9-465c-92d0-74a3789aba1b	966be15e-dee6-459f-a7be-33d074a9b321	380	1	0	d77f11d9-51c2-43d7-9763-37a26d8503c3	2021-07-11 10:30:23.477572	2021-07-11 10:30:23.477572	f	\N	\N
-7cd7bffb-3268-470f-8ddc-dfadd123ec26	e77a1098-52a3-418c-8c07-26e74a2c3f17	200	1	0	d77f11d9-51c2-43d7-9763-37a26d8503c3	2021-07-11 10:30:23.47773	2021-07-11 10:30:23.47773	f	\N	\N
-a9439531-0294-4a87-a5a6-5cfb4e71f51e	f0e83dc0-459b-4620-b8ec-0c5cd397e7df	360	1	0	d77f11d9-51c2-43d7-9763-37a26d8503c3	2021-07-11 10:30:23.477733	2021-07-11 10:30:23.477733	f	\N	\N
-c9048ec4-92ed-4e51-87fa-407a33696b36	92e8b6ad-3551-4582-8744-475a94885700	120	1	0	d77f11d9-51c2-43d7-9763-37a26d8503c3	2021-07-11 10:30:23.477733	2021-07-11 10:30:23.477733	f	\N	\N
-7347043f-1c5b-41d4-acac-9c7899b55072	617adb32-0cd2-4b50-8184-38ac47b165d5	100	1	0	d77f11d9-51c2-43d7-9763-37a26d8503c3	2021-07-11 10:30:23.477734	2021-07-11 10:30:23.477734	f	\N	\N
-f09598ee-7400-4631-968d-0ac08a531677	30c5678c-d149-4a26-902d-40ca55ede00e	150	1	0	d77f11d9-51c2-43d7-9763-37a26d8503c3	2021-07-11 10:30:23.477736	2021-07-11 10:30:23.477736	f	\N	\N
-01a2f080-9326-4aa2-a3e2-6bbe7ecf2a81	549e230a-91ea-47ce-b655-aba7d8bafc1f	300	1	0	d77f11d9-51c2-43d7-9763-37a26d8503c3	2021-07-11 10:30:23.477737	2021-07-11 10:30:23.477737	f	\N	\N
-1dd8ee8c-8817-47e0-8ec7-c1203a45c83d	48cef253-2147-4740-8fbe-5739f5870bc8	200	1	0	d77f11d9-51c2-43d7-9763-37a26d8503c3	2021-07-11 10:30:23.477743	2021-07-11 10:30:23.477743	f	\N	\N
-53e0d782-d24a-4dcd-8b00-74e17501bd96	fa402ed6-f9e8-4e2f-a757-98023421e508	220	1	0	19979d85-3819-4b4a-aa24-aeb3cc3b8eb7	2021-07-11 11:09:41.202244	2021-07-11 11:09:41.202244	f	\N	\N
-95f45a91-12d0-4c72-9479-3a101b53e5ec	55f77bb3-9c26-486d-8f6c-46953a233c1b	486	1	0	19979d85-3819-4b4a-aa24-aeb3cc3b8eb7	2021-07-11 11:09:41.202264	2021-07-11 11:09:41.202264	f	\N	\N
-45ad98a7-d4b1-43aa-8ca5-b19018da4860	534fc842-a96b-4f54-bdd1-d89a0134c2fd	980	1	0	19979d85-3819-4b4a-aa24-aeb3cc3b8eb7	2021-07-11 11:09:41.202273	2021-07-11 11:09:41.202273	f	\N	\N
-958c4c6b-84f8-4f0e-9968-d0054d08c995	2183f519-9560-4eb7-b764-50f481764cf4	300	1	0	19979d85-3819-4b4a-aa24-aeb3cc3b8eb7	2021-07-11 11:09:41.206415	2021-07-11 11:09:41.206415	f	\N	\N
-3922e927-8ffb-4750-9cc1-4377de1940f6	617adb32-0cd2-4b50-8184-38ac47b165d5	100	1	0	19979d85-3819-4b4a-aa24-aeb3cc3b8eb7	2021-07-11 11:09:41.206441	2021-07-11 11:09:41.206441	f	\N	\N
-0ea7bae4-e626-48f6-bd2d-b7e543055675	549e230a-91ea-47ce-b655-aba7d8bafc1f	300	1	0	19979d85-3819-4b4a-aa24-aeb3cc3b8eb7	2021-07-11 11:09:41.206451	2021-07-11 11:09:41.206451	f	\N	\N
-535bf81c-3a45-41d1-9c95-c104bc2b997c	11708d95-54db-4ec7-925d-541d33f5d654	1700	1	0	19979d85-3819-4b4a-aa24-aeb3cc3b8eb7	2021-07-11 11:09:41.206459	2021-07-11 11:09:41.206459	f	\N	\N
 \.
 
 
@@ -462,14 +414,6 @@ f09598ee-7400-4631-968d-0ac08a531677	30c5678c-d149-4a26-902d-40ca55ede00e	150	1	
 --
 
 COPY public.orders ("Id", "Address", "CustomerInfo", "TotalCostValue", "CreationDate", "CreationDateUtc", "LastUpdateDate", "LastUpdateDateUtc", "IsRemoved", "Version", "Status_Id", "Status_Name", "DeliveryCostValue", "AddedCostValue") FROM stdin;
-d77f11d9-51c2-43d7-9763-37a26d8503c3	{"Country":"Россия","City":"Москва","Street":"Кожуховская 6я, 23","ZipCode":"115193"}	{"PhoneNumber":"12","Name":"12"}	2900	2021-07-11 10:30:23.475066	2021-07-11 10:30:23.475066	2021-07-11 10:30:55.023067	2021-07-11 10:30:55.023067	t	2	1	Accepted	0.0	1090
-5846e91b-04c4-469d-bf6e-b46aa83797bb	{"Country":"Россия","City":"Москва","Street":"Кожуховская 6я, 23","ZipCode":"115193"}	{"PhoneNumber":"+7 923 123 1999","Name":"Анатолий"}	2900	2021-07-10 17:11:17.63173	2021-07-10 17:11:17.63173	2021-07-11 10:30:59.179472	2021-07-11 10:30:59.179472	t	2	1	Accepted	0.0	1090
-19979d85-3819-4b4a-aa24-aeb3cc3b8eb7	{"Country":"Россия","City":"Москва","Street":"test","ZipCode":"123"}	{"PhoneNumber":"+7 999 123 99 78","Name":"Test"}	4700	2021-07-11 11:09:41.201983	2021-07-11 11:09:41.201983	\N	\N	f	1	1	Accepted	0.0	614
-08d1cff2-b44f-496f-8b85-e166d52f086e	{"Country":"Россия","City":"Москва","Street":"test","ZipCode":"123123"}	{"PhoneNumber":"+79999999999","Name":"test"}	0	2021-04-10 14:53:15.752884	2021-04-10 14:53:15.752884	2021-04-11 13:40:36.266097	2021-04-11 13:40:36.266097	t	6	6	Completed	0.0	0.0
-d6f3bb0f-97c6-4aeb-b981-6c4a7c59d483	{"Country":"Россия","City":"Москва","Street":"test","ZipCode":"123321"}	{"PhoneNumber":"+7 999 999 99 99","Name":"test 2"}	0	2021-04-10 14:55:51.480491	2021-04-10 14:55:51.480491	2021-04-11 13:40:39.785836	2021-04-11 13:40:39.785836	t	17	1	DataReceived	300	0.0
-478b4923-f5dc-422d-af62-e711ac90fc8b	{"Country":"Россия","City":"Москва","Street":"Кожуховская 6я, 23","ZipCode":"115193"}	{"PhoneNumber":"+7 923 123 19 99","Name":""}	4386	2021-06-06 12:27:16.030008	2021-06-06 12:27:16.030008	2021-06-06 12:46:13.823502	2021-06-06 12:46:13.823502	t	2	1	Accepted	0.0	300
-d77247a5-43d6-4b16-908f-bef79a4c0a09	{"Country":"Россия","City":"Москва","Street":"Кожуховская 6я, 23","ZipCode":"115193"}	{"PhoneNumber":"+7 923 123 19 99","Name":"ANATOLII SOROKIN"}	5800	2021-06-06 15:55:27.546673	2021-06-06 15:55:27.546673	2021-06-20 21:09:22.182139	2021-06-20 21:09:22.182139	t	2	1	Accepted	300	1330
-cfbe94d0-bd04-48c2-a15a-d43efa0e1841	{"Country":"Россия","City":"Москва","Street":"Октябрьская 91к4","ZipCode":"00000000"}	{"PhoneNumber":"89999999999","Name":"Стас"}	3200	2021-07-04 13:11:10.86351	2021-07-04 13:11:10.86351	2021-07-04 13:15:47.677216	2021-07-04 13:15:47.677216	t	2	1	Accepted	300	1090
 \.
 
 
@@ -482,19 +426,17 @@ COPY public.products ("Id", "Label", "Name", "Description", "UnitPriceValue", "D
 f0e83dc0-459b-4620-b8ec-0c5cd397e7df	deodorant	Дезодорант	Be I	360	0	[]	2021-04-10 11:56:58.919598	2021-04-10 11:56:58.919598	2021-07-05 09:48:37.719625	2021-07-05 09:48:37.719625	f	7	0.0	f0e83dc0-459b-4620-b8ec-0c5cd397e7df/photo_2021-07-05_12-44-50.jpg
 e77a1098-52a3-418c-8c07-26e74a2c3f17	shower-gel	Гель для душа	Be I	200	0	[]	2021-04-10 12:01:50.108054	2021-04-10 12:01:50.108054	2021-07-05 09:48:46.529431	2021-07-05 09:48:46.529431	f	7	0.0	e77a1098-52a3-418c-8c07-26e74a2c3f17/photo_2021-07-05_12-44-47.jpg
 3d75c72c-798a-43cb-9201-ccb3ce5b488c	casio-watch-f-91w-1q	Часы Casio F-91W-1Q		1500	0	[]	2021-04-10 13:18:07.265916	2021-04-10 13:18:07.265916	2021-07-05 09:50:44.697505	2021-07-05 09:50:44.697505	f	7	0.0	3d75c72c-798a-43cb-9201-ccb3ce5b488c/photo_2021-07-05_12-44-20.jpg
-f4b6e42e-0733-44bf-b2fc-cf76daf056c7	mens-set-premium	Набор "Премиальный"	Для стильных ребят! 🕶	0	0	["617adb32-0cd2-4b50-8184-38ac47b165d5","549e230a-91ea-47ce-b655-aba7d8bafc1f","ab908022-676d-4347-8b3b-2d1de0bb9f81","b5f62934-b23b-4a6a-8675-b1dc31b981b2","d1a97d04-37f1-425a-ba31-7a22bebc34b2","8f467f7b-f669-4def-a483-b773cd55df04","3d75c72c-798a-43cb-9201-ccb3ce5b488c"]	2021-04-10 13:31:19.480311	2021-04-10 13:31:19.480311	2021-07-05 09:48:10.401949	2021-07-05 09:48:10.401949	f	19	1330	f4b6e42e-0733-44bf-b2fc-cf76daf056c7/photo_2021-07-05_12-44-32.jpg
 9ee9815e-3412-491e-b8e8-d625a21f3d53	casio-watch-a-168wa-1	Часы Casio A-168WA-1		2150	0	[]	2021-04-10 13:16:45.224622	2021-04-10 13:16:45.224622	2021-07-05 09:50:37.352119	2021-07-05 09:50:37.352119	f	6	0.0	9ee9815e-3412-491e-b8e8-d625a21f3d53/photo_2021-07-05_12-44-23.jpg
 92e8b6ad-3551-4582-8744-475a94885700	soap	Мыло ручной работы	В виде гранаты	120	0	[]	2021-04-10 12:02:22.414362	2021-04-10 12:02:22.414362	2021-07-05 09:53:53.44762	2021-07-05 09:53:53.44762	f	8	0.0	92e8b6ad-3551-4582-8744-475a94885700/photo_2021-07-05_12-44-49.jpg
-0ae495da-cc60-4359-ae4f-bc5a7ac1f177	mens-set-basic	Набор "Базовый"	Для настоящих чистюль! 🧼	0	0	["617adb32-0cd2-4b50-8184-38ac47b165d5","549e230a-91ea-47ce-b655-aba7d8bafc1f","966be15e-dee6-459f-a7be-33d074a9b321","92e8b6ad-3551-4582-8744-475a94885700","48cef253-2147-4740-8fbe-5739f5870bc8","e77a1098-52a3-418c-8c07-26e74a2c3f17","f0e83dc0-459b-4620-b8ec-0c5cd397e7df","30c5678c-d149-4a26-902d-40ca55ede00e"]	2021-04-10 12:06:25.051112	2021-04-10 12:06:25.051112	2021-07-05 09:47:26.994548	2021-07-05 09:47:26.994548	f	22	1090	0ae495da-cc60-4359-ae4f-bc5a7ac1f177/photo_2021-07-05_12-44-52.jpg
+0ae495da-cc60-4359-ae4f-bc5a7ac1f177	mens-set-basic	Набор "Базовый"	Для настоящих чистюль! 🧼	0	0	["617adb32-0cd2-4b50-8184-38ac47b165d5","549e230a-91ea-47ce-b655-aba7d8bafc1f","966be15e-dee6-459f-a7be-33d074a9b321","92e8b6ad-3551-4582-8744-475a94885700","48cef253-2147-4740-8fbe-5739f5870bc8","e77a1098-52a3-418c-8c07-26e74a2c3f17","f0e83dc0-459b-4620-b8ec-0c5cd397e7df","30c5678c-d149-4a26-902d-40ca55ede00e"]	2021-04-10 12:06:25.051112	2021-04-10 12:06:25.051112	2022-01-04 13:40:26.59234	2022-01-04 13:40:26.59234	f	26	1090	0ae495da-cc60-4359-ae4f-bc5a7ac1f177/photo_2021-07-05_12-44-52.jpeg
+ce773ba3-bc44-41b9-961a-13bb9a08e98a	mens-set-standard	Набор "Стандартный"	Для тех парней, которые любят вспомнить молодость! 🎮	0	0	["617adb32-0cd2-4b50-8184-38ac47b165d5","549e230a-91ea-47ce-b655-aba7d8bafc1f","2183f519-9560-4eb7-b764-50f481764cf4","fa402ed6-f9e8-4e2f-a757-98023421e508","534fc842-a96b-4f54-bdd1-d89a0134c2fd","55f77bb3-9c26-486d-8f6c-46953a233c1b","11708d95-54db-4ec7-925d-541d33f5d654"]	2021-04-10 13:29:19.785196	2021-04-10 13:29:19.785196	2022-01-04 13:40:35.760959	2022-01-04 13:40:35.760959	f	23	614	ce773ba3-bc44-41b9-961a-13bb9a08e98a/photo_2021-07-05_12-44-43.jpg
+f4b6e42e-0733-44bf-b2fc-cf76daf056c7	mens-set-premium	Набор "Премиальный"	Для стильных ребят! 🕶	0	0	["617adb32-0cd2-4b50-8184-38ac47b165d5","549e230a-91ea-47ce-b655-aba7d8bafc1f","ab908022-676d-4347-8b3b-2d1de0bb9f81","b5f62934-b23b-4a6a-8675-b1dc31b981b2","d1a97d04-37f1-425a-ba31-7a22bebc34b2","8f467f7b-f669-4def-a483-b773cd55df04","3d75c72c-798a-43cb-9201-ccb3ce5b488c"]	2021-04-10 13:31:19.480311	2021-04-10 13:31:19.480311	2022-01-04 13:40:40.137067	2022-01-04 13:40:40.137067	f	20	1330	f4b6e42e-0733-44bf-b2fc-cf76daf056c7/photo_2021-07-05_12-44-32.jpg
 549e230a-91ea-47ce-b655-aba7d8bafc1f	gift-box	Подарочная коробка		300	0	[]	2021-04-10 13:27:00.613077	2021-04-10 13:27:00.613077	\N	\N	f	1	0.0	\N
 617adb32-0cd2-4b50-8184-38ac47b165d5	box-filler	Наполнитель для коробки		100	0	[]	2021-04-10 13:27:48.264721	2021-04-10 13:27:48.264721	\N	\N	f	1	0.0	\N
-ce773ba3-bc44-41b9-961a-13bb9a08e98a	mens-set-standard	Набор "Стандартный"	Для тех парней, которые любят вспомнить молодость! 🎮	0	0	["617adb32-0cd2-4b50-8184-38ac47b165d5","549e230a-91ea-47ce-b655-aba7d8bafc1f","2183f519-9560-4eb7-b764-50f481764cf4","fa402ed6-f9e8-4e2f-a757-98023421e508","534fc842-a96b-4f54-bdd1-d89a0134c2fd","55f77bb3-9c26-486d-8f6c-46953a233c1b","11708d95-54db-4ec7-925d-541d33f5d654"]	2021-04-10 13:29:19.785196	2021-04-10 13:29:19.785196	2021-07-05 09:47:53.760766	2021-07-05 09:47:53.760766	f	22	614	ce773ba3-bc44-41b9-961a-13bb9a08e98a/photo_2021-07-05_12-44-43.jpg
 fa402ed6-f9e8-4e2f-a757-98023421e508	antistress-toy	Игрушка-антисресс	В виде геймпада	220	0	[]	2021-04-10 13:14:37.604228	2021-04-10 13:14:37.604228	2021-07-05 09:52:01.790956	2021-07-05 09:52:01.790956	f	7	0.0	fa402ed6-f9e8-4e2f-a757-98023421e508/photo_2021-07-05_12-44-40.jpg
 966be15e-dee6-459f-a7be-33d074a9b321	hair-wax	Воск для волос	Bock Style, 50 г	380	0	[]	2021-04-10 12:03:43.556143	2021-04-10 12:03:43.556143	2021-07-05 09:49:09.901312	2021-07-05 09:49:09.901312	f	7	0.0	966be15e-dee6-459f-a7be-33d074a9b321/photo_2021-07-05_12-44-48.jpg
-8d1a3cce-ffd3-47df-9420-5d0491134c67	test	test		0	0	[]	2021-06-14 09:47:42.687428	2021-06-14 09:47:42.687428	2021-06-14 09:51:56.870153	2021-06-14 09:51:56.870153	t	2	0.0	\N
 d1a97d04-37f1-425a-ba31-7a22bebc34b2	whiskey-glass	Стакан для виски	250 мл	800	0	[]	2021-04-10 13:25:45.632665	2021-04-10 13:25:45.632665	2021-07-05 09:51:01.811913	2021-07-05 09:51:01.811913	f	6	0.0	d1a97d04-37f1-425a-ba31-7a22bebc34b2/photo_2021-07-05_12-44-25.jpg
 0286c72e-27ec-4805-bec9-54271c471721	car-aston-martin-db5	Коллекционная машинка Aston Martin DB5		465	0	[]	2021-04-10 12:56:10.980733	2021-04-10 12:56:10.980733	2021-07-05 09:48:19.41324	2021-07-05 09:48:19.41324	f	6	0.0	0286c72e-27ec-4805-bec9-54271c471721/photo_2021-07-05_12-44-39.jpg
-30634ac7-9962-4197-8c42-76ea189f9879	test	test		0	0	[]	2021-06-14 09:52:06.418684	2021-06-14 09:52:06.418684	2021-06-14 11:30:43.248335	2021-06-14 11:30:43.248335	t	2	0.0	\N
 534fc842-a96b-4f54-bdd1-d89a0134c2fd	comics-transmetropolitan	Комикс "Трансметрополитен"		980	0	[]	2021-04-10 13:13:39.779479	2021-04-10 13:13:39.779479	2021-07-05 09:50:10.347027	2021-07-05 09:50:10.347027	f	6	0.0	534fc842-a96b-4f54-bdd1-d89a0134c2fd/photo_2021-07-05_12-44-42.jpg
 11708d95-54db-4ec7-925d-541d33f5d654	ps4-sub	Подписка PlayStation 4	На 3 мес.	1700	0	[]	2021-04-10 12:52:54.560999	2021-04-10 12:52:54.560999	2021-07-05 09:52:18.058949	2021-07-05 09:52:18.058949	f	8	0.0	11708d95-54db-4ec7-925d-541d33f5d654/photo_2021-07-05_12-44-35.jpg
 55f77bb3-9c26-486d-8f6c-46953a233c1b	car-kinsmart-shelby-gt500	Коллекционная машинка Kinsmart "Shelby GT500"		486	0	[]	2021-04-10 13:10:12.102332	2021-04-10 13:10:12.102332	2021-07-05 09:49:57.091686	2021-07-05 09:49:57.091686	f	6	0.0	55f77bb3-9c26-486d-8f6c-46953a233c1b/photo_2021-07-05_12-44-38.jpg
@@ -511,10 +453,10 @@ b5f62934-b23b-4a6a-8675-b1dc31b981b2	sunglasses	Очки солнцезащит�
 -- Data for Name: supplies; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.supplies ("Id", "SupplierInfo", "TotalCostValue", "CreationDate", "CreationDateUtc", "LastUpdateDate", "LastUpdateDateUtc", "IsRemoved") FROM stdin;
-fa311951-39ee-4be1-942a-2c9a01154efc	{"Name":"Ozon"}	6101	2021-04-10 13:37:46.970687	2021-04-10 13:37:46.970687	\N	\N	f
-43c364de-1a89-410f-ab09-9b6504f8a544	{"Name":"Wildberries"}	3943	2021-04-10 13:42:16.490874	2021-04-10 13:42:16.490874	\N	\N	f
-ee7f5b17-6bc2-45b0-ba8a-b0edb85421bc	{"Name":"Ali Express"}	4074	2021-04-10 13:44:30.29077	2021-04-10 13:44:30.29077	\N	\N	f
+COPY public.supplies ("Id", "SupplierInfo", "TotalCostValue", "CreationDate", "CreationDateUtc", "LastUpdateDate", "LastUpdateDateUtc", "IsRemoved", "Version") FROM stdin;
+fa311951-39ee-4be1-942a-2c9a01154efc	{"Name":"Ozon"}	6101	2021-04-10 13:37:46.970687	2021-04-10 13:37:46.970687	\N	\N	f	1
+43c364de-1a89-410f-ab09-9b6504f8a544	{"Name":"Wildberries"}	3943	2021-04-10 13:42:16.490874	2021-04-10 13:42:16.490874	\N	\N	f	1
+ee7f5b17-6bc2-45b0-ba8a-b0edb85421bc	{"Name":"Ali Express"}	4074	2021-04-10 13:44:30.29077	2021-04-10 13:44:30.29077	\N	\N	f	1
 \.
 
 
@@ -567,7 +509,7 @@ c38ea469-57a0-4a37-b4d5-438410bf7f9b	lukyanovst4s@mail.ru	AQAQJwAAapOxJ8s4+sGCwq
 -- Name: DataProtectionKeys_Id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."DataProtectionKeys_Id_seq"', 1, true);
+SELECT pg_catalog.setval('public."DataProtectionKeys_Id_seq"', 3, true);
 
 
 --
@@ -661,6 +603,13 @@ CREATE INDEX "IX_order_items_OrderId" ON public.order_items USING btree ("OrderI
 --
 
 CREATE INDEX "IX_supply_items_SupplyId" ON public.supply_items USING btree ("SupplyId");
+
+
+--
+-- Name: IX_users_Email; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX "IX_users_Email" ON public.users USING btree ("Email");
 
 
 --

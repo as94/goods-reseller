@@ -9,6 +9,11 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "GoodsReseller.Api Migrator": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "commandLineArgs": "--updateDatabase --createAdmin --createProducts"
     }
   }
 }
