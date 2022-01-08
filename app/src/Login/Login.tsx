@@ -100,6 +100,7 @@ const Login = () => {
 					<MaterialLink variant="body2" component={Link} to="/admin/register">
 						{t('SignUpQuestion')}
 					</MaterialLink>
+					Test
 				</form>
 			</div>
 			<Copyright />
