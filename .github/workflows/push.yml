@@ -1,0 +1,40 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build-artifacts:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker Login
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+      run: |
+        docker login -u $DOCKER_USERNAME -p $DOCKER_ACCESS_TOKEN
+        
+    - name: Build the Docker Image
+      run: docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/goods-reseller
+      
+    - name: Docker Push
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/goods-reseller
+
+    - name: Build the Migrator Image
+      run: docker build . --file migrator.dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator
+      
+    - name: Docker Push Migrator
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator
+      
+    - name: Build the Proxy Image
+      run: docker build . --file nginx.dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy
+      
+    - name: Docker Push Proxy
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy
