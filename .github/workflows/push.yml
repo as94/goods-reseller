@@ -27,14 +27,35 @@ jobs:
     - name: Docker Push
       run: docker push ${{ secrets.DOCKER_USERNAME }}/goods-reseller
 
-    - name: Build the Migrator Image
-      run: docker build . --file migrator.dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator
-      
-    - name: Docker Push Migrator
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator
-      
-    - name: Build the Proxy Image
-      run: docker build . --file nginx.dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy
-      
-    - name: Docker Push Proxy
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy
+    - name: Build and Push Backend
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: ./Dockerfile
+        builder: ${{ steps.buildx.outputs.name }}
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reseller:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/goods-reseller:buildcache,mode=max
+
+    - name: Build and Push Backend
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: ./migrator.dockerfile
+        builder: ${{ steps.buildx.outputs.name }}
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reselle-migratorr:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/goods-reseller-migrator:buildcache,mode=max
+
+    - name: Build and Push Backend
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: ./nginx.dockerfile
+        builder: ${{ steps.buildx.outputs.name }}
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reselle-proxy:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/goods-reseller-proxy:buildcache,mode=max
