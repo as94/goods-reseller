@@ -1,6 +1,7 @@
 # Техническая документация
 
 ## Генерация самоподписанного сертификата
+
 dotnet dev-certs https
 
 dotnet dev-certs https — trust
@@ -21,6 +22,7 @@ dotnet dev-certs https — trust
 ## База данных
 
 ### Миграции
+
 cd src
 
 dotnet ef migrations add InitialCreate -s GoodsReseller.Api/GoodsReseller.Api.csproj -p  GoodsReseller.Infrastructure/GoodsReseller.Infrastructure.csproj -c GoodsResellerDbContext
@@ -28,6 +30,7 @@ dotnet ef migrations add InitialCreate -s GoodsReseller.Api/GoodsReseller.Api.cs
 dotnet ef database update -s GoodsReseller.Api/GoodsReseller.Api.csproj -p  GoodsReseller.Infrastructure/GoodsReseller.Infrastructure.csproj -c GoodsResellerDbContext
 
 ### Сохранение / Восстановление
+
 docker exec -t your-db-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
 
 поменять пароль prod пользователя на qwe123
@@ -37,13 +40,19 @@ cat your_dump.sql | docker exec -i your-db-container psql -U postgres
 ## Другое
 
 ### Переместить файл с prod хоста на локальный
+
 scp root@happyboxy.ru:dump_06-01-2022_06_18_48.sql ~/Desktop
 
 ### JMeter
+
 open /usr/local/bin/jmeter
 
 ### Сертификаты
-Stop all containers and run command "sudo certbot certonly --standalone"
+
+Остановить все контейнеры и запустить команду
+
+`sudo certbot certonly --standalone`
+
 https://certbot.eff.org/lets-encrypt/ubuntuxenial-other
 
 ### Работа с изображениями
