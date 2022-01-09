@@ -1,5 +1,4 @@
-name: Docker Image CI
-
+name: Push
 on:
   push:
     branches: [ master ]
@@ -7,9 +6,7 @@ on:
     branches: [ master ]
 
 jobs:
-
   build-artifacts:
-
     runs-on: ubuntu-latest
 
     steps:
