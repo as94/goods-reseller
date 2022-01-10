@@ -23,10 +23,10 @@
 # Демо
 
 ## Оформление заказа
-[![happyboxy_demo.gif](https://s10.gifyu.com/images/happyboxy_demo.gif)](https://gifyu.com/image/SbMjK)
+![happyboxy_demo.gif](https://s10.gifyu.com/images/happyboxy_demo.gif)
 
 ## Админка
-[![happyboxy_admin_demo.gif](https://s10.gifyu.com/images/happyboxy_admin_demo.gif)](https://gifyu.com/image/SbMjO)
+![happyboxy_admin_demo.gif](https://s10.gifyu.com/images/happyboxy_admin_demo.gif)
 
 # Техническая документация
 
