@@ -6,94 +6,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup .NET Core SDK 3.1.404
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1.404
+    - uses: actions/checkout@v2
+    - name: Docker Login
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+      run: |
+        docker login -u $DOCKER_USERNAME -p $DOCKER_ACCESS_TOKEN
         
-      - name: Checkout
-        uses: actions/checkout@v2
-        
-      - name: Install Yarn packages
-        working-directory: ./app
-        run: yarn
-        
-      - name: Install Nuget packages
-        run: dotnet restore
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
-      - name: Build frontend
-        working-directory: ./app
-        run: yarn build-prod
+    - name: Build and Push Application
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: ./Dockerfile
+        builder: ${{ steps.buildx.outputs.name }}
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reseller:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache,mode=max
 
-      - name: Build backend
-        run: dotnet build -c Release --no-restore GoodsReseller.sln
-        
-      - name: Backend unit-tests
-        working-directory: ./src/GoodsReseller.UnitTests
-        run: dotnet test -c Release --no-restore --no-build
-        
-      - name: Copy artifacts
-        run: |
-          dotnet publish --no-restore --no-build --configuration Release --output ./artifacts/backend src/GoodsReseller.Api/GoodsReseller.Api.csproj
-          
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: default-artifact
-          path: ./artifacts/
-          
-  docker-push:
-    name: Docker push
-    runs-on: ubuntu-latest
-    needs: [ build-artifacts ]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Build and Push Migrator
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: ./migrator.dockerfile
+        builder: ${{ steps.buildx.outputs.name }}
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reselle-migratorr:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache,mode=max
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      
-      - name: Docker Login
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}`
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_ACCESS_TOKEN
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: default-artifact
-          path: ./artifacts/
-        
-      - name: Build and Push Application
-        uses: docker/build-push-action@v2
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/goods-reseller:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache,mode=max
-
-      - name: Build and Push Migrator
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./migrator.dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/goods-reselle-migrator:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache,mode=max
-
-      - name: Build and Push Proxy
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: ./nginx.dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/goods-reselle-proxy:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache,mode=max
-
+    - name: Build and Push Proxy
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: ./nginx.dockerfile
+        builder: ${{ steps.buildx.outputs.name }}
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reselle-proxy:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache
+        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache,mode=max
