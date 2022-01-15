@@ -10,6 +10,7 @@ COPY --from=frontend app/. ./app
 COPY --from=frontend src/. ./src
 COPY --from=frontend GoodsReseller.sln GoodsReseller.sln
 RUN dotnet restore
+RUN dotnet test ./src/GoodsReseller.UnitTests
 RUN dotnet publish --no-restore --configuration Release --output ./artifacts/backend src/GoodsReseller.Api/GoodsReseller.Api.csproj
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
