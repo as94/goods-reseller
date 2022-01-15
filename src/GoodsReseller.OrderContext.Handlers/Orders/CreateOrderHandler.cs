@@ -24,7 +24,7 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
             var order = new Order(
                 request.OrderInfo.Id,
                 request.OrderInfo.Version,
-                OrderStatus.Accepted.Name,
+                OrderStatus.Accepted,
                 request.OrderInfo.Address.ToDomain(),
                 request.OrderInfo.CustomerInfo.ToDomain(),
                 request.OrderInfo.DeliveryCost.ToDomain(),

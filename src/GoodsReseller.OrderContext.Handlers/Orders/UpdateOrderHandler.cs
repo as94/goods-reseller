@@ -29,7 +29,7 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
             }
 
             var orderInfo = new OrderInfo(
-                request.OrderInfo.Status,
+                request.OrderInfo.Status.ToDomain(),
                 request.OrderInfo.Address.ToDomain(),
                 request.OrderInfo.CustomerInfo.ToDomain(),
                 request.OrderInfo.DeliveryCost.ToDomain(),

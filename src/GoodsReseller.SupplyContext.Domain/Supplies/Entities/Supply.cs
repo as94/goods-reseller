@@ -102,12 +102,12 @@ namespace GoodsReseller.SupplyContext.Domain.Supplies.Entities
             TotalCost = totalCost;
         }
         
-        public override void Remove()
+        public override void Remove(DateValueObject lastUpdateDate = null)
         {
-            base.Remove();
+            base.Remove(lastUpdateDate);
             foreach (var supplyItem in _supplyItems)
             {
-                supplyItem.Remove();
+                supplyItem.Remove(lastUpdateDate);
             }
         }
     }

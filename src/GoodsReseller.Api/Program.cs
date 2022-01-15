@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using GoodsReseller.AuthContext.Domain.Users.Entities;
 using GoodsReseller.AuthContext.Domain.Users.ValueObjects;
@@ -13,9 +14,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+[assembly: InternalsVisibleTo("GoodsReseller.UnitTests")]
+
 namespace GoodsReseller.Api
 {
-    public class Program
+    internal static class Program
     {
         public static async Task Main(string[] args)
         {

@@ -8,7 +8,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
     public sealed class OrderInfo
     {
         public OrderInfo(
-            string status,
+            OrderStatus status,
             Address address,
             CustomerInfo customerInfo,
             Money deliveryCost,
@@ -53,7 +53,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             OrderItems = orderItems;
         }
 
-        public string Status { get; }
+        public OrderStatus Status { get; }
         public Address Address { get; }
         public CustomerInfo CustomerInfo { get; }
         public Money DeliveryCost { get; }

@@ -29,7 +29,7 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
         public Order(
             Guid id,
             int version,
-            string status,
+            OrderStatus status,
             Address address,
             CustomerInfo customerInfo,
             Money deliveryCost,
@@ -66,14 +66,8 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             {
                 throw new ArgumentNullException(nameof(orderItems));
             }
-            
-            if (!Enumeration.TryParse<OrderStatus>(status, out var parsedStatus))
-            {
-                // TODO: business rule, add translations
-                throw new ArgumentException($"Status '{status}' is invalid");
-            }
 
-            Status = parsedStatus;
+            Status = status;
             Address = address;
             CustomerInfo = customerInfo;
             DeliveryCost = deliveryCost;
@@ -105,14 +99,8 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             {
                 throw new ConcurrencyException();
             }
-
-            if (!Enumeration.TryParse<OrderStatus>(orderInfo.Status, out var parsedStatus))
-            {
-                // TODO: business rule, add translations
-                throw new ArgumentException($"Status '{orderInfo.Status}' is invalid");
-            }
                 
-            Status = parsedStatus;
+            Status = orderInfo.Status;
 
             Address = orderInfo.Address.Copy();
             CustomerInfo = orderInfo.CustomerInfo.Copy();
@@ -167,12 +155,12 @@ namespace GoodsReseller.OrderContext.Domain.Orders.Entities
             TotalCost = totalCost.Add(DeliveryCost).Add(AddedCost);
         }
 
-        public override void Remove()
+        public override void Remove(DateValueObject lastUpdateDate = null)
         {
-            base.Remove();
+            base.Remove(lastUpdateDate);
             foreach (var orderItem in _orderItems)
             {
-                orderItem.Remove();
+                orderItem.Remove(lastUpdateDate);
             }
         }
     }

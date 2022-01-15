@@ -74,9 +74,8 @@ namespace GoodsReseller.SeedWork
         {
             return !(left == right);
         }
-        
-        
-        public virtual void Remove()
+
+        public virtual void Remove(DateValueObject lastUpdateDate = null)
         {
             if (IsRemoved)
             {
@@ -84,7 +83,7 @@ namespace GoodsReseller.SeedWork
             }
             
             IsRemoved = true;
-            LastUpdateDate = new DateValueObject();
+            LastUpdateDate = lastUpdateDate ?? new DateValueObject();
         }
     }
 }

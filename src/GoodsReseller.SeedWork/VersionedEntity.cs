@@ -1,4 +1,5 @@
 using System;
+using GoodsReseller.SeedWork.ValueObjects;
 
 namespace GoodsReseller.SeedWork
 {
@@ -52,9 +53,9 @@ namespace GoodsReseller.SeedWork
             return base.GetHashCode();
         }
 
-        public override void Remove()
+        public override void Remove(DateValueObject lastUpdateDate = null)
         {
-            base.Remove();
+            base.Remove(lastUpdateDate);
             Version++;
         }
     }
