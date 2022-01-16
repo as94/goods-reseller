@@ -71,6 +71,11 @@ namespace GoodsReseller.IntegrationTests.Infrastructure
 
 			if (!response.IsSuccessful && response.ErrorException != null)
 			{
+				if (response.ErrorException.InnerException != null)
+				{
+					throw response.ErrorException.InnerException;
+				}
+				
 				throw response.ErrorException;
 			}
 
@@ -101,6 +106,11 @@ namespace GoodsReseller.IntegrationTests.Infrastructure
 
 			if (!response.IsSuccessful && response.ErrorException != null)
 			{
+				if (response.ErrorException.InnerException != null)
+				{
+					throw response.ErrorException.InnerException;
+				}
+				
 				throw response.ErrorException;
 			}
 
