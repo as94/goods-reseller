@@ -15,5 +15,6 @@ jobs:
           export DOCKER_CLIENT_TIMEOUT=120
           export COMPOSE_HTTP_TIMEOUT=120
           cd goodsreseller/
-          docker-compose pull
+          docker-compose down
+          docker rmi $(docker images -a -q)
           docker-compose up -d
