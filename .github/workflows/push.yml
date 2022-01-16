@@ -67,7 +67,7 @@ jobs:
         TESTABLE_SERVICE_PORT: 5001
       run: |
         sleep 10
-        dotnet test GoodsReseller.IntegrationTests/GoodsReseller.IntegrationTests.csproj -c Release
+        dotnet test tests/GoodsReseller.IntegrationTests/GoodsReseller.IntegrationTests.csproj -c Release
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2

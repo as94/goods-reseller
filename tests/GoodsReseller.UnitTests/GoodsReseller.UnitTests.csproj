@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
 
         <IsPackable>false</IsPackable>
     </PropertyGroup>
@@ -23,8 +23,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GoodsReseller.Api\GoodsReseller.Api.csproj" />
-      <ProjectReference Include="..\GoodsReseller.OrderContext.Domain\GoodsReseller.OrderContext.Domain.csproj" />
+      <ProjectReference Include="..\..\src\GoodsReseller.OrderContext.Domain\GoodsReseller.OrderContext.Domain.csproj" />
+      <ProjectReference Include="..\..\src\GoodsReseller.SeedWork\GoodsReseller.SeedWork.csproj" />
     </ItemGroup>
 
 </Project>
