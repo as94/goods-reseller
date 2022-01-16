@@ -72,7 +72,7 @@ namespace GoodsReseller.Api
             services.RegisterSupplyContextHandlers();
             services.RegisterNotificationContextHandlers();
 
-            if (_hostOptions.EnableCors)
+            if (_hostOptions is { EnableCors: true })
             {
                 services.AddCors(options =>
                     options.AddPolicy(
@@ -130,7 +130,7 @@ namespace GoodsReseller.Api
 
             app.UseRouting();
 
-            if (_hostOptions.EnableCors)
+            if (_hostOptions is { EnableCors: true })
             {
                 app.UseCors("CorsPolicy");
             }
