@@ -112,7 +112,11 @@ namespace GoodsReseller.Api
                 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Goods Reseller API V1"); });
             }
 
-            app.UseHttpsRedirection();
+            if (_isProduction)
+            {
+                app.UseHttpsRedirection();
+            }
+
             app.UseDefaultFiles();
 
             app.UseStaticFiles(new StaticFileOptions
