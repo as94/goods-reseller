@@ -58,7 +58,8 @@ jobs:
     - name: Run testable service
       env:
         DatabaseOptions__ConnectionString: Host=localhost;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123
-        HostOptions__DomainName: https://localhost:5001
+        HostOptions__DomainName: ""
+        HostOptions__EnableCors: false
       run: |
         dotnet artifacts/backend/GoodsReseller.Api.dll --urls https://*:5001 &> back-output.log &
         

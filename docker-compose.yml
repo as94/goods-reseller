@@ -17,6 +17,7 @@ services:
       TelegramApiOptions__ApiKey: ""
       TelegramApiOptions__Enabled: "false"
       HostOptions__DomainName: ""
+      HostOptions__EnableCors: false
     volumes:
       - $HOME/goodsreseller/wwwroot:/wwwroot/assets
   

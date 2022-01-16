@@ -24,11 +24,14 @@ namespace GoodsReseller.Api
     {
         private readonly IConfiguration _configuration;
         private readonly bool _isProduction;
+        private readonly HostOptions _hostOptions;
 
         public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             _configuration = configuration;
             _isProduction = environment.IsProduction();
+            
+            _hostOptions = _configuration.GetSection(nameof(HostOptions)).Get<HostOptions>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -69,15 +72,14 @@ namespace GoodsReseller.Api
             services.RegisterSupplyContextHandlers();
             services.RegisterNotificationContextHandlers();
 
-            if (_isProduction)
+            if (_hostOptions.EnableCors)
             {
-                var hostOptions = _configuration.GetSection(nameof(HostOptions)).Get<HostOptions>();
                 services.AddCors(options =>
                     options.AddPolicy(
                         "CorsPolicy",
                         builder =>
                         {
-                            builder.WithOrigins(hostOptions.DomainName)
+                            builder.WithOrigins(_hostOptions.DomainName)
                                 .AllowAnyMethod()
                                 .AllowAnyHeader();
                         }));
@@ -128,7 +130,7 @@ namespace GoodsReseller.Api
 
             app.UseRouting();
 
-            if (_isProduction)
+            if (_hostOptions.EnableCors)
             {
                 app.UseCors("CorsPolicy");
             }
