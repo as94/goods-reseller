@@ -4,48 +4,130 @@ on: [ push, pull_request ]
 jobs:
   build-artifacts:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13.2
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: qwe123
+          POSTGRES_DB: goodsreseller
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-
-    - name: Login to DockerHub
-      uses: docker/login-action@v1
+    - name: Setup .NET Core SDK 3.1.404
+      uses: actions/setup-dotnet@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+        dotnet-version: 3.1.404
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Install Yarn packages
+      working-directory: ./app
+      run: yarn
+
+    - name: Install Nuget packages
+      run: dotnet restore
+
+    - name: Build frontend
+      working-directory: ./app
+      run: yarn build-prod
+
+    - name: Build backend
+      run: dotnet build -c Release --no-restore GoodsReseller.sln
+
+    - name: Backend unit-tests
+      working-directory: ./src/GoodsReseller.UnitTests
+      run: dotnet test -c Release --no-restore --no-build
+      
+    - name: Copy artifacts
+      run: |
+        dotnet publish --no-restore --no-build --configuration Release --output ./artifacts/backend src/GoodsReseller.Api/GoodsReseller.Api.csproj
+
+    - name: Migrate database
+      env:
+        DatabaseOptions__ConnectionString: Host=database;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123
+      run: dotnet artifacts/backend/GoodsReseller.Api.dll --updateDatabase
+
+    - name: Run testable service
+      env:
+        DatabaseOptions__ConnectionString: Host=database;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123
+      run: |
+        dotnet artifacts/backend/GoodsReseller.Api.dll --urls "http://*:5000;https://*:5001" &> back-output.log &
         
-    - name: Build and Push Application
-      uses: docker/build-push-action@v2
-      with:
-        context: ./
-        file: ./Dockerfile
-        builder: ${{ steps.buildx.outputs.name }}
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reseller:latest
-        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache
-        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache,mode=max
+    - name: Run integration tests
+      env:
+        TESTABLE_SERVICE_HOST: localhost
+        TESTABLE_SERVICE_PORT: 5001
+      run: |
+        sleep 10
+        dotnet test GoodsReseller.IntegrationTests/GoodsReseller.IntegrationTests.csproj -c Release
 
-    - name: Build and Push Migrator
-      uses: docker/build-push-action@v2
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
       with:
-        context: ./
-        file: ./migrator.dockerfile
-        builder: ${{ steps.buildx.outputs.name }}
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reselle-migratorr:latest
-        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache
-        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache,mode=max
+        name: default-artifact
+        path: ./artifacts/
 
-    - name: Build and Push Proxy
-      uses: docker/build-push-action@v2
-      with:
-        context: ./
-        file: ./nginx.dockerfile
-        builder: ${{ steps.buildx.outputs.name }}
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/goods-reselle-proxy:latest
-        cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache
-        cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache,mode=max
+  docker-push:
+    name: Docker push
+    runs-on: ubuntu-latest
+    needs: [ build-artifacts ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+    
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+  
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: default-artifact
+          path: ./artifacts/
+
+      - name: Build and Push Application
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/goods-reseller:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller:buildcache,mode=max
+  
+      - name: Build and Push Migrator
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./migrator.dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-migrator:buildcache,mode=max
+  
+      - name: Build and Push Proxy
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./nginx.dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/goods-reseller-proxy:buildcache,mode=max
