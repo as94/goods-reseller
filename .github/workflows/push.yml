@@ -52,12 +52,12 @@ jobs:
 
     - name: Migrate database
       env:
-        DatabaseOptions__ConnectionString: Host=localhost;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123
+        DatabaseOptions__ConnectionString: Host=postgres;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123
       run: dotnet artifacts/backend/GoodsReseller.Api.dll --updateDatabase
 
     - name: Run testable service
       env:
-        DatabaseOptions__ConnectionString: Host=localhost;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123
+        DatabaseOptions__ConnectionString: Host=postgres;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123
       run: |
         dotnet artifacts/backend/GoodsReseller.Api.dll --urls "http://*:5000;https://*:5001" &> back-output.log &
         
