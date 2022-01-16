@@ -1,5 +1,3 @@
-import { MoneyContract } from '../contracts'
-
 export interface OrderListContract {
 	items: OrderListItemContract[]
 	rowsCount: number
@@ -27,9 +25,9 @@ export interface OrderContract {
 	address: AddressContract
 	customerInfo: CustomerInfoContract
 	orderItems: OrderItemContract[]
-	deliveryCost: MoneyContract
-	addedCost: MoneyContract
-	totalCost: MoneyContract
+	deliveryCost: number
+	addedCost: number
+	totalCost: number
 }
 
 export interface OrderInfoContract {
@@ -38,8 +36,8 @@ export interface OrderInfoContract {
 	status: string
 	address: AddressContract
 	customerInfo: CustomerInfoContract
-	deliveryCost: MoneyContract
-	addedCost: MoneyContract
+	deliveryCost: number
+	addedCost: number
 	orderItems: OrderItemContract[]
 }
 

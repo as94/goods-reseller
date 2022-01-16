@@ -23,7 +23,7 @@ export default {
 	},
 
 	Create: async (order: OrderInfoContract): Promise<void> => {
-		const response = await api.post('/orders', order)
+		const response = await api.post('/public/orders', order)
 
 		if (response.status !== 200) {
 			throw new Error()

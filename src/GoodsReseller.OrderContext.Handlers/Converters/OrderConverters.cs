@@ -17,9 +17,9 @@ namespace GoodsReseller.OrderContext.Handlers.Converters
                 Address = order.Address.ToContract(),
                 CustomerInfo = order.CustomerInfo.ToContract(),
                 OrderItems = order.GetExistingOrderItems().Select(x => x.ToContract()).ToArray(),
-                DeliveryCost = order.DeliveryCost.ToContract(),
-                AddedCost = order.AddedCost.ToContract(),
-                TotalCost = order.TotalCost.ToContract()
+                DeliveryCost = order.DeliveryCost.Value,
+                AddedCost = order.AddedCost.Value,
+                TotalCost = order.TotalCost.Value
             };
         }
 

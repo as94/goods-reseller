@@ -140,7 +140,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 			if (deliveryCost < 0) {
 				return
 			}
-			setOrderInfo({ ...orderInfo, deliveryCost: { ...orderInfo.deliveryCost, value: deliveryCost } })
+			setOrderInfo({ ...orderInfo, deliveryCost: deliveryCost })
 			setFormValidation({ ...formValidation, deliveryCostValid: deliveryCost >= 0 })
 		},
 		[orderInfo, formValidation, setFormValidation],
@@ -148,7 +148,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 
 	const setOrderAddedCost = useCallback(
 		(addedCost: number) => {
-			setOrderInfo({ ...orderInfo, addedCost: { ...orderInfo.addedCost, value: addedCost } })
+			setOrderInfo({ ...orderInfo, addedCost: addedCost })
 		},
 		[orderInfo, setOrderInfo],
 	)
@@ -188,7 +188,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 			(acc, cur) => (acc += cur.unitPrice * (1 - cur.discountPerUnit) * cur.quantity),
 			0,
 		)
-		setTotalCost(orderItemsCost + orderInfo.deliveryCost.value + orderInfo.addedCost.value)
+		setTotalCost(orderItemsCost + orderInfo.deliveryCost + orderInfo.addedCost)
 	}, [orderItems, orderInfo.deliveryCost, orderInfo.addedCost])
 
 	useEffect(() => {
@@ -282,7 +282,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 								required
 								type="number"
 								id="unitPrice"
-								value={orderInfo.deliveryCost.value}
+								value={orderInfo.deliveryCost}
 								onChange={deliveryCostChangeHandler}
 							/>
 						</FormControl>
@@ -294,7 +294,7 @@ const Order = ({ orderId, products, hide }: IOwnProps) => {
 								required
 								type="number"
 								id="addedCost"
-								value={orderInfo.addedCost.value}
+								value={orderInfo.addedCost}
 								onChange={addedCostChangeHandler}
 							/>
 						</FormControl>

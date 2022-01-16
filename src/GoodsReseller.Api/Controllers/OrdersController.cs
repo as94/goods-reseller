@@ -56,27 +56,6 @@ namespace GoodsReseller.Api.Controllers
 
             return Ok(response.OrderList);
         }
-        
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> CreateOrderAsync(
-            [FromBody] [Required] OrderInfoContract orderInfo,
-            CancellationToken cancellationToken)
-        {
-            await _mediator.Send(new CreateOrderRequest
-            {
-                OrderInfo = orderInfo
-            }, cancellationToken);
-
-            // TODO: add to local_queue
-            await _mediator.Send(new OrderAcceptedNotificationRequest
-            {
-                ClientPhoneNumber = orderInfo.CustomerInfo.PhoneNumber,
-                ClientName = orderInfo.CustomerInfo.Name
-            }, cancellationToken);
-
-            return Ok();
-        }
 
         [HttpPut("{orderId}")]
         public async Task<IActionResult> UpdateOrderAsync(

@@ -57,10 +57,6 @@ export const initialOrder = {
 	customerInfo: {
 		phoneNumber: '',
 	},
-	deliveryCost: {
-		value: 0,
-	},
-	addedCost: {
-		value: 0,
-	},
+	deliveryCost: 0,
+	addedCost: 0,
 } as OrderInfoContract

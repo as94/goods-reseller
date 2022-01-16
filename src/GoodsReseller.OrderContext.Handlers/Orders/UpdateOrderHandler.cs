@@ -6,6 +6,7 @@ using GoodsReseller.OrderContext.Contracts.Orders.Update;
 using GoodsReseller.OrderContext.Domain.Orders;
 using GoodsReseller.OrderContext.Domain.Orders.Entities;
 using GoodsReseller.OrderContext.Handlers.Converters;
+using GoodsReseller.SeedWork.ValueObjects;
 using MediatR;
 
 namespace GoodsReseller.OrderContext.Handlers.Orders
@@ -32,8 +33,8 @@ namespace GoodsReseller.OrderContext.Handlers.Orders
                 request.OrderInfo.Status.ToDomain(),
                 request.OrderInfo.Address.ToDomain(),
                 request.OrderInfo.CustomerInfo.ToDomain(),
-                request.OrderInfo.DeliveryCost.ToDomain(),
-                request.OrderInfo.AddedCost.ToDomain(),
+                new Money(request.OrderInfo.DeliveryCost),
+                new Money(request.OrderInfo.AddedCost),
                 request.OrderInfo.OrderItems.Select(x => x.ToDomain()));
             
             order.Update(orderInfo, request.OrderInfo.Version);

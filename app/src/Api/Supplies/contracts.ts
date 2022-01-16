@@ -1,5 +1,3 @@
-import { MoneyContract } from '../contracts'
-
 export interface SupplyListContract {
 	items: SupplyListItemContract[]
 	rowsCount: number
@@ -37,5 +35,5 @@ export interface SupplyContract {
 	date: string
 	supplierInfo: SupplierInfoContract
 	supplyItems: SupplyItemContract[]
-	totalCost: MoneyContract
+	totalCost: number
 }

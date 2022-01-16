@@ -39,8 +39,8 @@ const Review = ({ productSet, productsInSet, orderInfo, deliveryType }: IOwnProp
 		0,
 	)
 
-	const setCost = orderItemsCost + orderInfo.addedCost.value
-	const deliveryCost = orderInfo.deliveryCost.value
+	const setCost = orderItemsCost + orderInfo.addedCost
+	const deliveryCost = orderInfo.deliveryCost
 	const totalCost = setCost + deliveryCost
 
 	let deliveryInfo = 'Бесплатно'

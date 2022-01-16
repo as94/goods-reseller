@@ -14,7 +14,6 @@ import Review from './Review'
 import { useHistory, useParams } from 'react-router-dom'
 import StoreHeader from '../StoreHeader/StoreHeader'
 import { ProductListItemContract } from '../Api/Products/contracts'
-import productsApi from '../Api/Products/productsApi'
 import {
 	AddressContract,
 	CustomerInfoContract,
@@ -22,7 +21,6 @@ import {
 	OrderItemContract,
 	OrderStatuses,
 } from '../Api/Orders/contracts'
-import { MoneyContract } from '../Api/contracts'
 import ordersApi from '../Api/Orders/ordersApi'
 import StoreFooter from '../StoreFooter/StoreFooter'
 import { MessageModal } from '../Modal/MessageModal'
@@ -246,9 +244,9 @@ const Checkout = () => {
 				version: 1,
 				status: OrderStatuses[0],
 				address,
-				deliveryCost: { value: deliveryType === 1 ? 300 : 0 } as MoneyContract,
+				deliveryCost: deliveryType === 1 ? 300 : 0,
 				customerInfo,
-				addedCost: { value: productSet.addedCost } as MoneyContract,
+				addedCost: productSet.addedCost,
 				orderItems,
 			} as OrderInfoContract)
 		}
