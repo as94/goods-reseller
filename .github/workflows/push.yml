@@ -64,7 +64,7 @@ jobs:
     - name: Run integration tests
       env:
         TESTABLE_SERVICE_HOST: localhost
-        TESTABLE_SERVICE_PORT: 5001
+        TESTABLE_SERVICE_PORT: 5000
       run: |
         sleep 10
         dotnet test tests/GoodsReseller.IntegrationTests/GoodsReseller.IntegrationTests.csproj -c Release
