@@ -43,7 +43,7 @@ jobs:
       run: dotnet build -c Release --no-restore GoodsReseller.sln
 
     - name: Backend unit-tests
-      working-directory: ./src/GoodsReseller.UnitTests
+      working-directory: ./tests/GoodsReseller.UnitTests
       run: dotnet test -c Release --no-restore --no-build
       
     - name: Copy artifacts
