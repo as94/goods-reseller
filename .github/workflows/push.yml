@@ -44,7 +44,7 @@ jobs:
 
     - name: Backend unit-tests
       working-directory: ./tests/GoodsReseller.UnitTests
-      run: dotnet test -c Release --no-restore --no-build
+      run: dotnet test -c Release --no-restore --no-build --diag:log.txt
       
     - name: Copy artifacts
       run: |
@@ -59,7 +59,7 @@ jobs:
       env:
         DatabaseOptions__ConnectionString: Host=localhost;Port=5432;Database=goodsreseller;Username=postgres;Password=qwe123
       run: |
-        dotnet artifacts/backend/GoodsReseller.Api.dll --urls "http://*:5000;https://*:5001" &> back-output.log &
+        dotnet artifacts/backend/GoodsReseller.Api.dll --urls https://*:5001 &> back-output.log &
         
     - name: Run integration tests
       env:
@@ -68,6 +68,15 @@ jobs:
       run: |
         sleep 10
         dotnet test tests/GoodsReseller.IntegrationTests/GoodsReseller.IntegrationTests.csproj -c Release
+
+    - name: Upload test artifact
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: failure-reason-artifact
+        path: |
+          ./tests/GoodsReseller.UnitTests/log.txt
+          ./back-output.log
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
