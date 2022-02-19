@@ -18,15 +18,7 @@
 
 Для внесения информации о подарочных наборах и продуктах существует раздел "Продукты". Тут можно заполнить название и описание продуктов / наборов и добавить фотографию.
 
-В разделе "Статистика" можно посмотреть информацию по выручке, расходам и чистой прибыли.
-
-# Демо
-
-## Оформление заказа
-![](demo/happyboxy_demo.gif)
-
-## Админка
-![](demo/happyboxy_admin_demo.gif)
+В разделе "Статистика" можно посмотреть информацию по выручке/расходам и т.п.
 
 # Техническая документация
 
@@ -73,10 +65,6 @@ cat your_dump.sql | docker exec -i your-db-container psql -U postgres
 
 scp root@happyboxy.ru:dump_06-01-2022_06_18_48.sql ~/Desktop
 
-### JMeter
-
-open /usr/local/bin/jmeter
-
 ### Сертификаты
 
 Остановить все контейнеры и запустить команду
@@ -84,12 +72,4 @@ open /usr/local/bin/jmeter
 `sudo certbot certonly --standalone`
 
 https://certbot.eff.org/lets-encrypt/ubuntuxenial-other
-
-### Работа с изображениями
-
-https://unsplash.com/
-
-https://pixabay.com/
-
-https://convertio.co/
 
