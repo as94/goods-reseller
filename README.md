@@ -1,49 +1,51 @@
-# О проекте
+# About the Project
 
-## Для пользователя
+## For Users
 
-Данный интернет магазин предоставляет на выбор пользователю несколько подарочных наборов.
+This online store offers users several gift sets to choose from.
 
-Карточка набора содержит фотографию, состав набора и цену. При выборе любого продукта из набора отображается фотография этого продукта.
+Each set card contains a photo, the set's contents, and the price. When selecting any product from the set, a photo of that product is displayed.
 
-Оформить набор можно нажав на кнопку "Хочу этот". Затем пользователю необходимо оставить контактные данные и информацию по доставке. Далее пользователь проверяет введенные данные и нажимает на кнопку "Разместить заказ".
+To order a set, click the "I Want This" button. Next, the user needs to provide contact details and delivery information. After that, the user reviews the entered data and clicks the "Place Order" button.
 
-## Для исполнителя
+## For Administrators
 
-После оформления заказа пользователем приходит уведомление в телеграм о новом заказе. Исполнитель может зайти в админку и посмотреть подробнее информацию по заказу, связаться с пользователем для уточнения деталей.
+After a user places an order, a notification is sent via Telegram about the new order. The administrator can access the admin panel to view detailed information about the order and contact the user to clarify details.
 
-Когда подарочный набор собран, исполнитель меняет статус заказа на "Упакован". После этого, набор необходимо отправить клиенту, а когда клиент его получит, исполнитель меняет статус заказа на "Доставлен".
+When the gift set is prepared, the administrator updates the order status to "Packed." Once the set is shipped to the client and delivered, the status is changed to "Delivered."
 
-Для внесения информации о поставках предусмотрен соответствующий раздел "Поставки". Тут можно указать поставщика, товары и их стоимость.
+A separate "Supplies" section is available for tracking supply details, where suppliers, products, and costs can be recorded.
 
-Для внесения информации о подарочных наборах и продуктах существует раздел "Продукты". Тут можно заполнить название и описание продуктов / наборов и добавить фотографию.
+The "Products" section allows the administrator to manage gift sets and individual products, including filling in product names, descriptions, and uploading photos.
 
-В разделе "Статистика" можно посмотреть информацию по выручке/расходам и т.п.
+In the "Statistics" section, information on revenue, expenses, and other key metrics is available.
 
-# Техническая документация
+# Technical Documentation
 
-## Генерация самоподписанного сертификата
+## Generating a Self-Signed Certificate
 
 dotnet dev-certs https
 
 dotnet dev-certs https — trust
 
-## Как поднять всё локально для тестирования?
-1. Запустить из консоли скрипт updb.sh, который поднимет базу в контейнере и прогонит миграции
-2. Запустить проект `GoodsReseller.Api Migrator`, который создаст тестового администратора (логин: test@test, пароль: qwe123) и тестовые подарочные наборы
-3. Запустить проект `GoodsReseller.Api`, который поднимет бэкенд на localhost:5001. Тут можно открыть /swagger для тестирования бэкенда
-4. Открыть проект /app и выполнить команду yarn watch для тестирования фронтенда. Тут можно тестировать заказ подарочного набора.
-5. Чтобы зайти в админский UI, надо открыть /admin и войти из под тестового администратора. Тут можно смотреть статистику, управлять (crud) продуктами и подарочными наборами, поставками, заказами.
+## How to Run Everything Locally for Testing
 
-## Как поднять всё локально с prod данными?
-1. Поднять контейнер с базой данных
-2. Выполнить последнюю миграцию из бэкапа
-3. Положить в `GoodsReseller.Api/wwwroot/assets` архив [отсюда](https://drive.google.com/file/d/19yhkXaRA69bObtr8IW6F341AA4KKbKqo/view?usp=drivesdk) и распаковать его
-4. Запустить бэкенд и фронтенд локально
+1. Run the `updb.sh` script from the console to start the database container and apply migrations.
+2. Launch the `GoodsReseller.Api Migrator` project, which will create a test admin (login: `test@test`, password: `qwe123`) and sample gift sets.
+3. Start the `GoodsReseller.Api` project to launch the backend on `localhost:5001`. You can access `/swagger` to test the backend.
+4. Open the `/app` project and run the `yarn watch` command to test the frontend, including gift set orders.
+5. To access the admin UI, go to `/admin` and log in using the test admin credentials. From there, you can view statistics and manage (CRUD) products, gift sets, supplies, and orders.
 
-## База данных
+## How to Run Everything Locally with Production Data
 
-### Миграции
+1. Start the database container.
+2. Apply the latest migration from the backup.
+3. Place the archive from [here](https://drive.google.com/file/d/19yhkXaRA69bObtr8IW6F341AA4KKbKqo/view?usp=drivesdk) into the `GoodsReseller.Api/wwwroot/assets` directory and extract it.
+4. Launch both the backend and frontend locally.
+
+## Database
+
+### Migrations
 
 cd src
 
@@ -51,23 +53,23 @@ dotnet ef migrations add InitialCreate -s GoodsReseller.Api/GoodsReseller.Api.cs
 
 dotnet ef database update -s GoodsReseller.Api/GoodsReseller.Api.csproj -p  GoodsReseller.Infrastructure/GoodsReseller.Infrastructure.csproj -c GoodsResellerDbContext
 
-### Сохранение / Восстановление
+### Backup / Restore
 
 docker exec -t your-db-container pg_dumpall -c -U postgres > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
 
-поменять пароль prod пользователя на qwe123
+Change the production user’s password to qwe123
 
 cat your_dump.sql | docker exec -i your-db-container psql -U postgres
 
-## Другое
+## Other
 
-### Переместить файл с prod хоста на локальный
+### Transfer a File from the Production Host to Local
 
 scp root@happyboxy.ru:dump_06-01-2022_06_18_48.sql ~/Desktop
 
-### Сертификаты
+### Certificates
 
-Остановить все контейнеры и запустить команду
+Stop all containers and run the following command
 
 `sudo certbot certonly --standalone`
 
